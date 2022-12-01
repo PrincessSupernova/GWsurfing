@@ -25,6 +25,11 @@
 			Any HTML contained inside <noscript></noscript> tags will be loaded in the event that JavaScript is not
 			available. 
 		-->
+
+                <script type="text/javascript" charset="UTF-8" src="https://cdn.jsdelivr.net/npm/jsxgraph/distrib/jsxgraphcore.js"></script>
+                <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/jsxgraph/distrib/jsxgraph.css" />
+
+
 		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
 	</head>
 	<!-- The body is the location where your site's content will go -->
@@ -92,6 +97,7 @@
 						</nav>
 					</header>
 
+                                       
 					<!-- These are the "cards" that appear when you click the buttons on the main page -->
 					<div id="main">
 						<!-- 	Here is the "About Me" card. Note it has the id "about", which the previous 
@@ -205,6 +211,11 @@
 							</ul>
 						</article>
 					</div>
+
+                                        <div id="box" class="jxgbox" style="width:500px; height:500px;"></div>
+                                            <script type="text/javascript">
+                                                var board = JXG.JSXGraph.initBoard('box', {boundingbox: [-10, 10, 10, -10], axis:true});
+                                            </script>
 
 					<!-- This is the footer that appears at the bottom of the page -->
 					<footer id="footer">

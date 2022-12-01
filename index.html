@@ -203,7 +203,9 @@
 
                                         <div id="box" class="jxgbox" style="width:500px; height:500px;"></div>
                                             <script type="text/javascript">
-                                                var board = JXG.JSXGraph.initBoard('box', {boundingbox: [-10, 10, 10, -10], axis:true});
+                                                var board = JXG.JSXGraph.initBoard('jxgbox', {boundingbox: [-10, 10, 10, -10], axis:true});
+                                                board.suspendUpdate();
+
 
                                                 board.create('functiongraph', [
                                                     function(t) {

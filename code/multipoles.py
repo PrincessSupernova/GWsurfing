@@ -8,7 +8,7 @@ Created on Mon Nov 14 13:29:27 2022
 
 import numpy as np
 import matplotlib.pyplot as plt
-Nt = 1001
+Nt = 202
 Nth = 41
 Nph = 30
 m1 = 0.75
@@ -17,7 +17,7 @@ M = m1+m2
 R = 100
 Torb = 2.*np.pi*np.sqrt(R**3./M)
 Omg = 2.*np.pi/Torb
-dt = Torb/(Nt)
+dt = 2.*Torb/(Nt)
 tt = np.zeros(Nt)
 for it in range(Nt):
   tt[it]=it*dt
@@ -108,8 +108,9 @@ for ith in range(Nth):
         dhtp_thph[:,ith,iph,1,0] += Lphi_thph[ith,iph,i]*Lthi_thph[ith,iph,j]*dhij_thph[:,ith,iph,i,j]
         dhtp_thph[:,ith,iph,0,1] += Lthi_thph[ith,iph,i]*Lphi_thph[ith,iph,j]*dhij_thph[:,ith,iph,i,j]
         dhtp_thph[:,ith,iph,1,1] += Lphi_thph[ith,iph,i]*Lphi_thph[ith,iph,j]*dhij_thph[:,ith,iph,i,j]
-    PP_thph[ith,iph] = np.mean(htp_thph[:,ith,iph,0,0]**2)
-    PX_thph[ith,iph] = np.mean(htp_thph[:,ith,iph,0,1]**2)
+#by only including middle segment, reduce edge effects of np.gradient
+    PP_thph[ith,iph] = np.mean(htp_thph[(tt>=0.5*Torb)&(tt<1.5*Torb),ith,iph,0,0]**2)
+    PX_thph[ith,iph] = np.mean(htp_thph[(tt>=0.5*Torb)&(tt<1.5*Torb),ith,iph,0,1]**2)
 
 
 plt.plot(tt,dddMij[:,0,0])
@@ -123,6 +124,10 @@ plt.show()
 plt.plot(th,PP_thph[:,0])
 plt.plot(th,PX_thph[:,0])
 plt.show()
+plt.plot(th,4.*(1.+np.cos(th)**2)**2)
+plt.plot(th,16.*np.cos(th)**2)
+plt.show()
+
 plt.plot(pp,PP_thph[10,:])
 plt.plot(pp,PX_thph[10,:])
 plt.show()

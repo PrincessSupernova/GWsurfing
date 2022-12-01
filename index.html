@@ -213,7 +213,7 @@
                                                 var delta = brd.create('slider',[[2,4],[6,4],[0,0,Math.PI]],{name:'&delta;'}); 
                                               
                                                 var c = brd.create('curve',[
-                                                          function(t){return t);},
+                                                          function(t){return t;},
                                                           function(t){return B.Value()*Math.sin(m1.Value()*t);},
                                                           0, 2*Math.PI],{strokeColor:'#aa2233',strokeWidth:3});
                                                 brd.unsuspendUpdate();

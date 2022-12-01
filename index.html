@@ -215,6 +215,30 @@
                                         <div id="box" class="jxgbox" style="width:500px; height:500px;"></div>
                                             <script type="text/javascript">
                                                 var board = JXG.JSXGraph.initBoard('box', {boundingbox: [-10, 10, 10, -10], axis:true});
+
+                                                board.create('functiongraph', [
+                                                    function(t) {
+                                                        var val = 0, sv = s.Value()+1,
+                                                        k = 1;
+                                                        for(var i = 0; i < sv; i++) {
+                                                            val = val + Math.sin(2*Math.PI*k*t)/k;
+                                                            k += 1;
+                                                        }
+                                                        return val+2;
+                                                    }, -10, 10], {strokeColor: "#bb0000"});
+
+                                                board.create('functiongraph', [
+                                                    function(t) {
+                                                        var val = 0, sv = s.Value()+1,
+                                                            k = 1;
+                                                        for(var i = 0; i < sv; i++) {
+                                                            val = val + Math.sin(2*Math.PI*(2*k-1)*t)/(2*k-1);
+                                                            k += 1;
+                                                        }
+                                                        return val-2;
+                                                    }, -10, 10], {strokeColor: "#cc5520"});
+
+                                                board.unsuspendUpdate();
                                             </script>
 
 					<!-- This is the footer that appears at the bottom of the page -->

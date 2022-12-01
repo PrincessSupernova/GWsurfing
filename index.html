@@ -214,7 +214,7 @@
                                               
                                                 var c = brd.create('curve',[
                                                           function(t){return A.Value()*Math.sin(m.Value()*t+delta.Value());},
-                                                          function(t){return B.Value()*Math.sin(m.Value()*t);},
+                                                          function(t){return B.Value()*Math.sin(b.Value()*t);},
                                                           0, 2*Math.PI],{strokeColor:'#aa2233',strokeWidth:3});
                                                 brd.unsuspendUpdate();
 

@@ -219,6 +219,11 @@
                                                 // sg adds
                                                 a = board.create('slider', [[10.0,22.0],[15.0,22.0],[99,100,101]],{name:'R',strokeColor:'black',fillColor:'black'});
                                                 at = board.create('text', [10,23, "Separation"], {fixed:true});
+                                                m1 = board.create('slider', [[10.0,20.0],[15.0,20.0],[0.1,0.75,1.0]],{name:'m1',strokeColor:'black',fillColor:'black'});
+                                                m1t = board.create('text', [10,23, "m1"], {fixed:true});
+                                                m2 = board.create('slider', [[10.0,20.0],[15.0,20.0],[0.1,0.25,1.0]],{name:'m2',strokeColor:'black',fillColor:'black'});
+                                                m2t = board.create('text', [10,23, "m2"], {fixed:true});
+                                                
            
                                                 // Dynamic initial value as gliders on the y-axis
                                                 startpred = board.create('glider', [0, 10, board.defaultAxes.y], {name:'Preys',strokeColor:'red',fillColor:'red'});
@@ -278,12 +283,17 @@
                                                 var datapred = [];
                                                 var testarr = [];
                                                 var testarr2 = [];
+                                                
+                                                var M = m1.Value() + m2.Value();
+                                                var Torb = 2.*Math.PI*Math.sqrt(a.Value()**3./M)
+                                                var Omega = 2.*Math.PI/Torb
                                                 for(var i=0; i<data.length; i++) {
                                                     t[i] = data[i][2];
                                                     datapred[i] = data[i][0];
                                                     dataprey[i] = data[i][1];
                                                     testarr[i] = 5*Math.sin(t[i]) + 10;
-                                                    testarr2[i] = a.Value()/10
+                                                    testarr2[i] = Omega*1000;
+                                                
                                                 }
                                                 
                                                 // Plot Predator
@@ -294,7 +304,7 @@
                                                     this.dataY = [];
                                                     for(var i=0; i<data.length; i++) {
                                                         this.dataX[i] = t[i];
-                                                        this.dataY[i] = a.Value()/10.;
+                                                        this.dataY[i] = Omega*1000;//a.Value()/10.;
                                                     }
                                                 }
            

@@ -359,10 +359,10 @@
                                                 // Plot Predator
                                                 g3 = board.create('curve', [time, testarr], {strokeColor:'red', strokeWidth:'2px'});
                                                 g3.updateDataArray = function() {
-                                                    var data = ode();
+                                                    var time = solver();
                                                     this.dataX = [];
                                                     this.dataY = [];
-                                                    for(var i=0; i<data.length; i++) {
+                                                    for(var i=0; i<Nt; i++) {
                                                         this.dataX[i] = time[i];
                                                         this.dataY[i] = 15.;//data[i][0];
                                                     }

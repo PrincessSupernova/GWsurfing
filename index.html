@@ -221,7 +221,7 @@
                                                 at = board.create('text', [10,23, "Separation"], {fixed:true});
                                                 m1 = board.create('slider', [[10.0,20.0],[15.0,20.0],[0.1,0.75,1.0]],{name:'m1',strokeColor:'black',fillColor:'black'});
                                                 m1t = board.create('text', [10,23, "m1"], {fixed:true});
-                                                m2 = board.create('slider', [[10.0,20.0],[15.0,20.0],[0.1,0.25,1.0]],{name:'m2',strokeColor:'black',fillColor:'black'});
+                                                m2 = board.create('slider', [[10.0,18.0],[15.0,18.0],[0.1,0.25,1.0]],{name:'m2',strokeColor:'black',fillColor:'black'});
                                                 m2t = board.create('text', [10,23, "m2"], {fixed:true});
                                                 
            
@@ -234,7 +234,7 @@
                                                 var g3 = null;
                                                 var g4 = null;
                                                 var g5 = null;
-           
+
                                                 // Initialise ODE and solve it with JXG.Math.Numerics.rungeKutta()
                                                 function ode() {
                                                     // evaluation interval
@@ -303,13 +303,13 @@
                                                 }
                                                 
                                                 // Plot Predator
-                                                g3 = board.create('curve', [time, testarr2], {strokeColor:'red', strokeWidth:'2px'});
+                                                g3 = board.create('curve', [time/1000, testarr2], {strokeColor:'red', strokeWidth:'2px'});
                                                 g3.updateDataArray = function() {
                                                     var data = ode();
                                                     this.dataX = [];
                                                     this.dataY = [];
                                                     for(var i=0; i<Nt; i++) {
-                                                        this.dataX[i] = i*dt;
+                                                        this.dataX[i] = i*dt/1000;
                                                         this.dataY[i] = Omega*1000;//a.Value()/10.;
                                                     }
                                                 }
@@ -327,13 +327,13 @@
                                                 //}
 
                                                 // test
-                                                g5 = board.create('curve', [time, testarr], {strokeColor:'blue', strokeWidth:'2px'});
+                                                g5 = board.create('curve', [time/1000, testarr], {strokeColor:'blue', strokeWidth:'2px'});
                                                 g5.updateDataArray = function() {
                                                     var data = ode();
                                                     this.dataX = [];
                                                     this.dataY = [];
                                                     for(var i=0; i<Nt; i++) {
-                                                        this.dataX[i] = time[i];
+                                                        this.dataX[i] = time[i]/1000;
                                                         this.dataY[i] = 5*Math.sin(time[i]) + 10;
                                                     }
                                                 }

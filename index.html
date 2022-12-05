@@ -293,16 +293,16 @@
                                                 }
            
                                                 // Plot Prey
-                                                g4 = board.create('curve', [t, dataprey], {strokeColor:'blue', strokeWidth:'2px'});
-                                                g4.updateDataArray = function() {
-                                                    var data = ode();
-                                                    this.dataX = [];
-                                                    this.dataY = [];
-                                                    for(var i=0; i<data.length; i++) {
-                                                        this.dataX[i] = t[i];
-                                                        this.dataY[i] = data[i][1];
-                                                    }
-                                                }
+                                                // g4 = board.create('curve', [t, dataprey], {strokeColor:'blue', strokeWidth:'2px'});
+                                                // g4.updateDataArray = function() {
+                                                //     var data = ode();
+                                                //     this.dataX = [];
+                                                //     this.dataY = [];
+                                                //     for(var i=0; i<data.length; i++) {
+                                                //         this.dataX[i] = t[i];
+                                                //         this.dataY[i] = data[i][1];
+                                                //    }
+                                                //}
 
                                                 // test
                                                 g5 = board.create('curve', [t, testarr], {strokeColor:'blue', strokeWidth:'2px'});

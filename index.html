@@ -279,31 +279,37 @@
            
                                                 // copy data to arrays so we can plot it using JXG.Curve
                                                 var t = [];
+                                                var time = [];
                                                 var dataprey = [];
                                                 var datapred = [];
                                                 var testarr = [];
                                                 var testarr2 = [];
                                                 
                                                 var M = m1.Value() + m2.Value();
-                                                var Torb = 2.*Math.PI*Math.sqrt(a.Value()**3./M)
-                                                var Omega = 2.*Math.PI/Torb
+                                                var Torb = 2.*Math.PI*Math.sqrt(a.Value()**3./M);
+                                                var Omega = 2.*Math.PI/Torb;
+
+                                                var Nt = 202;
+                                                var dt = 2.*Torb/Nt;
+ 
                                                 for(var i=0; i<data.length; i++) {
                                                     t[i] = data[i][2];
+                                                    time[i] = i*dt;
                                                     datapred[i] = data[i][0];
                                                     dataprey[i] = data[i][1];
-                                                    testarr[i] = 5*Math.sin(t[i]) + 10;
+                                                    testarr[i] = 5*Math.sin(time[i]) + 10;
                                                     testarr2[i] = Omega*1000;
                                                 
                                                 }
                                                 
                                                 // Plot Predator
-                                                g3 = board.create('curve', [t, testarr2], {strokeColor:'red', strokeWidth:'2px'});
+                                                g3 = board.create('curve', [time, testarr2], {strokeColor:'red', strokeWidth:'2px'});
                                                 g3.updateDataArray = function() {
                                                     var data = ode();
                                                     this.dataX = [];
                                                     this.dataY = [];
-                                                    for(var i=0; i<data.length; i++) {
-                                                        this.dataX[i] = t[i];
+                                                    for(var i=0; i<Nt; i++) {
+                                                        this.dataX[i] = i*dt;
                                                         this.dataY[i] = Omega*1000;//a.Value()/10.;
                                                     }
                                                 }
@@ -321,14 +327,14 @@
                                                 //}
 
                                                 // test
-                                                g5 = board.create('curve', [t, testarr], {strokeColor:'blue', strokeWidth:'2px'});
+                                                g5 = board.create('curve', [time, testarr], {strokeColor:'blue', strokeWidth:'2px'});
                                                 g5.updateDataArray = function() {
                                                     var data = ode();
                                                     this.dataX = [];
                                                     this.dataY = [];
-                                                    for(var i=0; i<data.length; i++) {
-                                                        this.dataX[i] = t[i];
-                                                        this.dataY[i] = 5*Math.sin(t[i]) + 10;
+                                                    for(var i=0; i<Nt; i++) {
+                                                        this.dataX[i] = time[i];
+                                                        this.dataY[i] = 5*Math.sin(time[i]) + 10;
                                                     }
                                                 }
 

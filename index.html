@@ -57,33 +57,33 @@
 							</div>
 						</div>
 						<!-- This is the navigation menu -->
-<!--						<nav>-->
-							<!-- This element makes an "Unordered List" -->
-<!--							<ul>-->
-								<!-- This is a "List Item" -->
-<!--								<li>-->
-									<!-- 	Note that this links to #about, which will move the page to wherever
-										the element with the id "about" exists.
-									-->
-<!--									<a href="#about">About Me</a>
-								</li>
+						<nav>
+    						<!-- This element makes an "Unordered List" -->
+							<ul>
+    							<!-- This is a "List Item" -->
 								<li>
-									<a href="#research">Research</a>
-								</li>
-								<li>
-									<a href="#community">Community</a>
-								</li>
-								<li>
-									<a href="#contact">Contact</a>
-								</li>-->
-								<!-- 	You can add another button to your navigation menu by adding
-									another List Item with a link inside of it.
-								-->
-								<!-- <li>
-									<a href="images/gw-surfing.jpg">My CV</a>
-								</li> -->
-<!--							</ul>-->
-<!--						</nav>-->
+    								<!-- 	Note that this links to #about, which will move the page to wherever
+    									the element with the id "about" exists.
+    								-->
+									<a href="#about">About Me</a>
+    							</li>
+    							<li>
+    								<a href="#research">Research</a>
+    							</li>
+    							<li>
+    								<a href="#community">Community</a>
+    							</li>
+    							<li>
+    								<a href="#contact">Contact</a>
+    							</li>
+    							<!-- 	You can add another button to your navigation menu by adding
+    								another List Item with a link inside of it.
+    							-->
+    							<!-- <li>
+    								<a href="images/gw-surfing.jpg">My CV</a>
+    							</li> -->
+							</ul>
+						</nav>
 					</header>
 
                                        
@@ -221,6 +221,19 @@
 
 //                                                var B = brd.create('slider',[[2,5],[6,5],[0,3,6]],{name:'B'});
 //                                                var delta = brd.create('slider',[[2,4],[6,4],[0,0,Math.PI]],{name:'&delta;'}); 
+                                                var brd = JXG.JSXGraph.initBoard('box',{axis:true,boundingbox: [-12, 10, 12, -10]});
+                                                brd.suspendUpdate();
+                                                var m1 = brd.create('slider',[[2,8],[6,8],[0,3,6]],{name:'m1'});
+                                                var b = brd.create('slider',[[2,7],[6,7],[0,2,6]],{name:'b'});
+                                                var A = brd.create('slider',[[2,6],[6,6],[0,3,6]],{name:'A'});
+                                                var B = brd.create('slider',[[2,5],[6,5],[0,3,6]],{name:'B'});
+                                                var delta = brd.create('slider',[[2,4],[6,4],[0,0,Math.PI]],{name:'&delta;'}); 
+                                              
+                                                var c = brd.create('curve',[
+                                                          function(t){return t;},
+                                                          function(t){return B.Value()*Math.sin(m1.Value()*t);},
+                                                          0, 2*Math.PI],{strokeColor:'#aa2233',strokeWidth:3});
+                                                brd.unsuspendUpdate();
 
                                                 //var Omega = getOmega();                                                
 //

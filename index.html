@@ -216,6 +216,9 @@
                                                 ot = board.create('text', [10,25, "Death rate preys/per predator"], {fixed:true});
                                                 p = board.create('slider', [[10.0,24.0],[15.0,24.0],[0.0,0.3,1.0]],{name:'&gamma;2',strokeColor:'black',fillColor:'black'});
                                                 pt = board.create('text', [10,23, "Reproduction rate pred./per prey"], {fixed:true});
+                                                // sg adds
+                                                a = board.create('slider', [[10.0,22.0],[15.0,22.0],[99,100,101]],{name:'R',strokeColor:'black',fillColor:'black'});
+                                                at = board.create('text', [10,23, "Separation"], {fixed:true});
            
                                                 // Dynamic initial value as gliders on the y-axis
                                                 startpred = board.create('glider', [0, 10, board.defaultAxes.y], {name:'Preys',strokeColor:'red',fillColor:'red'});
@@ -225,6 +228,7 @@
                                                 // Variables for the JXG.Curves
                                                 var g3 = null;
                                                 var g4 = null;
+                                                var g5 = null;
            
                                                 // Initialise ODE and solve it with JXG.Math.Numerics.rungeKutta()
                                                 function ode() {
@@ -273,22 +277,24 @@
                                                 var dataprey = [];
                                                 var datapred = [];
                                                 var testarr = [];
+                                                var testarr2 = [];
                                                 for(var i=0; i<data.length; i++) {
                                                     t[i] = data[i][2];
                                                     datapred[i] = data[i][0];
                                                     dataprey[i] = data[i][1];
                                                     testarr[i] = 5*Math.sin(t[i]) + 10;
+                                                    testarr2[i] = a.Value()/10
                                                 }
                                                 
                                                 // Plot Predator
-                                                g3 = board.create('curve', [t, datapred], {strokeColor:'red', strokeWidth:'2px'});
+                                                g3 = board.create('curve', [t, testarr2], {strokeColor:'red', strokeWidth:'2px'});
                                                 g3.updateDataArray = function() {
                                                     var data = ode();
                                                     this.dataX = [];
                                                     this.dataY = [];
                                                     for(var i=0; i<data.length; i++) {
                                                         this.dataX[i] = t[i];
-                                                        this.dataY[i] = data[i][0];
+                                                        this.dataY[i] = a.Value()/10.;
                                                     }
                                                 }
            

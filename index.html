@@ -222,9 +222,10 @@
 //                                                var B = brd.create('slider',[[2,5],[6,5],[0,3,6]],{name:'B'});
 //                                                var delta = brd.create('slider',[[2,4],[6,4],[0,0,Math.PI]],{name:'&delta;'}); 
 
-                                              
+                                                var Omega = getOmega()                                                
+
                                                 var c = brd.create('curve',[
-                                                          function(t){return t;},
+                                                          t,//function(t){return t;},
                                                           function(t){return Math.sin(Omega.Value()*t);},
                                                           0, 2*Math.PI],{strokeColor:'#aa2233',strokeWidth:3});
                                                 brd.unsuspendUpdate();

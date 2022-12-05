@@ -239,7 +239,7 @@
 //
 
                                                 // Initialise board
-                                                var board = JXG.JSXGraph.initBoard('jxgbox', {boundingbox: [-1.5, 28.5, 28.5, -1.5], axis: true, grid: false});
+                                                var board = JXG.JSXGraph.initBoard('box', {boundingbox: [-1.5, 28.5, 28.5, -1.5], axis: true, grid: false});
            
                                                 // Define sliders to dynamically change parameters of the equations and create text elements to describe them
 //                                                s = board.create('slider', [[20.0,26.0],[25.0,26.0],[0.0,0.3,1.0]],{name:'&epsilon;1',strokeColor:'black',fillColor:'black'});
@@ -252,16 +252,16 @@
 //                                               p = board.create('slider', [[10.0,24.0],[15.0,24.0],[0.0,0.3,1.0]],{name:'&gamma;2',strokeColor:'black',fillColor:'black'});
 //                                               pt = board.create('text', [10,23, "Reproduction rate pred./per prey"], {fixed:true});
            
- //                                              // Dynamic initial value as gliders on the y-axis
- //                                              startpred = board.create('glider', [0, 10, board.defaultAxes.y], {name:'Preys',strokeColor:'red',fillColor:'red'});
- //                                              startprey = board.create('glider', [0, 5, board.defaultAxes.y], {name:'Predators',strokeColor:'blue',fillColor:'blue'});
- 
+//                                               // Dynamic initial value as gliders on the y-axis
+//                                               startpred = board.create('glider', [0, 10, board.defaultAxes.y], {name:'Preys',strokeColor:'red',fillColor:'red'});
+//                                               startprey = board.create('glider', [0, 5, board.defaultAxes.y], {name:'Predators',strokeColor:'blue',fillColor:'blue'});
+       
            
- //                                               // Variables for the JXG.Curves
- //                                               var g3 = null;
- //                                               var g4 = null;
-           
-                                                // Initialise ODE and solve it with JXG.Math.Numerics.rungeKutta()
+//                                                // Variables for the JXG.Curves
+//                                                var g3 = null;
+//                                                var g4 = null;
+          
+                                               // Initialise ODE and solve it with JXG.Math.Numerics.rungeKutta()
 //                                                function ode() {
                                                     // evaluation interval
 //                                                    var I = [0, 25];
@@ -278,7 +278,7 @@
 //                                                        var y = [];
 //                                                        y[0] = x[0]*(bpred - dpred*x[1]);
 //                                                        y[1] = -x[1]*(bprey - dprey*x[0]);
-           
+//
 //                                                        return y;
 //                                                    }
            

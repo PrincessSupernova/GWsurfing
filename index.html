@@ -337,35 +337,35 @@
                                                     //    data[i].push(q);
                                                     //    q += h;
                                                     //}
-         
+
                                                     return tt;//data;
                                                 }
                                               
                                                 // get data points
-                                                var time = solver();
+                                                //var time = solver();
          
                                                 // copy data to arrays so we can plot it using JXG.Curve
-                                                //var t = [];
+                                                var tt = [];
                                                 //var dataprey = [];
                                                 //var datapred = [];
                                                 var testarr = [];
                                                 for(var i=0; i<Nt; i++) {
-                                                    //t[i] = i*dt;
+                                                    tt[i] = i*dt;
 //                                                    datapred[i] = data[i][0];
 //                                                    dataprey[i] = data[i][1];
                                                     testarr[i] = 15;
                                                 }
                                               
                                                 // Plot Predator
-                                                g3 = board.create('curve', [time, testarr], {strokeColor:'red', strokeWidth:'2px'});
-                                                g3.updateDataArray = function() {
-                                                    var time = solver();
-                                                    this.dataX = [];
-                                                    this.dataY = [];
-                                                    for(var i=0; i<Nt; i++) {
-                                                        this.dataX[i] = time[i];
-                                                        this.dataY[i] = 15.;//data[i][0];
-                                                    }
+                                                g3 = board.create('curve', [tt, testarr], {strokeColor:'red', strokeWidth:'2px'});
+                                                //g3.updateDataArray = function() {
+                                                //    var time = solver();
+                                                //    this.dataX = [];
+                                                //    this.dataY = [];
+                                                //    for(var i=0; i<Nt; i++) {
+                                                //        this.dataX[i] = time[i];
+                                                //        this.dataY[i] = 15.;//data[i][0];
+                                                //    }
                                                 }
          
 //                                                // Plot Prey

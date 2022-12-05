@@ -272,36 +272,36 @@
                                                 //tt = np.zeros(Nt)
 
                                                 // Dynamic initial value as gliders on the y-axis
-                                                startpred = board.create('glider', [0, 10, board.defaultAxes.y], {name:'Preys',strokeColor:'red',fillColor:'red'});
-                                                startprey = board.create('glider', [0, 5, board.defaultAxes.y], {name:'Predators',strokeColor:'blue',fillColor:'blue'});
+                                                //startpred = board.create('glider', [0, 10, board.defaultAxes.y], {name:'Preys',strokeColor:'red',fillColor:'red'});
+                                                //startprey = board.create('glider', [0, 5, board.defaultAxes.y], {name:'Predators',strokeColor:'blue',fillColor:'blue'});
        
                                                 // Variables for the JXG.Curves
                                                 var g3 = null;
-                                                var g4 = null;
-                                                var g5 = null;
+                                                //var g4 = null;
+                                                //var g5 = null;
  
                                                 // Initialise ODE and solve it with JXG.Math.Numerics.rungeKutta()
-                                                function solver() {
+                                                //function solver() {
 
-                                                    var Nt = 202;
-                                                    var Nth = 41;
-                                                    var Nph = 30;
-                                                    var m1 = mass1.Value();
-                                                    var m2 = mass2.Value();
-                                                    var M = m1+m2;
-                                                    var R = Rad.Value();//100
-                                                    var Torb = 2.*Math.pi*Math.sqrt(R**3./M);
-                                                    var Omg = 2.*Math.pi/Torb;
-                                                    var dt = 2.*Torb/Nt;
+                                                //    var Nt = 202;
+                                                //    var Nth = 41;
+                                                //    var Nph = 30;
+                                                //    var m1 = mass1.Value();
+                                                //    var m2 = mass2.Value();
+                                                //    var M = m1+m2;
+                                                //    var R = Rad.Value();//100
+                                                //    var Torb = 2.*Math.pi*Math.sqrt(R**3./M);
+                                                //    var Omg = 2.*Math.pi/Torb;
+                                                //    var dt = 2.*Torb/Nt;
                                                 
-                                                    var tt = [];
+                                                //    var tt = [];
 
-                                                    for(var i=0; i<Nt; i++) {
-                                                        tt[i] = i*dt;
+                                                //    for(var i=0; i<Nt; i++) {
+                                                //        tt[i] = i*dt;
                                                         //datapred[i] = data[i][0];
                                                         //dataprey[i] = data[i][1];
                                                         //testarr[i] = 15;
-                                                    }
+                                                //    }
  
 
                                                     //// evaluation interval
@@ -338,8 +338,8 @@
                                                     //    q += h;
                                                     //}
 
-                                                    return tt;//data;
-                                                }
+                                                  //  return tt;//data;
+                                                //}
                                               
                                                 // get data points
                                                 //var time = solver();

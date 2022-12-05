@@ -217,7 +217,7 @@
                                                 p = board.create('slider', [[10.0,24.0],[15.0,24.0],[0.0,0.3,1.0]],{name:'&gamma;2',strokeColor:'black',fillColor:'black'});
                                                 pt = board.create('text', [10,23, "Reproduction rate pred./per prey"], {fixed:true});
                                                 // sg adds
-                                                a = board.create('slider', [[10.0,22.0],[15.0,22.0],[99,100,101]],{name:'R',strokeColor:'black',fillColor:'black'});
+                                                a = board.create('slider', [[10.0,22.0],[15.0,22.0],[50,100,200]],{name:'R',strokeColor:'black',fillColor:'black'});
                                                 at = board.create('text', [10,23, "Separation"], {fixed:true});
                                                 m1 = board.create('slider', [[10.0,20.0],[15.0,20.0],[0.1,0.75,1.0]],{name:'m1',strokeColor:'black',fillColor:'black'});
                                                 m1t = board.create('text', [10,23, "m1"], {fixed:true});
@@ -237,6 +237,12 @@
 
                                                 // Initialise ODE and solve it with JXG.Math.Numerics.rungeKutta()
                                                 function ode() {
+
+                                                    // Omega
+                                                    var M = m1.Value() + m2.Value();
+                                                    var Torb = 2.*Math.PI*Math.sqrt(a.Value()**3/M);
+                                                    var Omega = 2.*Math.PI/Torb;
+
                                                     // evaluation interval
                                                     var I = [0, 25];
                                                     // Number of steps. 1000 should be enough
@@ -263,7 +269,6 @@
                                                     var data = JXG.Math.Numerics.rungeKutta('euler', x0, I, N, f);
            
                                                     // to plot the data against time we need the times where the equations were solved
-                                                    var t = [];
                                                     var q = I[0];
                                                     var h = (I[1]-I[0])/N;
                                                     for(var i=0; i<data.length; i++) {
@@ -285,9 +290,9 @@
                                                 var testarr = [];
                                                 var testarr2 = [];
                                                 
-                                                var M = m1.Value() + m2.Value();
-                                                var Torb = 2.*Math.PI*Math.sqrt(a.Value()**3./M);
-                                                var Omega = 2.*Math.PI/Torb;
+                                                //var M = m1.Value() + m2.Value();
+                                                ///var Torb = 2.*Math.PI*Math.sqrt(a.Value()**3./M);
+                                                //var Omega = 2.*Math.PI/Torb;
 
                                                 var Nt = 202;
                                                 var dt = 2.*Torb/Nt;
@@ -305,7 +310,7 @@
                                                 // Plot Predator
                                                 g3 = board.create('curve', [time/1000, testarr2], {strokeColor:'red', strokeWidth:'2px'});
                                                 g3.updateDataArray = function() {
-                                                    //var data = ode();
+                                                    var data = ode();
                                                     this.dataX = [];
                                                     this.dataY = [];
                                                     for(var i=0; i<Nt; i++) {
@@ -329,7 +334,7 @@
                                                 // test
                                                 g5 = board.create('curve', [time/1000, testarr], {strokeColor:'blue', strokeWidth:'2px'});
                                                 g5.updateDataArray = function() {
-//                                                    var data = ode();
+                                                    var data = ode();
                                                     this.dataX = [];
                                                     this.dataY = [];
                                                     for(var i=0; i<Nt; i++) {

@@ -297,7 +297,7 @@
                                                     time[i] = i*dt;
                                                     datapred[i] = data[i][0];
                                                     dataprey[i] = data[i][1];
-                                                    testarr[i] = 5*Math.sin(time[i]) + 10;
+                                                    testarr[i] = 5*Math.sin(Omega*time[i]) + 10;
                                                     testarr2[i] = Omega*1000;
                                                 
                                                 }
@@ -334,7 +334,7 @@
                                                     this.dataY = [];
                                                     for(var i=0; i<Nt; i++) {
                                                         this.dataX[i] = time[i]/1000;
-                                                        this.dataY[i] = 5*Math.sin(time[i]) + 10;
+                                                        this.dataY[i] = 5*Math.sin(Omega*time[i]) + 10;
                                                     }
                                                 }
 

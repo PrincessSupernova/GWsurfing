@@ -242,13 +242,13 @@
                                                 var board = JXG.JSXGraph.initBoard('box', {boundingbox: [-1.5, 28.5, 28.5, -1.5], axis: true, grid: false});
            
                                                 // Define sliders to dynamically change parameters of the equations and create text elements to describe them
-                                                s = board.create('slider', [[20.0,26.0],[25.0,26.0],[0.0,0.3,1.0]],{name:'&epsilon;1',strokeColor:'black',fillColor:'black'});
-                                                st = board.create('text', [20,25, "Birth rate predators"], {fixed:true});
-                                                u = board.create('slider', [[20.0,24.0],[25.0,24.0],[0.0,0.7,1.0]],{name:'&epsilon;2',strokeColor:'black',fillColor:'black'});
-                                                ut = board.create('text', [20,23, "Death rate predators"], {fixed:true});
+                                                s = board.create('slider',[[20.0,26.0],[25.0,26.0],[0.0,0.3,1.0]],{name:'m1',strokeColor:'black',fillColor:'black'});
+                                                st = board.create('text', [20,25, "m1"], {fixed:true});
+                                                u = board.create('slider', [[20.0,24.0],[25.0,24.0],[0.0,0.7,1.0]],{name:'m2',strokeColor:'black',fillColor:'black'});
+                                                ut = board.create('text', [20,23, "m2"], {fixed:true});
           
-                                                o = board.create('slider', [[10.0,26.0],[15.0,26.0],[0.0,0.1,1.0]],{name:'&gamma;1',strokeColor:'black',fillColor:'black'});
-                                                ot = board.create('text', [10,25, "Death rate preys/per predator"], {fixed:true});
+                                                o = board.create('slider', [[10.0,26.0],[15.0,26.0],[0.0,0.1,1.0]],{name:'R',strokeColor:'black',fillColor:'black'});
+                                                ot = board.create('text', [10,25, "Separation"], {fixed:true});
                                                 p = board.create('slider', [[10.0,24.0],[15.0,24.0],[0.0,0.3,1.0]],{name:'&gamma;2',strokeColor:'black',fillColor:'black'});
                                                 pt = board.create('text', [10,23, "Reproduction rate pred./per prey"], {fixed:true});
           
@@ -259,8 +259,9 @@
                                                 // Variables for the JXG.Curves
                                                 var g3 = null;
                                                 var g4 = null;
-        
-                                               // Initialise ODE and solve it with JXG.Math.Numerics.rungeKutta()
+                                                var g5 = null;
+ 
+                                                // Initialise ODE and solve it with JXG.Math.Numerics.rungeKutta()
                                                 function ode() {
                                                     // evaluation interval
                                                     var I = [0, 25];
@@ -306,10 +307,12 @@
                                                 var t = [];
                                                 var dataprey = [];
                                                 var datapred = [];
+                                                var testarr = [];
                                                 for(var i=0; i<data.length; i++) {
                                                     t[i] = data[i][2];
                                                     datapred[i] = data[i][0];
                                                     dataprey[i] = data[i][1];
+                                                    testarr[i] = 15;
                                                 }
                                               
                                                 // Plot Predator
@@ -336,6 +339,18 @@
                                                     }
                                                 }
 
+
+                                                // Plot additional curve
+                                                g4 = board.create('curve', [t, testarr], {strokeColor:'blue', strokeWidth:'2px'});
+                                                g4.updateDataArray = function() {
+                                                    //var data = ode();
+                                                    this.dataX = [];
+                                                    this.dataY = [];
+                                                    for(var i=0; i<data.length; i++) {
+                                                        this.dataX[i] = t[i];
+                                                        this.dataY[i] = 15;
+                                                    }
+                                                }
 
 
 //                                                var c = brd.create('curve',[

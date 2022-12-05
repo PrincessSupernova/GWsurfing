@@ -214,10 +214,14 @@
                                                 var R = brd.create('slider',[[2,6],[6,6],[0,3,100]],{name:'R'});
 
 
-                                                var Omega = function(x){2.*Math.PI*Math.sqrt(R.Value()**3./(m1.Value()+m2.Value())}
+                                                function getOmega(){
+                                                    var Omega = 2.*Math.PI*Math.sqrt(R.Value()**3./(m1.Value()+m2.Value()))
+                                                    return Omega; 
+                                                    }
 
-                                                var B = brd.create('slider',[[2,5],[6,5],[0,3,6]],{name:'B'});
-                                                var delta = brd.create('slider',[[2,4],[6,4],[0,0,Math.PI]],{name:'&delta;'}); 
+//                                                var B = brd.create('slider',[[2,5],[6,5],[0,3,6]],{name:'B'});
+//                                                var delta = brd.create('slider',[[2,4],[6,4],[0,0,Math.PI]],{name:'&delta;'}); 
+
                                               
                                                 var c = brd.create('curve',[
                                                           function(t){return t;},

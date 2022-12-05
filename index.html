@@ -305,11 +305,11 @@
                                                 // Plot Predator
                                                 g3 = board.create('curve', [time/1000, testarr2], {strokeColor:'red', strokeWidth:'2px'});
                                                 g3.updateDataArray = function() {
-                                                    var data = ode();
+                                                    //var data = ode();
                                                     this.dataX = [];
                                                     this.dataY = [];
                                                     for(var i=0; i<Nt; i++) {
-                                                        this.dataX[i] = i*dt/1000;
+                                                        this.dataX[i] = time[i]/1000;
                                                         this.dataY[i] = Omega*1000;//a.Value()/10.;
                                                     }
                                                 }
@@ -329,7 +329,7 @@
                                                 // test
                                                 g5 = board.create('curve', [time/1000, testarr], {strokeColor:'blue', strokeWidth:'2px'});
                                                 g5.updateDataArray = function() {
-                                                    var data = ode();
+//                                                    var data = ode();
                                                     this.dataX = [];
                                                     this.dataY = [];
                                                     for(var i=0; i<Nt; i++) {

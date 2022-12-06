@@ -203,6 +203,25 @@
 
                                         <div id="box" class="jxgbox" style="width:500px; height:500px;"></div>
                                             <script type="text/javascript">
+                                                // preamble
+                                                // create n dimensional array
+                                                function createArray(length) {
+                                                    var arr = new Array(length || 0),
+                                                    i = length;
+                                                    if (arguments.length > 1) {
+                                                        var args = Array.prototype.slice.call(arguments, 1);
+                                                        while(i--) arr[length-1 - i] = createArray.apply(this, args);
+                                                    }
+                                                
+                                                    return arr;
+                                                }
+
+
+                                                
+
+                                                //////// graphics stuff
+
+             
                                                 // Initialise board
                                                 var board = JXG.JSXGraph.initBoard('box', {boundingbox: [-1.5, 28.5, 28.5, -1.5], axis: true, grid: false});
            
@@ -218,11 +237,11 @@
                                                 //pt = board.create('text', [10,23, "Reproduction rate pred./per prey"], {fixed:true});
                                                 // sg adds
                                                 a = board.create('slider', [[10.0,22.0],[15.0,22.0],[50,100,200]],{name:'R',strokeColor:'black',fillColor:'black'});
-                                                //at = board.create('text', [10,23, "Separation"], {fixed:true});
+                                                //at = board.create('text', [10,21, "Separation"], {fixed:true});
                                                 m1 = board.create('slider', [[10.0,20.0],[15.0,20.0],[0.1,0.75,1.0]],{name:'m1',strokeColor:'black',fillColor:'black'});
-                                                m1t = board.create('text', [10,23, "m1"], {fixed:true});
+                                                //m1t = board.create('text', [10,19, "m1"], {fixed:true});
                                                 m2 = board.create('slider', [[10.0,18.0],[15.0,18.0],[0.1,0.25,1.0]],{name:'m2',strokeColor:'black',fillColor:'black'});
-                                                m2t = board.create('text', [10,23, "m2"], {fixed:true});
+                                                //m2t = board.create('text', [10,17, "m2"], {fixed:true});
                                                 
            
                                                 // Dynamic initial value as gliders on the y-axis

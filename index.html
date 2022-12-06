@@ -200,7 +200,7 @@
 
                                                     // calculate derivatives
                                                     twodt = 2.*dt;
-                                                    for (var i=0; it<3; it++){
+                                                    for (var i=0; i<3; i++){
                                                        for (var j=0; j<3; j++){
                                                             // first time derivative
                                                             // deal w edge cases first
@@ -231,8 +231,6 @@
                                                                 // first time derivative
                                                                 dddIij[it,i,j] = (ddIij[it+1,i,j] - ddIij[it-1,i,j])/twodt;
                                                             }
-
-
                                                         }
                                                     }
 

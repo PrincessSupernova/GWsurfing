@@ -213,7 +213,7 @@
                                                 ut = board.create('text', [20,23, "Death rate predators"], {fixed:true});
            
                                                 o = board.create('slider', [[10.0,26.0],[15.0,26.0],[0.0,0.1,1.0]],{name:'&gamma;1',strokeColor:'black',fillColor:'black'});
-                                                ot = board.create('text', [10,25, "Death rate preys/per predator"], {fixed:true});
+                                                //ot = board.create('text', [10,25, "Death rate preys/per predator"], {fixed:true});
                                                 p = board.create('slider', [[10.0,24.0],[15.0,24.0],[0.0,0.3,1.0]],{name:'&gamma;2',strokeColor:'black',fillColor:'black'});
                                                 pt = board.create('text', [10,23, "Reproduction rate pred./per prey"], {fixed:true});
                                                 // sg adds
@@ -242,6 +242,9 @@
                                                     var M = m1.Value() + m2.Value();
                                                     var Torb = 2.*Math.PI*Math.sqrt(a.Value()**3/M);
                                                     var Omega = 2.*Math.PI/Torb;
+
+                                                    var Nt = 202;
+                                                    var dt = 2.*Torb/Nt;
 
                                                     // evaluation interval
                                                     var I = [0, 25];

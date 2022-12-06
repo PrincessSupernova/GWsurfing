@@ -105,13 +105,157 @@
                                                 // function to calculate hp
                                                 function get_hp(){
                                                     // Omega
-                                                    var M = m1.Value() + m2.Value();
+                                                    var mass1 = m1.Value();
+                                                    var mass2 = m2.Value();
+                                                    var M = mass1 + mass2;
+                                                    var R = a.Value();
                                                     var Torb = 2.*Math.PI*Math.sqrt(a.Value()**3/M);
                                                     var Omega = 2.*Math.PI/Torb;
                                                     // variables for calculations
-                                                    Nt = 202; // number of time steps to use
+                                                    var Nt = 202; // number of time steps to use
+                                                    var Nth = 41; // number of steps in cos theta to use
+                                                    var Nph = 30; // number of steps in phi to use
+                                                    var dt = 2.*Torb/Nt; // time steps
 
-                                                    return Omega;
+                                                    // array for time stamps
+                                                    var tt = CreateArray(Nt);
+                                                    for (var i=0; i<Nt; i++){
+                                                        tt[i] = i*dt;
+                                                    } 
+
+                                                    // arrays for theta+sin/cos
+                                                    var dcostheta = 2./(Nth-1)
+                                                    var theta = CreateArray(Nth);
+                                                    var costheta = CreateArray(Nth);
+                                                    var sintheta = CreateArray(Nth);
+                                                    for (var i=0; i<Nth;i++){
+                                                        costheta[i] = -1. + i*dcostheta;
+                                                        theta[i] = Math.acos(costheta[i]);
+                                                        sintheta[i] = Math.sin(theta[i]);
+
+                                                    }
+
+                                                    // arrays for phi+sin/cos
+                                                    var dphi = 2.*Math.PI/Nph
+                                                    var phi = CreateArray(Nphi); 
+                                                    var cosphi = CreateArray(Nphi); 
+                                                    var sinphi = CreateArray(Nphi); 
+                                                    for (var i=0; i<Nth;i++){
+                                                        phi[i] = i*dphi;
+                                                        cosphi[i] = Math.cos(phi[i]);
+                                                        sinphi[i] = Math.sin(phi[i]);
+                                                    }
+
+ 
+                                                    // arrays for particle positions and velocities
+                                                    var X1 = CreateArray(Nt,3);
+                                                    var X2 = CreateArray(Nt,3);
+                                                    var V1 = CreateArray(Nt,3);
+                                                    var V2 = CreateArray(Nt,3);
+
+                                                    // arrays for quadrupole moments and derivatives
+                                                    var Iij = CreateArray(Nt,3,3);
+                                                    var dIij = CreateArray(Nt,3,3);
+                                                    var ddIij = CreateArray(Nt,3,3);
+                                                    var dddIij = CreateArray(Nt,3,3);
+
+                                                    // prefactors to save time 
+                                                    var prefacm1 = -R*mass1/M;
+                                                    var prefacm1Omega = prefacm1*Omega;
+                                                    var prefacm2 = R*mass2/M;
+                                                    var prefacm2Omega = prefac2*Omega;
+
+                                                    for (var it=0; it<Nt; it++){
+                                                        var Omegat = Omega*tt[it];
+                                                        var sinOmegat = Math.sin(Omegat);
+                                                        var cosOmegat = Math.cos(Omegat);
+
+                                                        // X1[it,:]=R*m2/M*np.array([np.cos(ph),np.sin(ph),0])
+                                                        X1[it,0]=prefacm2*cosOmegat;
+                                                        X1[it,1]=prefacm2*sinOmegat;
+                                                        X1[it,2]=0;
+                                                       
+                                                        // V1[it,i]=R*m2/M*Omg*np.array([-np.sin(ph),np.cos(ph),0])
+                                                        V1[it,0]=-prefacm2Omega*sinOmegat;
+                                                        V1[it,1]=prefacm2Omega*cosOmegat;
+                                                        V1[it,2]=0;
+
+                                                        // X2[it,i]=-R*m1/M*np.array([np.cos(ph),np.sin(ph),0])
+                                                        X2[it,0]=prefacm1*cosOmegat;
+                                                        X2[it,1]=prefacm1*sinOmegat;
+                                                        X2[it,2]=0;
+
+                                                        //V2[it,i]=-R*m1/M*Omg*np.array([-np.sin(ph),np.cos(ph),0])
+                                                        V2[it,0]=-prefacm1Omega*sinOmegat;
+                                                        V2[it,1]=prefacm1Omega*cosOmegat;
+                                                        V2[it,2]=0;
+                                                       
+                                                        for (var i=0; i<3; i++){
+                                                            for (var j=0; j<3; j++){
+                                                                // mass quadrupole 
+                                                                Iij[it,i,j]=mass1*X1[it,i]*X1[it,j]+mass2*X2[it,i]*X2[it,j];
+                                                            }
+                                                        }
+                                                    }
+
+                                                    // calculate derivatives
+                                                    twodt = 2.*dt;
+                                                    for (var i=0; it<3; it++){
+                                                       for (var j=0; j<3; j++){
+                                                            // first time derivative
+                                                            // deal w edge cases first
+                                                            dIij[0,i,j] = (-3.*Iij[0,i,j] + 4.*Iij[1,i,j] - Iij[2,i,j])/twodt;
+                                                            dIij[Nt-1,i,j] = (Iij[Nt-3,i,j] - 4.*Iij[Nt-2,i,j] + 3.*Iij[Nt-1,i,j])/twodt;
+                                                            // now loop over rest
+                                                            for (var it=1; it<Nt-1; it++){
+                                                                // first time derivative
+                                                                dIij[it,i,j] = (Iij[it+1,i,j] - Iij[it-1,i,j])/twodt;
+                                                            }
+
+                                                            // second time derivative
+                                                            // deal w edge cases first
+                                                            ddIij[0,i,j] = (-3.*dIij[0,i,j] + 4.*dIij[1,i,j] - dIij[2,i,j])/twodt;
+                                                            ddIij[Nt-1,i,j] = (dIij[Nt-3,i,j] - 4.*dIij[Nt-2,i,j] + 3.*dIij[Nt-1,i,j])/twodt;
+                                                            // now loop over rest
+                                                            for (var it=1; it<Nt-1; it++){
+                                                                // first time derivative
+                                                                ddIij[it,i,j] = (dIij[it+1,i,j] - dIij[it-1,i,j])/twodt;
+                                                            }
+
+                                                            // third time derivative
+                                                            // deal w edge cases first
+                                                            dddIij[0,i,j] = (-3.*ddIij[0,i,j] + 4.*ddIij[1,i,j] - ddIij[2,i,j])/twodt;
+                                                            dddIij[Nt-1,i,j] = (ddIij[Nt-3,i,j] - 4.*ddIij[Nt-2,i,j] + 3.*ddIij[Nt-1,i,j])/twodt;
+                                                            // now loop over rest
+                                                            for (var it=1; it<Nt-1; it++){
+                                                                // first time derivative
+                                                                dddIij[it,i,j] = (ddIij[it+1,i,j] - ddIij[it-1,i,j])/twodt;
+                                                            }
+
+
+                                                        }
+                                                    }
+
+
+
+
+
+
+                                                    // 
+                                                    
+                                                    // 
+                                                    
+                                                    // 
+                                                    
+                                                    // 
+                                                    // 
+                                                    
+
+
+
+
+
+                                                    return dddIij;
                                                 } 
            
                                                 // Variables for the JXG.Curves
@@ -168,6 +312,7 @@
                                                 
                                                 // get data points
                                                 var data = ode();
+                                                var dddIij = get_hp();
            
                                                 // copy data to arrays so we can plot it using JXG.Curve
                                                 var t = [];
@@ -183,26 +328,36 @@
 
                                                 var Nt = 202;
                                                 var dt = 2.*Torb/Nt;
- 
-                                                for(var i=0; i<data.length; i++) {
-                                                    t[i] = data[i][2];
-                                                    time[i] = i*dt;
-                                                    datapred[i] = data[i][0];
-                                                    dataprey[i] = data[i][1];
-                                                    testarr[i] = 5*Math.sin(Omega*time[i]) + 10;
-                                                    testarr2[i] = Omega*1000;
+
+                                                // Plot Predator
+                                                var dddIijone = CreateArray(Nt)
+                                                var dddIijtwo = CreateArray(Nt)
+
+                                                for(var it=0; it<Nt; it++) {
+                                                    //t[i] = data[i][2];
+                                                    time[it] = i*dt;
+                                                    dddIijone[it] = dddIij[it,0,0];
+                                                    dddIijtwo[it] = dddIij[it,0,1];
+
+                                                    //datapred[i] = data[i][0];
+                                                    //dataprey[i] = data[i][1];
+                                                    //testarr[i] = 5*Math.sin(Omega*time[i]) + 10;
+                                                    //testarr2[i] = Omega*1000;
                                                 
                                                 }
                                                 
-                                                // Plot Predator
-                                                g3 = board.create('curve', [time/1000, testarr2], {strokeColor:'red', strokeWidth:'2px'});
+                                                g3 = board.create('curve', [time, dddIijone, {strokeColor:'red', strokeWidth:'2px'});
                                                 g3.updateDataArray = function() {
-                                                    var data = ode();
+//                                                    var data = ode();
+                                                    var dddIij = get_hp();
                                                     this.dataX = [];
                                                     this.dataY = [];
-                                                    for(var i=0; i<Nt; i++) {
-                                                        this.dataX[i] = time[i]/1000;
-                                                        this.dataY[i] = Omega*1000;//a.Value()/10.;
+                                                    for(var it=0; it<Nt; it++) {
+                                                        this.dataX[it] = time[it];
+                                                        this.dataY[it] = dddIij[it,0,0];
+
+
+//                                                        this.dataY[i] = Omega*1000;//a.Value()/10.;
                                                     }
                                                 }
            
@@ -219,14 +374,14 @@
                                                 //}
 
                                                 // test
-                                                g5 = board.create('curve', [time/1000, testarr], {strokeColor:'blue', strokeWidth:'2px'});
+                                                g5 = board.create('curve', [time, dddIijtwo], {strokeColor:'blue', strokeWidth:'2px'});
                                                 g5.updateDataArray = function() {
-                                                    var data = ode();
+                                                    var dddIij = get_hp();
                                                     this.dataX = [];
                                                     this.dataY = [];
-                                                    for(var i=0; i<Nt; i++) {
-                                                        this.dataX[i] = time[i]/1000;
-                                                        this.dataY[i] = 5*Math.sin(Omega*time[i]) + 10;
+                                                    for(var it=0; it<Nt; it++) {
+                                                        this.dataX[it] = time[it];
+                                                        this.dataY[it] = dddIij[it,0,1];
                                                     }
                                                 }
 

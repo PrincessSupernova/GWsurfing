@@ -148,6 +148,9 @@
                                                 var prefacm1Omega = prefacm1*Omega;
                                                 var prefacm2 = R*mass2/M;
                                                 var prefacm2Omega = prefac2*Omega;
+
+                                                var plotarr = [Nt];
+
                                                 // loop over time steps
                                                 for (var it=0; it<Nt; it++){
                                                     var Omegat = Omega*tt[it];
@@ -160,11 +163,13 @@
                                                     X1[it][2]=0;
 
 
+                                                    plotarr[it] = prefacm2*cosOmegat;
+
                                                 }
                                                 
  
-                                                var c = board.create('curve',[tt,X1[][0]],{strokeColor:'magenta',strokeWidth:3});                                                
-                                                var d = board.create('curve',[tt,X1[][1]],{strokeColor:'green',strokeWidth:3});                                                
+                                                var c = board.create('curve',[tt,plotarr],{strokeColor:'magenta',strokeWidth:3});                                                
+//                                                var d = board.create('curve',[tt,X1[][1]],{strokeColor:'green',strokeWidth:3});                                                
 
 
                                                 board.unsuspendUpdate(); 

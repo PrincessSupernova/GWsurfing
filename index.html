@@ -76,7 +76,7 @@
 
              
                                                 // Initialise board
-                                                var board = JXG.JSXGraph.initBoard('box', {boundingbox: [-700, 17, 12650, -3], axis: true, grid: false});
+                                                var board = JXG.JSXGraph.initBoard('box', {boundingbox: [-700, 100, 12650, -100], axis: true, grid: false});
                                                 board.suspendUpdate();
            
                                                 // Define sliders to dynamically change parameters of the equations and create text elements to describe them
@@ -115,8 +115,8 @@
                                                 var yt = [];//;CreateArray(Nt);
                                                 for (var i=0; i<Nt; i++){
                                                     tt[i] = i*dt;
-                                                    //yt[i] = (R*mass2/M)*Math.sin(Omega*tt[i]);
-                                                    yt[i] = 10.*Math.sin(Omega*tt[i]) + 5.;
+                                                    yt[i] = (R*mass2/M)*Math.sin(Omega*tt[i]);
+                                                    //yt[i] = 10.*Math.sin(Omega*tt[i]) + 5.;
  
                                                 }
 

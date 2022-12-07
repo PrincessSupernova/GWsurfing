@@ -149,7 +149,7 @@
                                                 var prefacm2 = R*mass2/M;
                                                 var prefacm2Omega = prefac2*Omega;
 
-                                                var plotarr = [Nt];
+                                                var plotarr = [];
 
                                                 // loop over time steps
                                                 for (var it=0; it<Nt; it++){
@@ -158,9 +158,9 @@
                                                     var cosOmegat = Math.cos(Omegat);
                                                 
                                                     // X1[it,:]=R*m2/M*np.array([np.cos(ph),np.sin(ph),0])
-                                                    X1[it][0]=prefacm2*cosOmegat;
-                                                    X1[it][1]=prefacm2*sinOmegat;
-                                                    X1[it][2]=0;
+                                                    //X1[it][0]=prefacm2*cosOmegat;
+                                                    //X1[it][1]=prefacm2*sinOmegat;
+                                                    //X1[it][2]=0;
 
 
                                                     plotarr[it] = prefacm2*cosOmegat;

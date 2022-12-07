@@ -119,7 +119,7 @@
                                                 }
                                                 var c = board.create('curve',[tt,yt],{strokeColor:'#aa2233',strokeWidth:3});                                                
 
-                                                
+                                                board.unsuspendUpdate(); 
            
                                                 // Dynamic initial value as gliders on the y-axis
                                                 //startpred = board.create('glider', [0, 10, board.defaultAxes.y], {name:'Preys',strokeColor:'red',fillColor:'red'});

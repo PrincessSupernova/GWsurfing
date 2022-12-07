@@ -236,23 +236,6 @@
 
 
 
-
-
-
-                                                    // 
-                                                    
-                                                    // 
-                                                    
-                                                    // 
-                                                    
-                                                    // 
-                                                    // 
-                                                    
-
-
-
-
-
                                                     return dddIij;
                                                 } 
            
@@ -344,20 +327,20 @@
                                                 
                                                 }
                                                 
-                                                g3 = board.create('curve', [time, dddIijone, {strokeColor:'red', strokeWidth:'2px'});
-                                                g3.updateDataArray = function() {
-//                                                    var data = ode();
-                                                    var dddIij = get_hp();
-                                                    this.dataX = [];
-                                                    this.dataY = [];
-                                                    for(var it=0; it<Nt; it++) {
-                                                        this.dataX[it] = time[it];
-                                                        this.dataY[it] = dddIij[it,0,0];
-
-
-//                                                        this.dataY[i] = Omega*1000;//a.Value()/10.;
-                                                    }
-                                                }
+                                                //g3 = board.create('curve', [time, dddIijone, {strokeColor:'red', strokeWidth:'2px'});
+                                                //g3.updateDataArray = function() {
+//                                              //      var data = ode();
+                                                //    var dddIij = get_hp();
+                                                //    this.dataX = [];
+                                                //    this.dataY = [];
+                                                //    for(var it=0; it<Nt; it++) {
+                                                //        this.dataX[it] = time[it];
+                                                //        this.dataY[it] = dddIij[it,0,0];
+                                                //
+                                                //
+                                                //        this.dataY[i] = Omega*1000;//a.Value()/10.;
+                                                //    }
+                                                //}
            
                                                 // Plot Prey
                                                 // g4 = board.create('curve', [t, dataprey], {strokeColor:'blue', strokeWidth:'2px'});
@@ -372,16 +355,16 @@
                                                 //}
 
                                                 // test
-                                                g5 = board.create('curve', [time, dddIijtwo], {strokeColor:'blue', strokeWidth:'2px'});
-                                                g5.updateDataArray = function() {
-                                                    var dddIij = get_hp();
-                                                    this.dataX = [];
-                                                    this.dataY = [];
-                                                    for(var it=0; it<Nt; it++) {
-                                                        this.dataX[it] = time[it];
-                                                        this.dataY[it] = dddIij[it,0,1];
-                                                    }
-                                                }
+                                                //g5 = board.create('curve', [time, dddIijtwo], {strokeColor:'blue', strokeWidth:'2px'});
+                                                //g5.updateDataArray = function() {
+                                                //    var dddIij = get_hp();
+                                                //    this.dataX = [];
+                                                //    this.dataY = [];
+                                                //    for(var it=0; it<Nt; it++) {
+                                                //        this.dataX[it] = time[it];
+                                                //        this.dataY[it] = dddIij[it,0,1];
+                                                //    }
+                                                //}
 
                                             </script>
 

@@ -77,6 +77,7 @@
              
                                                 // Initialise board
                                                 var board = JXG.JSXGraph.initBoard('box', {boundingbox: [-1.5, 28.5, 28.5, -1.5], axis: true, grid: false});
+                                                board.suspendUpdate();
            
                                                 // Define sliders to dynamically change parameters of the equations and create text elements to describe them
                                                 s = board.create('slider', [[20.0,26.0],[25.0,26.0],[0.0,0.3,1.0]],{name:'&epsilon;1',strokeColor:'black',fillColor:'black'});
@@ -313,12 +314,14 @@
                                                 // Plot Predator
                                                 var dddIijone = CreateArray(Nt)
                                                 var dddIijtwo = CreateArray(Nt)
+                                                var OmegaArr = CreateArray(Nt)
 
                                                 for(var it=0; it<Nt; it++) {
                                                     //t[i] = data[i][2];
                                                     time[it] = i*dt;
                                                     dddIijone[it] = dddIij[it,0,0];
                                                     dddIijtwo[it] = dddIij[it,0,1];
+                                                    OmegaArr[it] = 5*Math.sin(Omega*time[i]);
 
                                                     //datapred[i] = data[i][0];
                                                     //dataprey[i] = data[i][1];
@@ -327,19 +330,21 @@
                                                 
                                                 }
                                                 
-                                                g3 = board.create('curve', [time, Omega*1000, {strokeColor:'red', strokeWidth:'2px'});
-                                                g3.updateDataArray = function() {
-                                                    //var dddIij = get_hp();
-                                                    this.dataX = [];
-                                                    this.dataY = [];
-                                                    for(var it=0; it<Nt; it++) {
-                                                        this.dataX[it] = time[it];
-                                                        //this.dataY[it] = dddIij[it,0,0];
+                                                g3 = board.create('curve', [time, OmegaArr, {strokeColor:'red', strokeWidth:'2px'});
+                                                //g3.updateDataArray = function() {
+                                                //    //var dddIij = get_hp();
+                                                //    this.dataX = [];
+                                                //    this.dataY = [];
+                                                //    for(var it=0; it<Nt; it++) {
+                                                //        this.dataX[it] = time[it];
+                                                //        //this.dataY[it] = dddIij[it,0,0];
                                                 
-                                                
-                                                        this.dataY[it] = Omega*1000;//a.Value()/10.;
-                                                    }
-                                                }
+                                                //        this.dataY[it] = Omega*1000;//a.Value()/10.;
+                                                //    }
+                                                //}
+
+
+                                                board.unsuspendUpdate();
            
                                                 // Plot Prey
                                                 // g4 = board.create('curve', [t, dataprey], {strokeColor:'blue', strokeWidth:'2px'});

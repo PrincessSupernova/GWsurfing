@@ -116,7 +116,7 @@
 
                                                 //var prefacm1 = -R*mass1/M;
                                                 //var prefacm1Omega = prefacm1*Omega;
-                                                //var prefacm2 = R*mass2/M;
+                                                var prefacm2 = R*mass2/M;
                                                 //var prefacm2Omega = prefac2*Omega;
 
                                                 // array for time stamps
@@ -124,8 +124,8 @@
                                                 var yt = [];//;CreateArray(Nt);
                                                 for (var i=0; i<Nt; i++){
                                                     tt[i] = i*dt;
-                                                    //yt[i] = prefacm2*Math.sin(Omega*tt[i]);
-                                                    yt[i] = 10.*Math.sin(Omega*tt[i]) + 5.;
+                                                    yt[i] = prefacm2*Math.sin(Omega*tt[i]);
+                                                    //yt[i] = 10.*Math.sin(Omega*tt[i]) + 5.;
  
                                                 }
 

@@ -111,8 +111,8 @@
                                                 var dt = 2.*Torb/Nt; // time steps
 
                                                 // array for time stamps
-                                                var tt = CreateArray(Nt);
-                                                var yt = CreateArray(Nt);
+                                                var tt = [];//CreateArray(Nt);
+                                                var yt = [];//;CreateArray(Nt);
                                                 for (var i=0; i<Nt; i++){
                                                     tt[i] = i*dt;
                                                     yt[i] = 5*Math.sin(tt[i]) + 10.;

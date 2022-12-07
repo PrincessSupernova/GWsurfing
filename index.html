@@ -74,9 +74,16 @@
 
                                                 //////// graphics stuff
 
-             
+                                                // coordinates of top left corner
+                                                var TLx = -700;
+                                                var TLy = 100;
+                                                // coordinates of bottom right corner
+                                                var BRx = 12650;
+                                                var BRy = -100;
+                                                 
                                                 // Initialise board
-                                                var board = JXG.JSXGraph.initBoard('box', {boundingbox: [-700, 100, 12650, -100], axis: true, grid: false});
+                                                var board = JXG.JSXGraph.initBoard('box', {boundingbox: [TLx, TLy, BRx, BRy], axis: true, grid: false});
+         
                                                 board.suspendUpdate();
            
                                                 // Define sliders to dynamically change parameters of the equations and create text elements to describe them

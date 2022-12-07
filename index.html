@@ -98,40 +98,37 @@
                                                 //pt = board.create('text', [10,23, "Reproduction rate pred./per prey"], {fixed:true});
                                                 // sg adds
                                                 a = board.create('slider', [[8000,90],[10000,90],[50,100,200]],{name:'R',strokeColor:'black',fillColor:'black'});
-                                                //at = board.create('text', [10,21, "Separation"], {fixed:true});
                                                 m1 = board.create('slider', [[8000,80],[10000,80],[0.1,0.75,1.0]],{name:'m1',strokeColor:'black',fillColor:'black'});
-                                                //m1t = board.create('text', [10,19, "m1"], {fixed:true});
                                                 m2 = board.create('slider', [[8000,70],[10000,70],[0.1,0.25,1.0]],{name:'m2',strokeColor:'black',fillColor:'black'});
-                                                //m2t = board.create('text', [10,17, "m2"], {fixed:true});
 
-//                                                var mass1 = m1.Value();
-//                                                var mass2 = m2.Value();
-//                                                var M = mass1 + mass2;
-//                                                var R = a.Value();
-//                                                var Torb = 2.*Math.PI*Math.sqrt(R**3/M);
-//                                                var Omega = 2.*Math.PI/Torb;
-//
-//                                                // more variables for calculations
-//                                                var Nt = 202; // number of time steps to use
-//                                                var Nth = 41; // number of steps in cos theta to use
-//                                                var Nph = 30; // number of steps in phi to use
-//                                                var dt = 2.*Torb/Nt; // time steps
-//
-//                                                var prefacm1 = -R*mass1/M;
-//                                                var prefacm1Omega = prefacm1*Omega;
-//                                                var prefacm2 = R*mass2/M;
-//                                                var prefacm2Omega = prefac2*Omega;
-//
-//                                                // array for time stamps
-//                                                var tt = [];//CreateArray(Nt);
-//                                                var yt = [];//;CreateArray(Nt);
-//                                                for (var i=0; i<Nt; i++){
-//                                                    tt[i] = i*dt;
-//                                                    //yt[i] = prefacm2*Math.sin(Omega*tt[i]);
-//                                                    yt[i] = 10.*Math.sin(Omega*tt[i]) + 5.;
-// 
-//                                                }
-//
+                                                var mass1 = m1.Value();
+                                                var mass2 = m2.Value();
+                                                var M = mass1 + mass2;
+                                                var R = a.Value();
+                                                var Torb = 2.*Math.PI*Math.sqrt(R**3/M);
+                                                var Omega = 2.*Math.PI/Torb;
+
+                                                // more variables for calculations
+                                                var Nt = 202; // number of time steps to use
+                                                var Nth = 41; // number of steps in cos theta to use
+                                                var Nph = 30; // number of steps in phi to use
+                                                var dt = 2.*Torb/Nt; // time steps
+
+                                                var prefacm1 = -R*mass1/M;
+                                                var prefacm1Omega = prefacm1*Omega;
+                                                var prefacm2 = R*mass2/M;
+                                                var prefacm2Omega = prefac2*Omega;
+
+                                                // array for time stamps
+                                                var tt = [];//CreateArray(Nt);
+                                                var yt = [];//;CreateArray(Nt);
+                                                for (var i=0; i<Nt; i++){
+                                                    tt[i] = i*dt;
+                                                    //yt[i] = prefacm2*Math.sin(Omega*tt[i]);
+                                                    yt[i] = 10.*Math.sin(Omega*tt[i]) + 5.;
+ 
+                                                }
+
 //
 //                                                // prefactors to save time 
 

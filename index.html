@@ -115,7 +115,7 @@
                                                 var yt = [];//;CreateArray(Nt);
                                                 for (var i=0; i<Nt; i++){
                                                     tt[i] = i*dt;
-                                                    yt[i] = 5*Math.sin(tt[i]) + 10.;
+                                                    yt[i] = 5*Math.sin(Omega*tt[i]) + 10.;
                                                 }
                                                 var c = board.create('curve',[tt,yt],{strokeColor:'#aa2233',strokeWidth:3});                                                
 

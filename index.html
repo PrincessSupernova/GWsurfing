@@ -115,7 +115,9 @@
                                                 var yt = [];//;CreateArray(Nt);
                                                 for (var i=0; i<Nt; i++){
                                                     tt[i] = i*dt;
-                                                    yt[i] = (R*mass2/M)*Math.sin(Omega*tt[i]);
+                                                    //yt[i] = (R*mass2/M)*Math.sin(Omega*tt[i]);
+                                                    yt[i] = 10.*Math.sin(Omega*tt[i]) + 5.;
+ 
                                                 }
 
 

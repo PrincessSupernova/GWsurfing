@@ -117,7 +117,55 @@
                                                     tt[i] = i*dt;
                                                     yt[i] = 5*Math.sin(Omega*tt[i]) + 10.;
                                                 }
-                                                var c = board.create('curve',[tt,yt],{strokeColor:'#aa2233',strokeWidth:3});                                                
+
+
+                                                // arrays for theta+sin/cos
+                                                var dcostheta = 2./(Nth-1)
+                                                var theta = [];
+                                                var costheta = [];
+                                                var sintheta = [];
+                                                for (var i=0; i<Nth;i++){
+                                                    costheta[i] = -1. + i*dcostheta;
+                                                    theta[i] = Math.acos(costheta[i]);
+                                                    sintheta[i] = Math.sin(theta[i]);
+
+                                                }
+                                                
+                                                // arrays for phi+sin/cos
+                                                var dphi = 2.*Math.PI/Nph
+                                                var phi = [];
+                                                var cosphi = [];
+                                                var sinphi = [];
+                                                for (var i=0; i<Nph;i++){
+                                                    phi[i] = i*dphi;
+                                                    cosphi[i] = Math.cos(phi[i]);
+                                                    sinphi[i] = Math.sin(phi[i]);
+                                                }
+
+                                                var[][] X1 = new var[Nt][3];
+                                                // prefactors to save time 
+                                                var prefacm1 = -R*mass1/M;
+                                                var prefacm1Omega = prefacm1*Omega;
+                                                var prefacm2 = R*mass2/M;
+                                                var prefacm2Omega = prefac2*Omega;
+                                                // loop over time steps
+                                                for (var it=0; it<Nt; it++){
+                                                    var Omegat = Omega*tt[it];
+                                                    var sinOmegat = Math.sin(Omegat);
+                                                    var cosOmegat = Math.cos(Omegat);
+                                                
+                                                    // X1[it,:]=R*m2/M*np.array([np.cos(ph),np.sin(ph),0])
+                                                    X1[it][0]=prefacm2*cosOmegat;
+                                                    X1[it][1]=prefacm2*sinOmegat;
+                                                    X1[it][2]=0;
+
+
+                                                }
+                                                
+ 
+                                                var c = board.create('curve',[tt,X1[][0]],{strokeColor:'magenta',strokeWidth:3});                                                
+                                                var d = board.create('curve',[tt,X1[][1]],{strokeColor:'green',strokeWidth:3});                                                
+
 
                                                 board.unsuspendUpdate(); 
            
@@ -128,49 +176,6 @@
 
                                                 // function to calculate hp
                                                 //function get_hp(){
-                                                //    // Omega
-                                                //    var mass1 = m1.Value();
-                                                //    var mass2 = m2.Value();
-                                                //    var M = mass1 + mass2;
-                                                //    var R = a.Value();
-                                                //    var Torb = 2.*Math.PI*Math.sqrt(a.Value()**3/M);
-                                                //    var Omega = 2.*Math.PI/Torb;
-                                                //    // variables for calculations
-                                                //    var Nt = 202; // number of time steps to use
-                                                //    var Nth = 41; // number of steps in cos theta to use
-                                                //    var Nph = 30; // number of steps in phi to use
-                                                //    var dt = 2.*Torb/Nt; // time steps
-
-                                                //    // array for time stamps
-                                                //    var tt = CreateArray(Nt);
-                                                //    for (var i=0; i<Nt; i++){
-                                                //        tt[i] = i*dt;
-                                                //    } 
-                                                //
-                                                //    // arrays for theta+sin/cos
-                                                //    var dcostheta = 2./(Nth-1)
-                                                //    var theta = CreateArray(Nth);
-                                                //    var costheta = CreateArray(Nth);
-                                                //    var sintheta = CreateArray(Nth);
-                                                //    for (var i=0; i<Nth;i++){
-                                                //        costheta[i] = -1. + i*dcostheta;
-                                                //        theta[i] = Math.acos(costheta[i]);
-                                                //        sintheta[i] = Math.sin(theta[i]);
-
-                                                //    }
-                                                //
-                                                //    // arrays for phi+sin/cos
-                                                //    var dphi = 2.*Math.PI/Nph
-                                                //    var phi = CreateArray(Nphi); 
-                                                //    var cosphi = CreateArray(Nphi); 
-                                                //    var sinphi = CreateArray(Nphi); 
-                                                //    for (var i=0; i<Nth;i++){
-                                                //        phi[i] = i*dphi;
-                                                //        cosphi[i] = Math.cos(phi[i]);
-                                                //        sinphi[i] = Math.sin(phi[i]);
-                                                //    }
-                                                //
-                                                //
                                                 //    // arrays for particle positions and velocities
                                                 //    var X1 = CreateArray(Nt,3);
                                                 //    var X2 = CreateArray(Nt,3);

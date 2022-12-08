@@ -208,19 +208,19 @@
                                                     X2[it][1] = prefacm1*sinOmegat;
                                                     X2[it][2] = 0;
 
-
+                                                    
 
 
 ////
 
 
-                                                //        for (var i=0; i<3; i++){
-                                                //            for (var j=0; j<3; j++){
-                                                //                // mass quadrupole 
-                                                //                Iij[it,i,j]=mass1*X1[it,i]*X1[it,j]+mass2*X2[it,i]*X2[it,j];
-                                                //            }
-                                                //        }
-                                                //    }
+                                                    for (var i=0; i<3; i++){
+                                                        for (var j=0; j<3; j++){
+                                                            // mass quadrupole 
+                                                            Iij[it][i][j]=mass1*X1[it][i]*X1[it][j]+mass2*X2[it][i]*X2[it][j];
+                                                        }
+                                                    }
+                                                
                                                 //
                                                 //    // calculate derivatives
                                                 //    twodt = 2.*dt;
@@ -243,7 +243,7 @@
 
 ////                                                
  
-                                                var c = board.create('curve',[tt,X1x],{strokeColor:'magenta',strokeWidth:3});                                                
+                                                var c = board.create('curve',[tt,X1y],{strokeColor:'magenta',strokeWidth:3});                                                
 //                                                var d = board.create('curve',[tt,X1[][1]],{strokeColor:'green',strokeWidth:3});                                                
 
 

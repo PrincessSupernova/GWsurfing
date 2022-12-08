@@ -172,15 +172,30 @@
 //                                                Iyy = [];
 //
                                                 //make arrays for positions and mass quadrupole moments
+                                                // array for position vector of mass 1
                                                 var X1 = [Nt];
+                                                // array for position vector of mass 2
                                                 var X2 = [Nt];
+                                                // mass quadrupole moment and time derivatives
                                                 var Iij = [Nt];
+                                                var dIij = [Nt];
+                                                var ddIij = [Nt];
+                                                var dddIij = [Nt];
+
                                                 for (var it=0;it<Nt;it++){
                                                     X1[it] = [3];
                                                     X2[it] = [3];
+
                                                     Iij[it] = [3];
+                                                    dIij[it] = [3];
+                                                    ddIij[it] = [3];
+                                                    dddIij[it] = [3];
+
                                                     for (var i=0;i<3;i++){
                                                         Iij[it][i] = [3];
+                                                        dIij[it][i] = [3];
+                                                        ddIij[it][i] = [3];
+                                                        dddIij[it][i] = [3];
                                                     }
                                                 }
 
@@ -195,55 +210,47 @@
                                                     X1y[it]=prefacm2*sinOmegat;
                                                     X1z[it]=0;
 
-                                                    // X2[it,i]=-R*m1/M*np.array([np.cos(ph),np.sin(ph),0]) 
-                                                    X2x[it]=prefacm1*cosOmegat;
-                                                    X2y[it]=prefacm1*sinOmegat;
-                                                    X2z[it]=0;
-
                                                     X1[it][0] = prefacm2*cosOmegat;
                                                     X1[it][1] = prefacm2*sinOmegat;
                                                     X1[it][2] = 0;
 
+                                                    // X2[it,i]=-R*m1/M*np.array([np.cos(ph),np.sin(ph),0]) 
                                                     X2[it][0] = prefacm1*cosOmegat;
                                                     X2[it][1] = prefacm1*sinOmegat;
                                                     X2[it][2] = 0;
 
                                                     
-
-
-////
-
-
                                                     for (var i=0; i<3; i++){
                                                         for (var j=0; j<3; j++){
                                                             // mass quadrupole 
                                                             Iij[it][i][j]=mass1*X1[it][i]*X1[it][j]+mass2*X2[it][i]*X2[it][j];
                                                         }
                                                     }
-                                                
+                                                }
                                                 //
-                                                //    // calculate derivatives
-                                                //    twodt = 2.*dt;
-                                                //    for (var i=0; i<3; i++){
-                                                //       for (var j=0; j<3; j++){
-                                                //            // first time derivative
-                                                //            // deal w edge cases first
-                                                //            dIij[0,i,j] = (-3.*Iij[0,i,j] + 4.*Iij[1,i,j] - Iij[2,i,j])/twodt;
-                                                //            dIij[Nt-1,i,j] = (Iij[Nt-3,i,j] - 4.*Iij[Nt-2,i,j] + 3.*Iij[Nt-1,i,j])/twodt;
-                                                //            // now loop over rest
-                                                //            for (var it=1; it<Nt-1; it++){
-                                                //                // first time derivative
-                                                //                dIij[it,i,j] = (Iij[it+1,i,j] - Iij[it-1,i,j])/twodt;
-                                                //            }
+                                                // calculate derivatives of mass quadrupole
+                                                twodt = 2.*dt;
+                                                for (var i=0; i<3; i++){
+                                                   for (var j=0; j<3; j++){
+                                                        // first time derivative
+                                                        // deal w edge cases first
+                                                        dIij[0][i][j] = (-3.*Iij[0][i][j] + 4.*Iij[1][i][j] - Iij[2][i][j])/twodt;
+                                                        dIij[Nt-1][i][j] = (Iij[Nt-3][i][j] - 4.*Iij[Nt-2][i][j] + 3.*Iij[Nt-1][i][j])/twodt;
+                                                        // now loop over rest
+                                                        for (var it=1; it<Nt-1; it++){
+                                                            // first time derivative
+                                                            dIij[it][i][j] = (Iij[it+1][i][j] - Iij[it-1][i][j])/twodt;
+                                                        }
+                                                    }
+                                                }
  
 
-
-                                                }
+                                                
 
 
 ////                                                
  
-                                                var c = board.create('curve',[tt,X1y],{strokeColor:'magenta',strokeWidth:3});                                                
+                                                var c = board.create('curve',[tt,X1x],{strokeColor:'magenta',strokeWidth:3});                                                
 //                                                var d = board.create('curve',[tt,X1[][1]],{strokeColor:'green',strokeWidth:3});                                                
 
 

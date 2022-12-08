@@ -156,6 +156,66 @@
                                                     sinphi[i] = Math.sin(phi[i]);
                                                 }
 
+                                               // projection tensor stuff
+                                               var ni_thph = [Nth]; //ni_thph = np.zeros((Nth,Nph,3))
+                                               var Lthi_thph = [Nth]; //Lthi_thph = np.zeros((Nth,Nph,3))
+                                               var Lphi_thph = [Nth]; //Lphi_thph = np.zeros((Nth,Nph,3))
+                                               var Pij_thph = [Nth]; // Pij_thph = np.zeros((Nth,Nph,3,3))
+                                               var Lamijkl_thph = [Nth]; //Lamijkl_thph = np.zeros((Nth,Nph,3,3,3,3))
+
+                                               for (var ith=0;ith<Nth;ith++){
+                                                   ni_thph[ith] = [Nph];
+                                                   Lthi_thph[ith] = [Nph];
+                                                   Lphi_thph[ith] = [Nph];
+                                                   Pij_thph[ith] = [Nph];
+                                                   Lamijkl_thph[ith] = [Nph];
+
+                                                   for (var iph=0;iph<Nph;i++){
+
+                                                       ni_thph[ith][iph] = [3];
+                                                       Lthi_thph[ith][iph] = [3];
+                                                       Lphi_thph[ith][iph] = [3];
+                                                       Pij_thph[ith][iph] = [3];
+                                                       Lamijkl_thph[ith][iph] = [3];
+
+                                                       for (var i=0;i<3;i++){
+
+                                                           Pij_thph[ith][iph][i] = [3];
+                                                           Lamijkl_thph[ith][iph][i] = [3];
+
+                                                           for (var j=0;j<3;j++){
+
+                                                               Lamijkl_thph[ith][iph][i][j] = [3];
+
+                                                               for (var k=0;k<3;k++){
+
+                                                                   Lamijkl_thph[ith][iph][i][j][k] = [3]; 
+
+                                                               }
+                                                           }
+                                                       }
+                                                   }                                                   
+                                               }
+                                               
+
+                                               //Calculate the Lambda projection tensor over the sphere of (z,phi)
+                                               //for ith in range(Nth):
+                                               //  for iph in range(Nph):
+                                               //    ni_thph[ith,iph,:]=[sth[ith]*np.cos(pp[iph]),sth[ith]*np.sin(pp[iph]),cth[ith]]
+                                               //    Lthi_thph[ith,iph,:]=[cth[ith]*np.cos(pp[iph]),cth[ith]*np.sin(pp[iph]),-sth[ith]]
+                                               //    Lphi_thph[ith,iph,:]=[-np.sin(pp[iph]),np.cos(pp[iph]),0]
+
+                                               //    for i in range(3):
+                                               //      for j in range(3):
+                                               //        Pij_thph[ith,iph,i,j]=Dij[i,j]-ni_thph[ith,iph,i]*ni_thph[ith,iph,j]
+
+                                               //    for i in range(3):
+                                               //      for j in range(3):
+                                               //        for k in range(3):
+                                               //          for l in range(3):
+                                               //            Lamijkl_thph[ith,iph,i,j,k,l]=Pij_thph[ith,iph,i,k]*Pij_thph[ith,iph,j,l]-0.5*Pij_thph[ith,iph,i,j]*Pij_thph[ith,iph,k,l]
+
+
                                                 // array for position vector of mass 1
                                                 var X1x = [];
                                                 var X1y = [];
@@ -254,13 +314,15 @@
  
 
 
+
                                                 var plotarr1 = [Nt];
                                                 var plotarr2 = [Nt];
                                                 var plotarr3 = [Nt];
                                                 for (var it=0;it<Nt;it++){
                                                     plotarr1[it] = dddIij[it][0][0]*10000000.;
-                                                    plotarr2[it] = dddIij[it][0][1]*10000000.;
+                                                    plotarr2[it] = -dddIij[it][0][1]*10000000.;
                                                 }
+
 ////                                                
  
 //                                                var c = board.create('curve',[tt,X1x],{strokeColor:'magenta',strokeWidth:3});                                                
@@ -271,151 +333,13 @@
 
                                                 board.unsuspendUpdate(); 
            
-                                                // function to calculate hp
-                                                //function get_hp(){
-                                                //    // arrays for particle positions and velocities
-                                                //    var X1 = CreateArray(Nt,3);
-                                                //    var X2 = CreateArray(Nt,3);
-                                                //    var V1 = CreateArray(Nt,3);
-                                                //    var V2 = CreateArray(Nt,3);
-                                                //
-                                                //    // arrays for quadrupole moments and derivatives
-                                                //    var Iij = CreateArray(Nt,3,3);
-                                                //    var dIij = CreateArray(Nt,3,3);
-                                                //    var ddIij = CreateArray(Nt,3,3);
-                                                //    var dddIij = CreateArray(Nt,3,3);
-                                                //
-                                                //    // prefactors to save time 
-                                                //    var prefacm1 = -R*mass1/M;
-                                                //    var prefacm1Omega = prefacm1*Omega;
-                                                //    var prefacm2 = R*mass2/M;
-                                                //    var prefacm2Omega = prefac2*Omega;
-                                                //
-                                                //    for (var it=0; it<Nt; it++){
-                                                //        var Omegat = Omega*tt[it];
-                                                //        var sinOmegat = Math.sin(Omegat);
-                                                //        var cosOmegat = Math.cos(Omegat);
-                                                //
-                                                //        // X1[it,:]=R*m2/M*np.array([np.cos(ph),np.sin(ph),0])
-                                                //        X1[it,0]=prefacm2*cosOmegat;
-                                                //        X1[it,1]=prefacm2*sinOmegat;
-                                                //        X1[it,2]=0;
-                                                //       
-                                                //        // V1[it,i]=R*m2/M*Omg*np.array([-np.sin(ph),np.cos(ph),0])
-                                                //        V1[it,0]=-prefacm2Omega*sinOmegat;
-                                                //        V1[it,1]=prefacm2Omega*cosOmegat;
-                                                //        V1[it,2]=0;
-                                                //
-                                                //        // X2[it,i]=-R*m1/M*np.array([np.cos(ph),np.sin(ph),0])
-                                                //        X2[it,0]=prefacm1*cosOmegat;
-                                                //        X2[it,1]=prefacm1*sinOmegat;
-                                                //        X2[it,2]=0;
-                                                //
-                                                //        //V2[it,i]=-R*m1/M*Omg*np.array([-np.sin(ph),np.cos(ph),0])
-                                                //        V2[it,0]=-prefacm1Omega*sinOmegat;
-                                                //        V2[it,1]=prefacm1Omega*cosOmegat;
-                                                //        V2[it,2]=0;
-                                                //       
-                                                //        for (var i=0; i<3; i++){
-                                                //            for (var j=0; j<3; j++){
-                                                //                // mass quadrupole 
-                                                //                Iij[it,i,j]=mass1*X1[it,i]*X1[it,j]+mass2*X2[it,i]*X2[it,j];
-                                                //            }
-                                                //        }
-                                                //    }
-                                                //
-                                                //    // calculate derivatives
-                                                //    twodt = 2.*dt;
-                                                //    for (var i=0; i<3; i++){
-                                                //       for (var j=0; j<3; j++){
-                                                //            // first time derivative
-                                                //            // deal w edge cases first
-                                                //            dIij[0,i,j] = (-3.*Iij[0,i,j] + 4.*Iij[1,i,j] - Iij[2,i,j])/twodt;
-                                                //            dIij[Nt-1,i,j] = (Iij[Nt-3,i,j] - 4.*Iij[Nt-2,i,j] + 3.*Iij[Nt-1,i,j])/twodt;
-                                                //            // now loop over rest
-                                                //            for (var it=1; it<Nt-1; it++){
-                                                //                // first time derivative
-                                                //                dIij[it,i,j] = (Iij[it+1,i,j] - Iij[it-1,i,j])/twodt;
-                                                //            }
-                                                //
-                                                //            // second time derivative
-                                                //            // deal w edge cases first
-                                                //            ddIij[0,i,j] = (-3.*dIij[0,i,j] + 4.*dIij[1,i,j] - dIij[2,i,j])/twodt;
-                                                //            ddIij[Nt-1,i,j] = (dIij[Nt-3,i,j] - 4.*dIij[Nt-2,i,j] + 3.*dIij[Nt-1,i,j])/twodt;
-                                                //            // now loop over rest
-                                                //            for (var it=1; it<Nt-1; it++){
-                                                //                // first time derivative
-                                                //                ddIij[it,i,j] = (dIij[it+1,i,j] - dIij[it-1,i,j])/twodt;
-                                                //            }
-                                                //
-                                                //            // third time derivative
-                                                //            // deal w edge cases first
-                                                //            dddIij[0,i,j] = (-3.*ddIij[0,i,j] + 4.*ddIij[1,i,j] - ddIij[2,i,j])/twodt;
-                                                //            dddIij[Nt-1,i,j] = (ddIij[Nt-3,i,j] - 4.*ddIij[Nt-2,i,j] + 3.*ddIij[Nt-1,i,j])/twodt;
-                                                //            // now loop over rest
-                                                //            for (var it=1; it<Nt-1; it++){
-                                                //                // first time derivative
-                                                //                dddIij[it,i,j] = (ddIij[it+1,i,j] - ddIij[it-1,i,j])/twodt;
-                                                //            }
-                                                //        }
-                                                //    }
-
-
-
-                                                //    return dddIij;
-                                                //} 
-           
+             
                                                 //// Variables for the JXG.Curves
                                                 //var g3 = null;
                                                 //var g4 = null;
                                                 //var g5 = null;
                                                 //
-                                                //// Initialise ODE and solve it with JXG.Math.Numerics.rungeKutta()
-                                                //function ode() {
-                                                //
-                                                //    // Omega
-                                                //    var M = m1.Value() + m2.Value();
-                                                //    var Torb = 2.*Math.PI*Math.sqrt(a.Value()**3/M);
-                                                //    var Omega = 2.*Math.PI/Torb;
-                                                //
-                                                //    var Nt = 202;
-                                                //    var dt = 2.*Torb/Nt;
-                                                //
-                                                //    // evaluation interval
-                                                //    var I = [0, 25];
-                                                //    // Number of steps. 1000 should be enough
-                                                //    var N = 1000;
-                                                //
-                                                //    // Right hand side of the ODE dx/dt = f(t, x)
-                                                //    var f = function(t, x) {
-                                                //        var bpred = s.Value();//0.3;
-                                                //        var bprey = u.Value();//0.7;
-                                                //        var dpred = o.Value();//0.1;
-                                                //        var dprey = p.Value();//0.3;
-                                                //
-                                                //        var y = [];
-                                                //        y[0] = x[0]*(bpred - dpred*x[1]);
-                                                //        y[1] = -x[1]*(bprey - dprey*x[0]);
-                                                //
-                                                //        return y;
-                                                //    }
-                                                //
-                                                //    // Initial value
-                                                //    var x0 = [startpred.Y(), startprey.Y()];
-                                                //
-                                                //    // Solve ode
-                                                //    var data = JXG.Math.Numerics.rungeKutta('euler', x0, I, N, f);
-                                                //
-                                                //    // to plot the data against time we need the times where the equations were solved
-                                                //    var q = I[0];
-                                                //    var h = (I[1]-I[0])/N;
-                                                //    for(var i=0; i<data.length; i++) {
-                                                //        data[i].push(q);
-                                                //        q += h;
-                                                //    }
-                                                //
-                                                //    return data;
-                                                //}
+                                               
                                                 //
                                                 //// get data points
                                                 //var data = ode();

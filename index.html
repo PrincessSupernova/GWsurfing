@@ -174,8 +174,10 @@
                                                 //var X1 = [][]; 
                                                 //int[][] twoDIntArray;
                                                 var X1 = [];
+                                                var X2 = [];
                                                 for (var it=0;it<Nt;it++){
                                                     X1[it] = [];
+                                                    X2[it] = [];
                                                 }
 
                                                 // loop over time steps
@@ -194,9 +196,14 @@
                                                     X2y[it]=prefacm1*sinOmegat;
                                                     X2z[it]=0;
 
-                                                    X1[it][0] = X1x[it];
-                                                    X1[it][1] = X1y[it];
-                                                    X1[it][2] = X1z[it];
+                                                    X1[it][0] = prefacm2*cosOmegat;
+                                                    X1[it][1] = prefacm2*sinOmegat;
+                                                    X1[it][2] = 0;
+
+                                                    X2[it][0] = prefacm1*cosOmegat;
+                                                    X2[it][1] = prefacm1*sinOmegat;
+                                                    X2[it][2] = 0;
+
 
 
 
@@ -232,7 +239,7 @@
 
 ////                                                
  
-                                                var c = board.create('curve',[tt,X1y],{strokeColor:'magenta',strokeWidth:3});                                                
+                                                var c = board.create('curve',[tt,X1x],{strokeColor:'magenta',strokeWidth:3});                                                
 //                                                var d = board.create('curve',[tt,X1[][1]],{strokeColor:'green',strokeWidth:3});                                                
 
 

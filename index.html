@@ -171,13 +171,17 @@
 //                                                Iyx = [];
 //                                                Iyy = [];
 //
-                                                //var X1 = [][]; 
-                                                //int[][] twoDIntArray;
+                                                //make arrays for positions and mass quadrupole moments
                                                 var X1 = [Nt];
                                                 var X2 = [Nt];
+                                                var Iij = [Nt];
                                                 for (var it=0;it<Nt;it++){
                                                     X1[it] = [3];
                                                     X2[it] = [3];
+                                                    Iij[it] = [3];
+                                                    for (var i=0;i<3;i++){
+                                                        Iij[it][i] = [3];
+                                                    }
                                                 }
 
                                                 // loop over time steps
@@ -239,7 +243,7 @@
 
 ////                                                
  
-                                                var c = board.create('curve',[tt,X1y],{strokeColor:'magenta',strokeWidth:3});                                                
+                                                var c = board.create('curve',[tt,X1x],{strokeColor:'magenta',strokeWidth:3});                                                
 //                                                var d = board.create('curve',[tt,X1[][1]],{strokeColor:'green',strokeWidth:3});                                                
 
 

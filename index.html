@@ -163,39 +163,39 @@
                                                var Pij_thph = [Nth]; // Pij_thph = np.zeros((Nth,Nph,3,3))
                                                var Lamijkl_thph = [Nth]; //Lamijkl_thph = np.zeros((Nth,Nph,3,3,3,3))
 
-                                               //for (var ith=0;ith<Nth;ith++){
-                                               //    ni_thph[ith] = [Nph];
-                                               //    Lthi_thph[ith] = [Nph];
-                                               //    Lphi_thph[ith] = [Nph];
-                                               //    Pij_thph[ith] = [Nph];
-                                               //    Lamijkl_thph[ith] = [Nph];
+                                               for (var ith=0;ith<Nth;ith++){
+                                                   ni_thph[ith] = [Nph];
+                                                   Lthi_thph[ith] = [Nph];
+                                                   Lphi_thph[ith] = [Nph];
+                                                   Pij_thph[ith] = [Nph];
+                                                   Lamijkl_thph[ith] = [Nph];
 
-                                               //    for (var iph=0;iph<Nph;i++){
+                                                   for (var iph=0;iph<Nph;i++){
 
-                                               //        ni_thph[ith][iph] = [3];
-                                               //        Lthi_thph[ith][iph] = [3];
-                                               //        Lphi_thph[ith][iph] = [3];
-                                               //        Pij_thph[ith][iph] = [3];
-                                               //        Lamijkl_thph[ith][iph] = [3];
+                                                       ni_thph[ith][iph] = [3];
+                                                       Lthi_thph[ith][iph] = [3];
+                                                       Lphi_thph[ith][iph] = [3];
+                                                       Pij_thph[ith][iph] = [3];
+                                                       Lamijkl_thph[ith][iph] = [3];
 
-                                               //        for (var i=0;i<3;i++){
+                                                       for (var i=0;i<3;i++){
 
-                                               //            Pij_thph[ith][iph][i] = [3];
-                                               //            Lamijkl_thph[ith][iph][i] = [3];
+                                                           Pij_thph[ith][iph][i] = [3];
+                                                           Lamijkl_thph[ith][iph][i] = [3];
 
-                                               //            for (var j=0;j<3;j++){
+                                                           for (var j=0;j<3;j++){
 
-                                               //                Lamijkl_thph[ith][iph][i][j] = [3];
+                                                               Lamijkl_thph[ith][iph][i][j] = [3];
 
-                                               //                for (var k=0;k<3;k++){
+                                                               for (var k=0;k<3;k++){
 
-                                               //                    Lamijkl_thph[ith][iph][i][j][k] = [3]; 
+                                                                   Lamijkl_thph[ith][iph][i][j][k] = [3]; 
 
-                                               //                }
-                                               //            }
-                                               //        }
-                                               //    }                                                   
-                                               //}
+                                                               }
+                                                           }
+                                                       }
+                                                   }                                                   
+                                               }
                                                
 
                                                //Calculate the Lambda projection tensor over the sphere of (z,phi)
@@ -320,7 +320,7 @@
                                                 var plotarr3 = [Nt];
                                                 for (var it=0;it<Nt;it++){
                                                     plotarr1[it] = dddIij[it][0][0]*10000000.;
-                                                    plotarr2[it] = -dddIij[it][0][1]*10000000.;
+                                                    plotarr2[it] = dddIij[it][0][1]*10000000.;
                                                 }
 
 ////                                                

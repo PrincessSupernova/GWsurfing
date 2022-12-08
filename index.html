@@ -159,18 +159,7 @@
                                                 // array for position vector of mass 1
                                                 var X1x = [];
                                                 var X1y = [];
-                                                var X1z = [];
-                                                // array for position vector of mass 2
-                                                var X2x = [];
-                                                var X2y = [];
-                                                var X2z = [];
 
-                                                // arrays for mass quadrupole moments
-//                                                Ixx = [];
-//                                                Ixy = [];
-//                                                Iyx = [];
-//                                                Iyy = [];
-//
                                                 //make arrays for positions and mass quadrupole moments
                                                 // array for position vector of mass 1
                                                 var X1 = [Nt];
@@ -208,7 +197,6 @@
                                                     // X1[it,:]=R*m2/M*np.array([np.cos(ph),np.sin(ph),0])
                                                     X1x[it]=prefacm2*cosOmegat;
                                                     X1y[it]=prefacm2*sinOmegat;
-                                                    X1z[it]=0;
 
                                                     X1[it][0] = prefacm2*cosOmegat;
                                                     X1[it][1] = prefacm2*sinOmegat;
@@ -219,7 +207,6 @@
                                                     X2[it][1] = prefacm1*sinOmegat;
                                                     X2[it][2] = 0;
 
-                                                    
                                                     for (var i=0; i<3; i++){
                                                         for (var j=0; j<3; j++){
                                                             // mass quadrupole 
@@ -262,17 +249,21 @@
                                                             // first time derivative
                                                             dddIij[it,i,j] = (ddIij[it+1,i,j] - ddIij[it-1,i,j])/twodt;
                                                         }
-
                                                     }
                                                 }
  
 
-                                                
 
-
+                                                var plotarr1 = [Nt];
+                                                var plotarr2 = [Nt];
+                                                var plotarr3 = [Nt];
+                                                for (var it=0;it<Nt;it++){
+                                                    plotarr1[it] = dddIij[it][0][0];
+                                                    plotarr2[it] = dddIij[it][0][1];
+                                                }
 ////                                                
  
-                                                var c = board.create('curve',[tt,X1y],{strokeColor:'magenta',strokeWidth:3});                                                
+                                                var c = board.create('curve',[tt,X1x],{strokeColor:'magenta',strokeWidth:3});                                                
 //                                                var d = board.create('curve',[tt,X1[][1]],{strokeColor:'green',strokeWidth:3});                                                
 
 

@@ -125,7 +125,7 @@
                                                 for (var i=0; i<Nt; i++){
                                                     tt[i] = i*dt;
                                                     //yt[i] = prefacm2*Math.sin(Omega*tt[i]);
-                                                    yt[i] = prefacm1*Math.sin(Omega*tt[i]);
+                                                    yt[i] = prefacm2*Math.sin(Omega*tt[i]);
                                                     //yt[i] = 10.*Math.sin(Omega*tt[i]) + 5.;
  
                                                 }
@@ -133,17 +133,17 @@
 //
 //                                                // prefactors to save time 
 
-//                                                // arrays for theta+sin/cos
-//                                                var dcostheta = 2./(Nth-1);
-//                                                var theta = [];
-//                                                var costheta = [];
-//                                                var sintheta = [];
-//                                                for (var i=0; i<Nth;i++){
-//                                                    costheta[i] = -1. + i*dcostheta;
-//                                                    theta[i] = Math.acos(costheta[i]);
-//                                                    sintheta[i] = Math.sin(theta[i]);
-//
-//                                                }
+                                                // arrays for theta+sin/cos
+                                                var dcostheta = 2./(Nth-1);
+                                                var theta = [];
+                                                var costheta = [];
+                                                var sintheta = [];
+                                                for (var i=0; i<Nth;i++){
+                                                    costheta[i] = -1. + i*dcostheta;
+                                                    theta[i] = Math.acos(costheta[i]);
+                                                    sintheta[i] = Math.sin(theta[i]);
+
+                                                }
 //                                                
 //                                                // arrays for phi+sin/cos
 //                                                var dphi = 2.*Math.PI/Nph

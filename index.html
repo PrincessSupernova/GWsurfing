@@ -232,6 +232,7 @@
                                                 twodt = 2.*dt;
                                                 for (var i=0; i<3; i++){
                                                    for (var j=0; j<3; j++){
+
                                                         // first time derivative
                                                         // deal w edge cases first
                                                         dIij[0][i][j] = (-3.*Iij[0][i][j] + 4.*Iij[1][i][j] - Iij[2][i][j])/twodt;
@@ -241,6 +242,27 @@
                                                             // first time derivative
                                                             dIij[it][i][j] = (Iij[it+1][i][j] - Iij[it-1][i][j])/twodt;
                                                         }
+
+                                                        // second time derivative
+                                                        // deal w edge cases first
+                                                        ddIij[0,i,j] = (-3.*dIij[0,i,j] + 4.*dIij[1,i,j] - dIij[2,i,j])/twodt;
+                                                        ddIij[Nt-1,i,j] = (dIij[Nt-3,i,j] - 4.*dIij[Nt-2,i,j] + 3.*dIij[Nt-1,i,j])/twodt;
+                                                        // now loop over rest
+                                                        for (var it=1; it<Nt-1; it++){
+                                                            // first time derivative
+                                                            ddIij[it,i,j] = (dIij[it+1,i,j] - dIij[it-1,i,j])/twodt;
+                                                        }
+                                                
+                                                        // third time derivative
+                                                        // deal w edge cases first
+                                                        dddIij[0,i,j] = (-3.*ddIij[0,i,j] + 4.*ddIij[1,i,j] - ddIij[2,i,j])/twodt;
+                                                        dddIij[Nt-1,i,j] = (ddIij[Nt-3,i,j] - 4.*ddIij[Nt-2,i,j] + 3.*ddIij[Nt-1,i,j])/twodt;
+                                                        // now loop over rest
+                                                        for (var it=1; it<Nt-1; it++){
+                                                            // first time derivative
+                                                            dddIij[it,i,j] = (ddIij[it+1,i,j] - ddIij[it-1,i,j])/twodt;
+                                                        }
+
                                                     }
                                                 }
  
@@ -250,7 +272,7 @@
 
 ////                                                
  
-                                                var c = board.create('curve',[tt,X1x],{strokeColor:'magenta',strokeWidth:3});                                                
+                                                var c = board.create('curve',[tt,X1y],{strokeColor:'magenta',strokeWidth:3});                                                
 //                                                var d = board.create('curve',[tt,X1[][1]],{strokeColor:'green',strokeWidth:3});                                                
 
 

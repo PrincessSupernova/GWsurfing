@@ -163,8 +163,8 @@
                                               var Pij_thph = [Nth]; // Pij_thph = np.zeros((Nth,Nph,3,3))
                                               var Lamijkl_thph = [Nth]; //Lamijkl_thph = np.zeros((Nth,Nph,3,3,3,3))
 
-                                              //for (var ith=0;ith<Nth;ith++){
-                                              //    ni_thph[ith] = [Nph];
+                                              for (var ith=0;ith<Nth;ith++){
+                                                  ni_thph[ith] = [Nph];
                                               //    //Lthi_thph[ith] = [Nph];
                                               //    //Lphi_thph[ith] = [Nph];
                                               //    Pij_thph[ith] = [Nph];
@@ -195,7 +195,7 @@
                                               //            }
                                               //        }
                                               //    }                                                   
-                                              //}
+                                              }
                                               
 
                                               //Calculate the Lambda projection tensor over the sphere of (z,phi)
@@ -355,7 +355,7 @@
  
 //                                                var c = board.create('curve',[tt,X1x],{strokeColor:'magenta',strokeWidth:3});                                                
                                                 var c = board.create('curve',[tt,plotarr1],{strokeColor:'magenta',strokeWidth:3});
-                                                var d = board.create('curve',[tt,plotarr2],{strokeColor:'black',strokeWidth:3});
+                                                var d = board.create('curve',[tt,plotarr2],{strokeColor:'green',strokeWidth:3});
 
 
 

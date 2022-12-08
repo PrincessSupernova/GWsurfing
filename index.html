@@ -258,13 +258,15 @@
                                                 var plotarr2 = [Nt];
                                                 var plotarr3 = [Nt];
                                                 for (var it=0;it<Nt;it++){
-                                                    plotarr1[it] = dddIij[it][0][0]*1000000.;
-                                                    plotarr2[it] = dddIij[it][0][1]*1000000.;
+                                                    plotarr1[it] = dddIij[it][0][0]*10000000.;
+                                                    plotarr2[it] = dddIij[it][0][1]*10000000.;
                                                 }
 ////                                                
  
 //                                                var c = board.create('curve',[tt,X1x],{strokeColor:'magenta',strokeWidth:3});                                                
-                                                var d = board.create('curve',[tt,plotarr1],{strokeColor:'green',strokeWidth:3});                                                
+                                                var c = board.create('curve',[tt,plotarr1],{strokeColor:'magenta',strokeWidth:3});
+                                                var d = board.create('curve',[tt,plotarr2],{strokeColor:'green',strokeWidth:3});
+
 
 
                                                 board.unsuspendUpdate(); 

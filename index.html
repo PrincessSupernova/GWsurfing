@@ -155,27 +155,30 @@
                                                     cosphi[i] = Math.cos(phi[i]);
                                                     sinphi[i] = Math.sin(phi[i]);
                                                 }
-//
-//                                                var[][] X1 = new var[Nt][3];
+
+                                                var X1x = [];
+                                                var X1y = [];
+                                                var X1z = [];
+
 
 //
 //                                                //var plotarr = [];
 //
-////                                                // loop over time steps
-////                                                for (var it=0; it<Nt; it++){
-////                                                    var Omegat = Omega*tt[it];
-////                                                    var sinOmegat = Math.sin(Omegat);
-////                                                    var cosOmegat = Math.cos(Omegat);
-////                                                
-////                                                    // X1[it,:]=R*m2/M*np.array([np.cos(ph),np.sin(ph),0])
-////                                                    //X1[it][0]=prefacm2*cosOmegat;
-////                                                    //X1[it][1]=prefacm2*sinOmegat;
-////                                                    //X1[it][2]=0;
-////
-////
+                                                // loop over time steps
+                                                for (var it=0; it<Nt; it++){
+                                                    var Omegat = Omega*tt[it];
+                                                    var sinOmegat = Math.sin(Omegat);
+                                                    var cosOmegat = Math.cos(Omegat);
+                                                
+                                                    // X1[it,:]=R*m2/M*np.array([np.cos(ph),np.sin(ph),0])
+                                                    X1x[it]=prefacm2*cosOmegat;
+                                                    X1y[it]=prefacm2*sinOmegat;
+                                                    X1z[it]=0;
+
+
 ////                                                    plotarr[it] = prefacm2*cosOmegat;
 ////
-////                                                }
+                                                }
 ////                                                
  
                                                 var c = board.create('curve',[tt,yt],{strokeColor:'magenta',strokeWidth:3});                                                

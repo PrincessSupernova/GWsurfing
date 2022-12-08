@@ -156,9 +156,13 @@
                                                     sinphi[i] = Math.sin(phi[i]);
                                                 }
 
+                                                // array for position vector of mass 1
                                                 var X1x = [];
                                                 var X1y = [];
                                                 var X1z = [];
+                                                //        X2[it,0]=prefacm1*cosOmegat;
+                                                //        X2[it,1]=prefacm1*sinOmegat;
+                                                //        X2[it,2]=0;
 
 
 //
@@ -175,13 +179,43 @@
                                                     X1y[it]=prefacm2*sinOmegat;
                                                     X1z[it]=0;
 
-
-////                                                    plotarr[it] = prefacm2*cosOmegat;
+                                                    // X2[it,i]=-R*m1/M*np.array([np.cos(ph),np.sin(ph),0]) 
+                                                    X2x[it]=prefacm1*cosOmegat;
+                                                    X2y[it]=prefacm1*sinOmegat;
+                                                    X2z[it]=0;
 ////
+
+
+                                                //        for (var i=0; i<3; i++){
+                                                //            for (var j=0; j<3; j++){
+                                                //                // mass quadrupole 
+                                                //                Iij[it,i,j]=mass1*X1[it,i]*X1[it,j]+mass2*X2[it,i]*X2[it,j];
+                                                //            }
+                                                //        }
+                                                //    }
+                                                //
+                                                //    // calculate derivatives
+                                                //    twodt = 2.*dt;
+                                                //    for (var i=0; i<3; i++){
+                                                //       for (var j=0; j<3; j++){
+                                                //            // first time derivative
+                                                //            // deal w edge cases first
+                                                //            dIij[0,i,j] = (-3.*Iij[0,i,j] + 4.*Iij[1,i,j] - Iij[2,i,j])/twodt;
+                                                //            dIij[Nt-1,i,j] = (Iij[Nt-3,i,j] - 4.*Iij[Nt-2,i,j] + 3.*Iij[Nt-1,i,j])/twodt;
+                                                //            // now loop over rest
+                                                //            for (var it=1; it<Nt-1; it++){
+                                                //                // first time derivative
+                                                //                dIij[it,i,j] = (Iij[it+1,i,j] - Iij[it-1,i,j])/twodt;
+                                                //            }
+ 
+
+
                                                 }
+
+
 ////                                                
  
-                                                var c = board.create('curve',[tt,X1x],{strokeColor:'magenta',strokeWidth:3});                                                
+                                                var c = board.create('curve',[tt,X1y],{strokeColor:'magenta',strokeWidth:3});                                                
 //                                                var d = board.create('curve',[tt,X1[][1]],{strokeColor:'green',strokeWidth:3});                                                
 
 

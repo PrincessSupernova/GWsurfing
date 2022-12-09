@@ -58,19 +58,215 @@
 						</div>
                                         <div id="box" class="jxgbox" style="width:500px; height:500px;"></div>
                                             <script type="text/javascript">
-                                                // preamble
-                                                // create n dimensional array
-                                                function createArray(length) {
-                                                    var arr = new Array(length || 0),
-                                                    i = length;
-                                                    if (arguments.length > 1) {
-                                                        var args = Array.prototype.slice.call(arguments, 1);
-                                                        while(i--) arr[length-1 - i] = createArray.apply(this, args);
+
+                                                // function to compute Iij at time t
+                                                function get_Iij_t(t,m1,m2,R){
+                                                    // first get omega and Tor
+                                                    var M = m1 + m2;
+                                                    var Torb = 2.*Math.PI*Math.sqrt(R**3/M);
+                                                    var Omega = 2.*Math.PI/Torb;
+                                                    var Omega_t = Omega*t;
+                                                    var cosOmega_t = Math.cos(Omega_t);
+                                                    var sinOmega_t = Math.sin(Omega_t);
+                                                                                                        
+                                                    var X1_t = (mass2*R/M)*[cosOmega_t,sinOmega_t,0];
+                                                    var X2_t = (-mass1*R/M)*[cosOmega_t,sinOmega_t,0];
+                                                    var Iij_t = [];
+                                                    for (var i = 0; i < 3; i++){
+                                                        Iij_t[i] = [];
+                                                        for (var j = 0; j < 3; j++){
+                                                            Iij_t[i][j] = mass1*X1_t[i]*X1_t[j] + mass2*X2_t[i]*X2_t[j];
+                                                        }
                                                     }
-                                                
-                                                    return arr;
+                                                    return Iij_t;
                                                 }
 
+                                                // function to get first time derivative of Iij_t
+                                                function get_dIij_t(t,m1,m2,R,dt,edgeFLAG=0){
+
+                                                    // output array 
+                                                    var dIij_t = [];
+                                                    // calculate Iij
+                                                    if (edgeFLAG){
+                                                        if (t==0) {
+                                                            var Iij_t0 = get_Iij_t(t,m1,m2,R);
+                                                            var Iij_t1 = get_Iij_t(t+dt,m1,m2,R);
+                                                            var Iij_t2 = get_Iij_t(t+2.*dt,m1,m2,R);
+                                                            for (var i = 0; i < 3; i++){
+                                                                dIij_t[i] = [];
+                                                                for (var j = 0; j < 3; j++){
+                                                                    dIij_t[i][j] = (-3.*Iij_t0[i][j] + 4.*Iij_t1[i][j] - Iij_t2[i][j])/(2.*dt);
+                                                                } 
+                                                            }
+                                                        } else {
+                                                            var Iij_t0 = get_Iij_t(t-2.*dt,m1,m2,R);
+                                                            var Iij_t1 = get_Iij_t(t-dt,m1,m2,R);
+                                                            var Iij_t2 = get_Iij_t(t,m1,m2,R);
+                                                            for (var i = 0; i < 3; i++){
+                                                                dIij_t[i] = [];
+                                                                for (var j = 0; j < 3; j++){
+                                                                    dIij_t[i][j] = (Iij_t0[i][j] - 4.*Iij_t1[i][j] + 3.*Iij_t2[i][j])/(2.*dt);
+                                                                }
+                                                            }    
+                                                        }
+
+                                                    } else {
+                                                        var Iij_tp1 = get_Iij_t(t+dt,m1,m2,R);
+                                                        var Iij_tm1 = get_Iij_t(t-dt,m1,m2,R);
+                                                        for (var i = 0; i < 3; i++){
+                                                            dIij_t[i] = [];
+                                                            for (var j = 0; j < 3; j++){
+                                                                dIij_t[i][j] = (Iij_tp1[i][j] - Iij_tm1[i][j])/(2.*dt);
+                                                            }
+                                                        }
+                                                    }
+                                                    return dIij_t; // this is a 3x3 array
+                                                } 
+                                                
+                                               function get_ddIij_t(t,m1,m2,R,dt,edgeFLAG=0){
+
+                                                    // output array 
+                                                    var ddIij_t = [];
+                                                    // calculate Iij
+                                                    if (edgeFLAG){
+                                                        if (t==0) {
+                                                            var dIij_t0 = get_dIij_t(t,m1,m2,R,dt,edgeFLAG=1);
+                                                            var dIij_t1 = get_dIij_t(t+dt,m1,m2,R,edgeFLAG=1);
+                                                            var dIij_t2 = get_dIij_t(t+2.*dt,m1,m2,R,edgeFLAG=1);
+                                                            for (var i = 0; i < 3; i++){
+                                                                ddIij_t[i] = [];
+                                                                for (var j = 0; j < 3; j++){
+                                                                    ddIij_t[i][j] = (-3.*dIij_t0[i][j] + 4.*dIij_t1[i][j] - dIij_t2[i][j])/(2.*dt);
+                                                                } 
+                                                            }
+                                                        } else {
+                                                            var dIij_t0 = get_dIij_t(t-2.*dt,m1,m2,R,edgeFLAG=1);
+                                                            var dIij_t1 = get_dIij_t(t-dt,m1,m2,R,edgeFLAG=1);
+                                                            var dIij_t2 = get_dIij_t(t,m1,m2,R,edgeFLAG=1);
+                                                            for (var i = 0; i < 3; i++){
+                                                                ddIij_t[i] = [];
+                                                                for (var j = 0; j < 3; j++){
+                                                                    ddIij_t[i][j] = (dIij_t0[i][j] - 4.*dIij_t1[i][j] + 3.*dIij_t2[i][j])/(2.*dt);
+                                                                }
+                                                            }    
+                                                        }
+
+                                                    } else {
+                                                        var dIij_tp1 = get_dIij_t(t+dt,m1,m2,R,dt);
+                                                        var dIij_tm1 = get_dIij_t(t-dt,m1,m2,R,dt);
+                                                        for (var i = 0; i < 3; i++){
+                                                            ddIij_t[i] = [];
+                                                            for (var j = 0; j < 3; j++){
+                                                                ddIij_t[i][j] = (dIij_tp1[i][j] - dIij_tm1[i][j])/(2.*dt);
+                                                            }
+                                                        }
+                                                    }
+                                                    return ddIij_t; // this is a 3x3 array
+                                                }    
+
+                                                function get_dddIij_t(t,m1,m2,R,dt,edgeFLAG=0){
+
+                                                    // output array 
+                                                    var dddIij_t = [];
+                                                    // calculate Iij
+                                                    if (edgeFLAG){
+                                                        if (t==0) {
+                                                            var ddIij_t0 = get_ddIij_t(t,m1,m2,R,dt,edgeFLAG=1);
+                                                            var ddIij_t1 = get_ddIij_t(t+dt,m1,m2,R,edgeFLAG=1);
+                                                            var ddIij_t2 = get_ddIij_t(t+2.*dt,m1,m2,R,edgeFLAG=1);
+                                                            for (var i = 0; i < 3; i++){
+                                                                dddIij_t[i] = [];
+                                                                for (var j = 0; j < 3; j++){
+                                                                    dddIij_t[i][j] = (-3.*ddIij_t0[i][j] + 4.*ddIij_t1[i][j] - ddIij_t2[i][j])/(2.*dt);
+                                                                } 
+                                                            }
+                                                        } else {
+                                                            var ddIij_t0 = get_ddIij_t(t-2.*dt,m1,m2,R,edgeFLAG=1);
+                                                            var ddIij_t1 = get_ddIij_t(t-dt,m1,m2,R,edgeFLAG=1);
+                                                            var ddIij_t2 = get_ddIij_t(t,m1,m2,R,edgeFLAG=1);
+                                                            for (var i = 0; i < 3; i++){
+                                                                dddIij_t[i] = [];
+                                                                for (var j = 0; j < 3; j++){
+                                                                    dddIij_t[i][j] = (ddIij_t0[i][j] - 4.*ddIij_t1[i][j] + 3.*ddIij_t2[i][j])/(2.*dt);
+                                                                }
+                                                            }    
+                                                        }
+
+                                                    } else {
+                                                        var ddIij_tp1 = get_ddIij_t(t+dt,m1,m2,R,dt);
+                                                        var ddIij_tm1 = get_ddIij_t(t-dt,m1,m2,R,dt);
+                                                        for (var i = 0; i < 3; i++){
+                                                            dddIij_t[i] = [];
+                                                            for (var j = 0; j < 3; j++){
+                                                                dddIij_t[i][j] = (ddIij_tp1[i][j] - ddIij_tm1[i][j])/(2.*dt);
+                                                            }
+                                                        }
+                                                    }
+                                                    return dddIij_t; // this is a 3x3 array
+                                                }
+                                                    
+
+                                                // array to get ni projection vector in direction theta,phi
+                                                function get_ni_thetaphi(theta,phi){                                            
+                                                    var ni_thph = [Math.sin(theta)*Math.cos(phi),Math.sin(theta)*Math.sin(phi),Math.cos(theta)]; 
+                                                    return ni_thph; // this is a 3x1 array
+                                                }
+
+                                                function get_Pij_thetaphi(theta,phi){
+                                                    var ni_thph = get_ni_thetaphi(theta,phi);
+                                                    var Pij_thph = [];
+                                                    var Dij = 0;
+                                                    for (var i=0;i<3;i++){
+                                                        Pij[i] = [];
+                                                        for (var j=0;j<3;j++){
+                                                            if (i==j) {
+                                                                Pij_thph[i][j] = 1. - ni_thph[i]*ni_thph[j];                                                   //            Pij_thph[ith][iph][i][j] = 1. - ni_thph[ith,iph,i]*ni_thph[ith,iph,j];
+                                                            } else {
+                                                                Pij_thph[i][j] = -ni_thph[i]*ni_thph[j];  
+                                                            }
+                                                        }
+                                                    }
+                                                    return Pij_thph; // this is a 3x3 array
+                                                }
+
+                                                function get_Lijkl_thetaphi(theta,phi){
+                                                    var Pij_thph = get_Pij_thetaphi(theta,phi);
+                                                    var Lijkl_thph = [];
+                                                    for (var i = 0; i < 3; i++){
+                                                        Lijkl_thph[i] = []; 
+                                                        for (var j = 0; j < 3; j++){
+                                                            Lijkl_thph[i][j] = [];
+                                                            for (var k = 0; k < 3; k++){
+                                                                Lijkl_thph[i][j][k] = [];
+                                                                for (var l = 0; l < 3; l++){
+                                                                    Lijkl_thph[i][j][k][l] = Pij_thph[i][k]*Pij_thph[j][l]-0.5*Pij_thph[i][j]*Pij_thph[k][l];
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    return Lijkl_thph; // this is a 3x3x3x3 array
+                                                }
+
+                                                function get_hij_t_thetaphi(t,m1,m2,R,dt,theta,phi,edgeFLAG=0){
+
+                                                    var ddIij_t = get_ddIij_t(t,m1,m2,R,dt,edgeFLAG=0);
+                                                    var Lijkl_thph = get_Lijkl_thetaphi(theta,phi);
+//                                                  var ddIij = get_ddIij();
+                                                    var hij_t_thph = [];
+                                                    for (var i = 0; i < 3; i++){
+                                                        hij_t_thph[i] = [];
+                                                        for (var j = 0; j < 3; j++){
+                                                            // start sum
+                                                            hij_t_thph[i][j] = 0.;
+                                                            for (var k = 0; k < 3; k++){
+                                                                for (var l = 0; l < 3; l++){
+                                                                    hij_t_thph[i][j] += Lijkl_thph[i][j][k][l]*ddIij_t[k,l];
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    return hij_t_thph; // this is a 3x3 array
+                                                }
 
                                                 //////// graphics stuff
 
@@ -100,266 +296,67 @@
                                                 var Omega = 2.*Math.PI/Torb;
 
                                                 // more variables for calculations
-                                                var Nt = 101; // number of time steps to use
+                                                var Nt = 202; // number of time steps to use
                                                 var Nth = 41; // number of steps in cos theta to use
                                                 var Nph = 30; // number of steps in phi to use
                                                 var dt = 2.*Torb/Nt; // time steps
 
-                                                var prefacm1 = -R*mass1/M;
-                                                //var prefacm1Omega = prefacm1*Omega;
-                                                var prefacm2 = R*mass2/M;
-                                                //var prefacm2Omega = prefac2*Omega;
+                                                //// arrays for theta+sin/cos
+                                                //var dcostheta = 2./(Nth-1);
+                                                //var theta = [];
+                                                //var costheta = [];
+                                                //var sintheta = [];
+                                                //for (var i=0; i<Nth;i++){
+                                                //    costheta[i] = -1. + i*dcostheta;
+                                                //    theta[i] = Math.acos(costheta[i]);
+                                                //    sintheta[i] = Math.sin(theta[i]);
 
-                                                // array for time stamps
-                                                var tt = [];//CreateArray(Nt);
-                                                var yt = [];//;CreateArray(Nt);
-                                                for (var i=0; i<Nt; i++){
-                                                    tt[i] = i*dt;
-                                                    //yt[i] = prefacm2*Math.sin(Omega*tt[i]);
+                                                //}
+
+                                                //// arrays for phi+sin/cos
+                                                //var dphi = 2.*Math.PI/Nph
+                                                //var phi = [];
+                                                //var cosphi = [];
+                                                //var sinphi = [];
+                                                //for (var i=0; i<Nph;i++){
+                                                //    phi[i] = i*dphi;
+                                                //    cosphi[i] = Math.cos(phi[i]);
+                                                //    sinphi[i] = Math.sin(phi[i]);
+                                                //}
+
  
-                                                }
-
-//
-//                                                // prefactors to save time 
-
-                                                // arrays for theta+sin/cos
-                                                var dcostheta = 2./(Nth-1);
-                                                var theta = [];
-                                                var costheta = [];
-                                                var sintheta = [];
-                                                for (var i=0; i<Nth;i++){
-                                                    costheta[i] = -1. + i*dcostheta;
-                                                    theta[i] = Math.acos(costheta[i]);
-                                                    sintheta[i] = Math.sin(theta[i]);
-
-                                                }
-//                                                
-                                                // arrays for phi+sin/cos
-                                                var dphi = 2.*Math.PI/Nph
-                                                var phi = [];
-                                                var cosphi = [];
-                                                var sinphi = [];
-                                                for (var i=0; i<Nph;i++){
-                                                    phi[i] = i*dphi;
-                                                    cosphi[i] = Math.cos(phi[i]);
-                                                    sinphi[i] = Math.sin(phi[i]);
-                                                }
-
-                                              // projection tensor stuff
-                                              var ni_thph = []; //ni_thph = np.zeros((Nth,Nph,3))
-                                              //var Lthi_thph = [Nth]; //Lthi_thph = np.zeros((Nth,Nph,3))
-                                              //var Lphi_thph = [Nth]; //Lphi_thph = np.zeros((Nth,Nph,3))
-                                              var Pij_thph = []; // Pij_thph = np.zeros((Nth,Nph,3,3))
-                                              //var Lamijkl_thph = [Nth]; //Lamijkl_thph = np.zeros((Nth,Nph,3,3,3,3))
-                                              var Dij;
-                                              for (var ith=0;ith<Nth;ith++){
-                                                  ni_thph[ith] = [];
-                                                  Pij_thph[ith] = [];
-                                                  for (var iph=0;iph<Nph;iph++){
-                                                    ni_thph[ith][iph] = [sintheta[ith]*cosphi[iph],sintheta[ith]*sinphi[iph],costheta[ith]];
-                                                    //for (var i=0;i<3;i++){
-                                                    //    Pij_thph[ith][iph][i] = [];
-                                                    //    // Pij_thph[ith,iph,i,j]=Dij[i,j]-ni_thph[ith,iph,i]*ni_thph[ith,iph,j]
-                                                    //    for (var j=0;j<3;j++){
-                                                    //        if (i==j) {
-                                                    //            Pij_thph[ith][iph][i][j] = 1. - ni_thph[ith,iph,i]*ni_thph[ith,iph,j];
-                                                    //        } else {
-                                                    //            Pij_thph[ith][iph][i][j] = -ni_thph[ith,iph,i]*ni_thph[ith,iph,j]; 
-                                                    //        }
-                                                    //    }
-                                                    }
-                                                }
-                                              //    //Lthi_thph[ith] = [Nph];
-                                              //    //Lphi_thph[ith] = [Nph];
-                                                  //Pij_thph[ith] = [Nph];
-                                              //    Lamijkl_thph[ith] = [Nph];
-
-                                                  //for (var iph=0;iph<Nph;i++){
-
-                                                  //    ni_thph[ith][iph] = [3];
-                                              ////        Lthi_thph[ith][iph] = [3];
-                                              ////        Lphi_thph[ith][iph] = [3];
-                                                      //Pij_thph[ith][iph] = [3];
-                                              //        Lamijkl_thph[ith][iph] = [3];
-
-                                              //        for (var i=0;i<3;i++){
-
-                                              //            Pij_thph[ith][iph][i] = [3];
-                                              //            Lamijkl_thph[ith][iph][i] = [3];
-
-                                              //            for (var j=0;j<3;j++){
-
-                                              //                Lamijkl_thph[ith][iph][i][j] = [3];
-
-                                              //                for (var k=0;k<3;k++){
-
-                                              //                    Lamijkl_thph[ith][iph][i][j][k] = [3]; 
-
-                                              //                }
-                                              //            }
-                                              //        }
-                                                  //}                                                   
-                                              //}
-                                              
-
-                                              //Calculate the Lambda projection tensor over the sphere of (z,phi)
-                                              //for ith in range(Nth):
-                                              //  for iph in range(Nph):
-                                              //    ni_thph[ith,iph,:]=[sth[ith]*np.cos(pp[iph]),sth[ith]*np.sin(pp[iph]),cth[ith]]
-                                              //    Lthi_thph[ith,iph,:]=[cth[ith]*np.cos(pp[iph]),cth[ith]*np.sin(pp[iph]),-sth[ith]]
-                                              //    Lphi_thph[ith,iph,:]=[-np.sin(pp[iph]),np.cos(pp[iph]),0]
-
-                                              //    for i in range(3):
-                                              //      for j in range(3):
-                                              //        Pij_thph[ith,iph,i,j]=Dij[i,j]-ni_thph[ith,iph,i]*ni_thph[ith,iph,j]
-
-                                              //    for i in range(3):
-                                              //      for j in range(3):
-                                              //        for k in range(3):
-                                              //          for l in range(3):
-                                              //            Lamijkl_thph[ith,iph,i,j,k,l]=Pij_thph[ith,iph,i,k]*Pij_thph[ith,iph,j,l]-0.5*Pij_thph[ith,iph,i,j]*Pij_thph[ith,iph,k,l]
-
-                                              //#Calculate the wave tensor by contracting the projection tensor with the multipole expansion
-                                              //for ith in range(Nth):
-                                              //  for iph in range(Nph):
-                                              //    for i in range(3):
-                                              //      for j in range(3):
-                                              //        for k in range(3):
-                                              //          for l in range(3):
-                                              //            hij_thph[:,ith,iph,i,j] += Lamijkl_thph[ith,iph,i,j,k,l]*ddMij[:,k,l]
-                                              //            dhij_thph[:,ith,iph,i,j] += Lamijkl_thph[ith,iph,i,j,k,l]*dddMij[:,k,l]
-                                              //
-                                              //#Now project the h_ij wave tensor onto the h_{\hat{theta} \hat{phi}} basis
-                                              //for ith in range(Nth):
-                                              //  for iph in range(Nph):
-                                              //    for i in range(3):
-                                              //      for j in range(3):
-                                              //        htp_thph[:,ith,iph,0,0] += Lthi_thph[ith,iph,i]*Lthi_thph[ith,iph,j]*hij_thph[:,ith,iph,i,j]
-                                              //        htp_thph[:,ith,iph,1,0] += Lphi_thph[ith,iph,i]*Lthi_thph[ith,iph,j]*hij_thph[:,ith,iph,i,j]
-                                              //        htp_thph[:,ith,iph,0,1] += Lthi_thph[ith,iph,i]*Lphi_thph[ith,iph,j]*hij_thph[:,ith,iph,i,j]
-                                              //        htp_thph[:,ith,iph,1,1] += Lphi_thph[ith,iph,i]*Lphi_thph[ith,iph,j]*hij_thph[:,ith,iph,i,j]
-                                              //        dhtp_thph[:,ith,iph,0,0] += Lthi_thph[ith,iph,i]*Lthi_thph[ith,iph,j]*dhij_thph[:,ith,iph,i,j]
-                                              //        dhtp_thph[:,ith,iph,1,0] += Lphi_thph[ith,iph,i]*Lthi_thph[ith,iph,j]*dhij_thph[:,ith,iph,i,j]
-                                              //        dhtp_thph[:,ith,iph,0,1] += Lthi_thph[ith,iph,i]*Lphi_thph[ith,iph,j]*dhij_thph[:,ith,iph,i,j]
-                                              //        dhtp_thph[:,ith,iph,1,1] += Lphi_thph[ith,iph,i]*Lphi_thph[ith,iph,j]*dhij_thph[:,ith,iph,i,j]
-                                              //#by only including middle segment, reduce edge effects of np.gradient
-                                              //    PP_thph[ith,iph] = np.mean(htp_thph[(tt>=0.5*Torb)&(tt<1.5*Torb),ith,iph,0,0]**2)
-                                              //    PX_thph[ith,iph] = np.mean(htp_thph[(tt>=0.5*Torb)&(tt<1.5*Torb),ith,iph,0,1]**2)
-
-
-
-                                                // array for position vector of mass 1
-                                                var X1x = [];
-                                                var X1y = [];
-
-                                                //make arrays for positions and mass quadrupole moments
-                                                // array for position vector of mass 1
-                                                var X1 = [Nt];
-                                                // array for position vector of mass 2
-                                                var X2 = [Nt];
-                                                // mass quadrupole moment and time derivatives
-                                                var Iij = [Nt];
-                                                var dIij = [Nt];
-                                                var ddIij = [Nt];
-                                                var dddIij = [Nt];
-
-                                                for (var it=0;it<Nt;it++){
-                                                    X1[it] = [3];
-                                                    X2[it] = [3];
-
-                                                    Iij[it] = [3];
-                                                    dIij[it] = [3];
-                                                    ddIij[it] = [3];
-                                                    dddIij[it] = [3];
-
-                                                    for (var i=0;i<3;i++){
-                                                        Iij[it][i] = [3];
-                                                        dIij[it][i] = [3];
-                                                        ddIij[it][i] = [3];
-                                                        dddIij[it][i] = [3];
-                                                    }
-                                                }
-
-                                                // loop over time steps
-                                                for (var it=0; it<Nt; it++){
-                                                    var Omegat = Omega*tt[it];
-                                                    var sinOmegat = Math.sin(Omegat);
-                                                    var cosOmegat = Math.cos(Omegat);
-                                                
-                                                    // X1[it,:]=R*m2/M*np.array([np.cos(ph),np.sin(ph),0])
-                                                    X1x[it]=prefacm2*cosOmegat;
-                                                    X1y[it]=prefacm2*sinOmegat;
-
-                                                    X1[it][0] = prefacm2*cosOmegat;
-                                                    X1[it][1] = prefacm2*sinOmegat;
-                                                    X1[it][2] = 0;
-
-                                                    // X2[it,i]=-R*m1/M*np.array([np.cos(ph),np.sin(ph),0]) 
-                                                    X2[it][0] = prefacm1*cosOmegat;
-                                                    X2[it][1] = prefacm1*sinOmegat;
-                                                    X2[it][2] = 0;
-
-                                                    for (var i=0; i<3; i++){
-                                                        for (var j=0; j<3; j++){
-                                                            // mass quadrupole 
-                                                            Iij[it][i][j]=mass1*X1[it][i]*X1[it][j]+mass2*X2[it][i]*X2[it][j];
-                                                        }
-                                                    }
-                                                }
-                                                //
-                                                // calculate derivatives of mass quadrupole
-                                                twodt = 2.*dt;
-                                                for (var i=0; i<3; i++){
-                                                   for (var j=0; j<3; j++){
-
-                                                        // first time derivative
-                                                        // deal w edge cases first
-                                                        dIij[0][i][j] = (-3.*Iij[0][i][j] + 4.*Iij[1][i][j] - Iij[2][i][j])/twodt;
-                                                        dIij[Nt-1][i][j] = (Iij[Nt-3][i][j] - 4.*Iij[Nt-2][i][j] + 3.*Iij[Nt-1][i][j])/twodt;
-                                                        // now loop over rest
-                                                        for (var it=1; it<Nt-1; it++){
-                                                            // first time derivative
-                                                            dIij[it][i][j] = (Iij[it+1][i][j] - Iij[it-1][i][j])/twodt;
-                                                        }
-
-                                                        // second time derivative
-                                                        // deal w edge cases first
-                                                        ddIij[0][i][j] = (-3.*dIij[0][i][j] + 4.*dIij[1][i][j] - dIij[2][i][j])/twodt;
-                                                        ddIij[Nt-1][i][j] = (dIij[Nt-3][i][j] - 4.*dIij[Nt-2][i][j] + 3.*dIij[Nt-1][i][j])/twodt;
-                                                        // now loop over rest
-                                                        for (var it=1; it<Nt-1; it++){
-                                                            // first time derivative
-                                                            ddIij[it][i][j] = (dIij[it+1][i][j] - dIij[it-1][i][j])/twodt;
-                                                        }
-                                                
-                                                        // third time derivative
-                                                        // deal w edge cases first
-                                                        dddIij[0][i][j] = (-3.*ddIij[0][i][j] + 4.*ddIij[1][i][j] - ddIij[2][i][j])/twodt;
-                                                        dddIij[Nt-1][i][j] = (ddIij[Nt-3][i][j] - 4.*ddIij[Nt-2][i][j] + 3.*ddIij[Nt-1][i][j])/twodt;
-                                                        // now loop over rest
-                                                        for (var it=1; it<Nt-1; it++){
-                                                            // first time derivative
-                                                            dddIij[it][i][j] = (ddIij[it+1][i][j] - ddIij[it-1][i][j])/twodt;
-                                                        }
-                                                    }
-                                                }
- 
-
-
-
+                                                var tt = [Nt];
                                                 var plotarr1 = [Nt];
                                                 var plotarr2 = [Nt];
                                                 var plotarr3 = [Nt];
-                                                for (var it=0;it<Nt;it++){
-                                                    plotarr1[it] = dddIij[it][0][0]*10000000.;
-                                                    plotarr2[it] = dddIij[it][0][1]*10000000.;
+
+                                                tt[0] = 0;
+                                                dddIij_t0 = get_dddIij_t(0,m1,m2,R,dt,edgeFLAG=1);
+                                                plotarr1[0] = dddIij_t0[0][0]*10000000.; 
+                                                plotarr2[0] = dddIij_t[0][1]*10000000.; 
+                                                tt[Nt-1] = (Nt-1)*dt;
+                                                dddIij_t1 = get_dddIij_t(tt[Nt-1],m1,m2,R,dt,edgeFLAG=1);
+                                                plotarr1[Nt-1] = dddIij_t1[0][0]*10000000.; 
+                                                plotarr2[Nt-1] = dddIij_t1[0][1]*10000000.;
+
+                                                for (var it=1;it<Nt-1;it++){
+                                                    // time array
+                                                    tt[it] = it*dt;
+
+                                                    dddIij_t = get_dddIij_t(tt[it],m1,m2,R,dt);
+                                                    //hij_t_thph = get_hij_t_thetaphi(tt[it],m1,m2,R,dt,theta,phi);
+
+                                                    // plot things                                                    
+                                                    plotarr1[it] = dddIij_t[0][0]*10000000.;
+                                                    plotarr2[it] = dddIij_t[0][1]*10000000.;
+                                                    //plotarr3[it] = hij_t_thph[0][0]*1000000.;
                                                 }
 
 ////                                                
  
 //                                                var c = board.create('curve',[tt,X1x],{strokeColor:'magenta',strokeWidth:3});                                                
                                                 var c = board.create('curve',[tt,plotarr1],{strokeColor:'magenta',strokeWidth:3});
-                                                var d = board.create('curve',[tt,plotarr2],{strokeColor:'green',strokeWidth:3});
+                                                var d = board.create('curve',[tt,plotarr2],{strokeColor:'black',strokeWidth:3});
 
 
 

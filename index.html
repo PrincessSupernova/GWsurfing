@@ -345,6 +345,11 @@
                                                 ////dddIij_t1 = get_dddIij_t(tt[Nt-1],m1,m2,R,dt,edgeFLAG=1);
                                                 //plotarr1[Nt-1] = Iij_t1[0,0];//dddIij_t1[0][0]*10000000.; 
                                                 //plotarr2[Nt-1] = Iij_t1[0,1];//dddIij_t1[0][1]*10000000.;
+                                                var X1_t = [3];
+                                                var X2_t = [3];
+
+                                                var prefac1 = mass2*R/M;
+                                                var prefac2  =-mass1*R/M; 
 
                                                 for (var it=0;it<Nt;it++){
                                                     // time array
@@ -353,12 +358,21 @@
                                                     var Omega_t = Omega*t;
                                                     var cosOmega_t = Math.cos(Omega_t);
                                                     var sinOmega_t = Math.sin(Omega_t);
+
+                                                    X1_t[0] = prefac1*cosOmega_t;
+                                                    X1_t[1] = prefac1*sinOmega_t;
+                                                    X1_t[2] = 0;
+
+                                                    X2_t[0] = prefac2*cosOmega_t;
+                                                    X2_t[1] = prefac2*sinOmega_t;
+                                                    X2_t[2] = 0;
+ 
                                                                                                         
-                                                    var X1_t = (mass2*R/M)*[cosOmega_t,sinOmega_t,0];
-                                                    var X2_t = (-mass1*R/M)*[cosOmega_t,sinOmega_t,0];
                                                     var Iij_t = [];
                                                     for (var i = 0; i < 3; i++){
                                                         Iij_t[i] = [];
+
+
                                                     }
                                                     for (var i = 0; i < 3; i++){    
                                                         for (var j = 0; j < 3; j++){

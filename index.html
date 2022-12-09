@@ -146,14 +146,17 @@
                                                 }
 
                                               // projection tensor stuff
-                                              var ni_thph = [Nth]; //ni_thph = np.zeros((Nth,Nph,3))
+                                              var ni_thph = []; //ni_thph = np.zeros((Nth,Nph,3))
                                               //var Lthi_thph = [Nth]; //Lthi_thph = np.zeros((Nth,Nph,3))
                                               //var Lphi_thph = [Nth]; //Lphi_thph = np.zeros((Nth,Nph,3))
-                                              var Pij_thph = [Nth]; // Pij_thph = np.zeros((Nth,Nph,3,3))
-                                              var Lamijkl_thph = [Nth]; //Lamijkl_thph = np.zeros((Nth,Nph,3,3,3,3))
+                                              var Pij_thph = []; // Pij_thph = np.zeros((Nth,Nph,3,3))
+                                              //var Lamijkl_thph = [Nth]; //Lamijkl_thph = np.zeros((Nth,Nph,3,3,3,3))
 
                                               for (var ith=0;ith<Nth;ith++){
-                                                  ni_thph[ith] = [Nph];
+                                                  ni_thph[ith] = [];
+                                                  for (var iph=0;iph<Nph;iph++){
+                                                    ni_thph[ith][iph] = {sintheta[ith],*cosphi[iph]),sintheta[ith]*sinphi[iph],costheta[ith]};                                                  //    ni_thph[ith,iph,:]=[sth[ith]*np.cos(pp[iph]),sth[ith]*np.sin(pp[iph]),cth[ith]]  
+                                                  }
                                               //    //Lthi_thph[ith] = [Nph];
                                               //    //Lphi_thph[ith] = [Nph];
                                                   //Pij_thph[ith] = [Nph];
@@ -344,7 +347,7 @@
  
 //                                                var c = board.create('curve',[tt,X1x],{strokeColor:'magenta',strokeWidth:3});                                                
                                                 var c = board.create('curve',[tt,plotarr1],{strokeColor:'magenta',strokeWidth:3});
-                                                var d = board.create('curve',[tt,plotarr2],{strokeColor:'black',strokeWidth:3});
+                                                var d = board.create('curve',[tt,plotarr2],{strokeColor:'green',strokeWidth:3});
 
 
 

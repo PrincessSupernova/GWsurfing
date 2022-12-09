@@ -151,12 +151,24 @@
                                               //var Lphi_thph = [Nth]; //Lphi_thph = np.zeros((Nth,Nph,3))
                                               var Pij_thph = []; // Pij_thph = np.zeros((Nth,Nph,3,3))
                                               //var Lamijkl_thph = [Nth]; //Lamijkl_thph = np.zeros((Nth,Nph,3,3,3,3))
-
+                                              var Dij;
                                               for (var ith=0;ith<Nth;ith++){
                                                   ni_thph[ith] = [];
+                                                  Pij_thph[ith] = [];
                                                   for (var iph=0;iph<Nph;iph++){
-                                                    ni_thph[ith][iph] = [sintheta[ith]*cosphi[iph],sintheta[ith]*sinphi[iph],costheta[ith]];                                                  //    ni_thph[ith,iph,:]=[sth[ith]*np.cos(pp[iph]),sth[ith]*np.sin(pp[iph]),cth[ith]]  
-                                                  }
+                                                    ni_thph[ith][iph] = [sintheta[ith]*cosphi[iph],sintheta[ith]*sinphi[iph],costheta[ith]];
+                                                    for (var i=0;i<3;i++){
+                                                        Pij_thph[ith][iph][i] = [];
+                                                        // Pij_thph[ith,iph,i,j]=Dij[i,j]-ni_thph[ith,iph,i]*ni_thph[ith,iph,j]
+                                                        for (var j=0;j<3;j++){
+                                                            if (i==j) {
+                                                                Pij_thph[ith][iph][i][j] = 1. - ni_thph[ith,iph,i]*ni_thph[ith,iph,j];
+                                                            } else {
+                                                                Pij_thph[ith][iph][i][j] = -ni_thph[ith,iph,i]*ni_thph[ith,iph,j]; 
+                                                            }
+                                                        }
+                                                    }
+                                                }
                                               //    //Lthi_thph[ith] = [Nph];
                                               //    //Lphi_thph[ith] = [Nph];
                                                   //Pij_thph[ith] = [Nph];

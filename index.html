@@ -74,10 +74,13 @@
                                                     var Iij_t = [];
                                                     for (var i = 0; i < 3; i++){
                                                         Iij_t[i] = [];
+                                                    }
+                                                    for (var i = 0; i < 3; i++){    
                                                         for (var j = 0; j < 3; j++){
                                                             Iij_t[i][j] = mass1*X1_t[i]*X1_t[j] + mass2*X2_t[i]*X2_t[j];
                                                         }
                                                     }
+
                                                     return Iij_t;
                                                 }
 
@@ -300,6 +303,8 @@
                                                 var Nth = 41; // number of steps in cos theta to use
                                                 var Nph = 30; // number of steps in phi to use
                                                 var dt = 2.*Torb/Nt; // time steps
+
+
 
                                                 //// arrays for theta+sin/cos
                                                 //var dcostheta = 2./(Nth-1);

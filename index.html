@@ -157,16 +157,16 @@
                                                   Pij_thph[ith] = [];
                                                   for (var iph=0;iph<Nph;iph++){
                                                     ni_thph[ith][iph] = [sintheta[ith]*cosphi[iph],sintheta[ith]*sinphi[iph],costheta[ith]];
-                                                    for (var i=0;i<3;i++){
-                                                        Pij_thph[ith][iph][i] = [];
-                                                        // Pij_thph[ith,iph,i,j]=Dij[i,j]-ni_thph[ith,iph,i]*ni_thph[ith,iph,j]
-                                                        for (var j=0;j<3;j++){
-                                                            if (i==j) {
-                                                                Pij_thph[ith][iph][i][j] = 1. - ni_thph[ith,iph,i]*ni_thph[ith,iph,j];
-                                                            } else {
-                                                                Pij_thph[ith][iph][i][j] = -ni_thph[ith,iph,i]*ni_thph[ith,iph,j]; 
-                                                            }
-                                                        }
+                                                    //for (var i=0;i<3;i++){
+                                                    //    Pij_thph[ith][iph][i] = [];
+                                                    //    // Pij_thph[ith,iph,i,j]=Dij[i,j]-ni_thph[ith,iph,i]*ni_thph[ith,iph,j]
+                                                    //    for (var j=0;j<3;j++){
+                                                    //        if (i==j) {
+                                                    //            Pij_thph[ith][iph][i][j] = 1. - ni_thph[ith,iph,i]*ni_thph[ith,iph,j];
+                                                    //        } else {
+                                                    //            Pij_thph[ith][iph][i][j] = -ni_thph[ith,iph,i]*ni_thph[ith,iph,j]; 
+                                                    //        }
+                                                    //    }
                                                     }
                                                 }
                                               //    //Lthi_thph[ith] = [Nph];
@@ -359,7 +359,7 @@
  
 //                                                var c = board.create('curve',[tt,X1x],{strokeColor:'magenta',strokeWidth:3});                                                
                                                 var c = board.create('curve',[tt,plotarr1],{strokeColor:'magenta',strokeWidth:3});
-                                                var d = board.create('curve',[tt,plotarr2],{strokeColor:'black',strokeWidth:3});
+                                                var d = board.create('curve',[tt,plotarr2],{strokeColor:'green',strokeWidth:3});
 
 
 

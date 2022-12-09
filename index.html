@@ -218,7 +218,6 @@
                                                 function get_Pij_thetaphi(theta,phi){
                                                     var ni_thph = get_ni_thetaphi(theta,phi);
                                                     var Pij_thph = [];
-                                                    var Dij = 0;
                                                     for (var i=0;i<3;i++){
                                                         Pij[i] = [];
                                                         for (var j=0;j<3;j++){
@@ -335,30 +334,30 @@
                                                 var plotarr2 = [Nt];
                                                 var plotarr3 = [Nt];
 
-                                                tt[0] = 0;
-                                                var Iij_t0 = get_Iij_t(0,m1,m2,R);
-                                                //dddIij_t0 = get_dddIij_t(0,m1,m2,R,dt,edgeFLAG=1);
-                                                plotarr1[0] = Iij_t0[0,0];//65.;//dddIij_t0[0][0]*10000000.; 
-                                                plotarr2[0] = Iij_t0[0,1];//35.;//dddIij_t[0][1]*10000000.; 
+                                                //tt[0] = 0;
+                                                //var Iij_t0 = get_Iij_t(0,m1,m2,R);
+                                                ////dddIij_t0 = get_dddIij_t(0,m1,m2,R,dt,edgeFLAG=1);
+                                                //plotarr1[0] = Iij_t0[0,0];//65.;//dddIij_t0[0][0]*10000000.; 
+                                                //plotarr2[0] = Iij_t0[0,1];//35.;//dddIij_t[0][1]*10000000.; 
 
-                                                tt[Nt-1] = (Nt-1)*dt;
-                                                var Iij_t1 = get_Iij_t(tt[Nt-1],m1,m2,R);
-                                                //dddIij_t1 = get_dddIij_t(tt[Nt-1],m1,m2,R,dt,edgeFLAG=1);
-                                                plotarr1[Nt-1] = Iij_t1[0,0];//dddIij_t1[0][0]*10000000.; 
-                                                plotarr2[Nt-1] = Iij_t1[0,1];//dddIij_t1[0][1]*10000000.;
+                                                //tt[Nt-1] = (Nt-1)*dt;
+                                                //var Iij_t1 = get_Iij_t(tt[Nt-1],m1,m2,R);
+                                                ////dddIij_t1 = get_dddIij_t(tt[Nt-1],m1,m2,R,dt,edgeFLAG=1);
+                                                //plotarr1[Nt-1] = Iij_t1[0,0];//dddIij_t1[0][0]*10000000.; 
+                                                //plotarr2[Nt-1] = Iij_t1[0,1];//dddIij_t1[0][1]*10000000.;
 
-                                                for (var it=1;it<Nt-1;it++){
+                                                for (var it=0;it<Nt;it++){
                                                     // time array
                                                     tt[it] = it*dt;
 
-                                                    var Iij_t = get_Iij_t(tt[i],m1,m2,R);
+                                                    //var Iij_t = get_Iij_t(tt[i],m1,m2,R);
 
                                                     //dddIij_t = get_dddIij_t(tt[it],m1,m2,R,dt);
                                                     //hij_t_thph = get_hij_t_thetaphi(tt[it],m1,m2,R,dt,theta,phi);
 
                                                     // plot things                                                    
-                                                    plotarr1[it] = Iij_t[0][0];//65.;//dddIij_t[0][0]*10000000.;
-                                                    plotarr2[it] = Iij_t[0][1];//35.;//dddIij_t[0][1]*10000000.;
+                                                    plotarr1[it] = 65.;//Iij_t[0][0];////dddIij_t[0][0]*10000000.;
+                                                    plotarr2[it] = 35.;//Iij_t[0][1];////dddIij_t[0][1]*10000000.;
                                                     //plotarr3[it] = hij_t_thph[0][0]*1000000.;
                                                 }
 

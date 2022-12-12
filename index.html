@@ -94,18 +94,24 @@
                                 // Initialise ODE and solve it with JXG.Math.Numerics.rungeKutta()
                                 function ode() {
 
-
-                                    //Torb = 2.*Math.PI*Math.sqrt(a.Value()**3/(m1.Value() + m2.Value()));
-                                    //Omega = 2.*Math.PI/Torb;
+                                    var m1 = 0.75;
+                                    var m2 = 0.25;
+                                    var M = m1 + m2;
+                                    var Torb = 2.*Math.PI*Math.sqrt(a.Value()**3/M);
+                                    var Omega = 2.*Math.PI/Torb;
 
                                     // evaluation interval
                                     var I = [0, 25];
-                                    //var I2 = [0,2.*Torb];
+                                    var I2 = [0,2.*Torb];
                                     // Number of steps. 1000 should be enough
                                     var N = 1000;
-            
+                                    var Nt = 101; // number of timesteps -- keep low for now
+
                                     // Right hand side of the ODE dx/dt = f(t, x)
                                     var f = function(t, x) {
+                                        var R = a.Value();
+                                        var Torb = 2.*Math.PI*Math.sqrt(a.Value()**3/M); 
+
                                         var bpred = s.Value();//0.3;
                                         var bprey = u.Value();//0.7;
                                         var dpred = o.Value();//0.1;
@@ -123,6 +129,7 @@
             
                                   // Solve ode
                                   var data = JXG.Math.Numerics.rungeKutta('euler', x0, I, N, f);
+                                  var data2 = [];
             
                                   // to plot the data against time we need the times where the equations were solved
                                   var q = I[0];
@@ -131,6 +138,15 @@
                                       data[i].push(q);
                                       q += h;
                                   }
+
+                                  // to plot the data against time we need the times where the equations were solved
+                                  var t = 0.;
+                                  var dt = 2.*Torb/Nt;//h2 = (I2[1]-I2[0])/N; // this is dt, get from Nt and Torb
+                                  for(var i=0; i<Nt; i++) {
+                                      data2[i].push(t); // add to array
+                                      t += dt;
+                                  }
+ 
             
                                   return data;
                                 }
@@ -151,7 +167,7 @@
                                 }
            
                                 // Plot Predator
-                                g3 = board.create('curve', [t, datapred], {strokeColor:'red', strokeWidth:'2px'});
+                                g3 = board.create('curve', [t, datapred], {strokeColor:'magenta', strokeWidth:'2px'});
                                 g3.updateDataArray = function() {
                                     var data = ode();
                                     this.dataX = [];

@@ -133,9 +133,9 @@
             
                                   // to plot the data against time we need the times where the equations were solved
                                   // sg hacky fix -- make better later
-
-                                  var q = 0.;
-                                  var h = 2.*Torb/Nt;
+                                  
+                                  var q = I[0];
+                                  var h = (I[1]-I[0])/N;
                                   for(var i=0; i<data.length; i++) {
                                       data[i].push(q);
                                       q += h;
@@ -175,7 +175,7 @@
                                     this.dataX = [];
                                     this.dataY = [];
                                     for(var i=0; i<data.length; i++) {
-                                        this.dataX[i] = t[i];
+                                        this.dataX[i] = 1000.*t[i];
                                         this.dataY[i] = data[i][0];
                                     }
                                 }
@@ -187,7 +187,7 @@
                                     this.dataX = [];
                                     this.dataY = [];
                                     for(var i=0; i<data.length; i++) {
-                                        this.dataX[i] = t[i];
+                                        this.dataX[i] = 1000.*t[i];
                                         this.dataY[i] = data[i][1];
                                       }
                                   }

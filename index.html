@@ -215,27 +215,27 @@
                                       }
                                   }
 
-                                // Plot SG test
-                                g5 = board.create('curve', [time, datatest], {strokeColor:'magenta', strokeWidth:'2px'});
-                                g5.updateDataArray = function() {
-                                    var Omega = ode2();
-
-                                    var Torb = 2.*Math.PI/Omega;
-                                    var dt = 2.*Torb/Nt;
-                              
-                                    for (var i=0; i < Nt; i++){
-                                        time[i] = i*dt;
-                                        datatest[i] = 30.*Math.sin(Omega*time[i]);
-                                    }
-
-                                    this.dataX = [];
-                                    this.dataY = [];
-                                    for(var i=0; i<Nt; i++) {
-                                        this.dataX[i] = time[i];
-                                        this.dataY[i] = datatest[i];
-                                    }
-                                }
- 
+//                                // Plot SG test
+//                                g5 = board.create('curve', [time, datatest], {strokeColor:'magenta', strokeWidth:'2px'});
+//                                g5.updateDataArray = function() {
+//                                    var Omega = ode2();
+//
+//                                    var Torb = 2.*Math.PI/Omega;
+//                                    var dt = 2.*Torb/Nt;
+//                              
+//                                    for (var i=0; i < Nt; i++){
+//                                        time[i] = i*dt;
+//                                        datatest[i] = 30.*Math.sin(Omega*time[i]);
+//                                    }
+//
+//                                    this.dataX = [];
+//                                    this.dataY = [];
+//                                    for(var i=0; i<Nt; i++) {
+//                                        this.dataX[i] = time[i];
+//                                        this.dataY[i] = datatest[i];
+//                                    }
+//                                }
+// 
 
                             </script>
 

@@ -75,12 +75,12 @@
                                 board = JXG.JSXGraph.initBoard('box', {boundingbox: [TLx, TLy, BRx, BRy], axis: true, grid: false});
            
                                 // Define sliders to dynamically change parameters of the equations and create text elements to describe them
-                                s = board.create('slider', [[0.7*BRx,0.85*TLy],[0.9*BRx,0.85*TLy],[0.0,0.3,1.0]],{name:'&epsilon;1',strokeColor:'magenta',fillColor:'magenta'});
-                                u = board.create('slider', [[0.7*BRx,0.75*TLy],[0.9*BRx,0.75*TLy],[0.0,0.7,1.0]],{name:'&epsilon;2',strokeColor:'black',fillColor:'black'});
+                                s = board.create('slider', [[0.6*BRx,0.85*TLy],[0.8*BRx,0.85*TLy],[0.0,0.3,1.0]],{name:'&epsilon;1',strokeColor:'green',fillColor:'green'});
+                                u = board.create('slider', [[0.6*BRx,0.75*TLy],[0.8*BRx,0.75*TLy],[0.0,0.7,1.0]],{name:'&epsilon;2',strokeColor:'black',fillColor:'black'});
            
-                                o = board.create('slider', [[10.0,26.0],[15.0,26.0],[0.0,0.1,1.0]],{name:'&gamma;1',strokeColor:'black',fillColor:'black'});
-                                p = board.create('slider', [[10.0,24.0],[15.0,24.0],[0.0,0.3,1.0]],{name:'&gamma;2',strokeColor:'black',fillColor:'black'});
-                                a = board.create('slider', [[10.0,22.0],[15.0,22.0],[0.0,0.3,1.0]],{name:'a',strokeColor:'black',fillColor:'black'});
+                                o = board.create('slider', [[0.2*BRx,26.0],[0.4*BRx,26.0],[0.0,0.1,1.0]],{name:'&gamma;1',strokeColor:'black',fillColor:'black'});
+                                p = board.create('slider', [[0.2*BRx,24.0],[0.4*BRx,24.0],[0.0,0.3,1.0]],{name:'&gamma;2',strokeColor:'black',fillColor:'black'});
+                                a = board.create('slider', [[0.2*BRx,22.0],[0.4*BRx,22.0],[0.0,0.3,1.0]],{name:'a',strokeColor:'black',fillColor:'black'});
            
                                 // Dynamic initial value as gliders on the y-axis
                                 startpred = board.create('glider', [0, 10, board.defaultAxes.y], {name:'Preys',strokeColor:'red',fillColor:'red'});

@@ -76,7 +76,7 @@
            
                                 o = board.create('slider', [[10.0,26.0],[15.0,26.0],[0.0,0.1,1.0]],{name:'&gamma;1',strokeColor:'black',fillColor:'black'});
                                 p = board.create('slider', [[10.0,24.0],[15.0,24.0],[0.0,0.3,1.0]],{name:'&gamma;2',strokeColor:'black',fillColor:'black'});
-                                x = board.create('slider', [[10.0,22.0],[15.0,22.0],[0.0,0.3,1.0]],{name:'&x',strokeColor:'black',fillColor:'black'});
+                                x = board.create('slider', [[10.0,22.0],[15.0,22.0],[0.0,0.3,1.0]],{name:'x',strokeColor:'black',fillColor:'black'});
            
                                 // Dynamic initial value as gliders on the y-axis
                                 startpred = board.create('glider', [0, 10, board.defaultAxes.y], {name:'Preys',strokeColor:'red',fillColor:'red'});
@@ -106,7 +106,7 @@
                                         y[1] = -x[1]*(bprey - dprey*x[0]);
             
                                         return y;
-                                  }
+                                    }
             
                                   // Initial value
                                   var x0 = [startpred.Y(), startprey.Y()];
@@ -125,6 +125,8 @@
             
                                   return data;
                                 }
+
+
            
                                 // get data points
                                 var data = ode();
@@ -140,7 +142,7 @@
                                 }
            
                                 // Plot Predator
-                                g3 = board.create('curve', [t, datapred], {strokeColor:'red', strokeWidth:'2px'});
+                                g3 = board.create('curve', [t, x.Value()*datapred], {strokeColor:'red', strokeWidth:'2px'});
                                 g3.updateDataArray = function() {
                                     var data = ode();
                                     this.dataX = [];

@@ -75,7 +75,7 @@
                                 board = JXG.JSXGraph.initBoard('box', {boundingbox: [TLx, TLy, BRx, BRy], axis: true, grid: false});
            
                                 // Define sliders to dynamically change parameters of the equations and create text elements to describe them
-                                s = board.create('slider', [[0.6*BRx,0.85*TLy],[0.8*BRx,0.85*TLy],[0.0,0.3,1.0]],{name:'&epsilon;1',strokeColor:'magenta',fillColor:'magenta'});
+                                s = board.create('slider', [[0.6*BRx,0.85*TLy],[0.8*BRx,0.85*TLy],[0.0,0.3,1.0]],{name:'&epsilon;1',strokeColor:'green',fillColor:'green'});
                                 u = board.create('slider', [[0.6*BRx,0.75*TLy],[0.8*BRx,0.75*TLy],[0.0,0.7,1.0]],{name:'&epsilon;2',strokeColor:'black',fillColor:'black'});
            
                                 o = board.create('slider', [[0.1*BRx,0.85*TLy],[0.3*BRx,0.85*TLy],[0.0,0.1,1.0]],{name:'&gamma;1',strokeColor:'black',fillColor:'black'});
@@ -158,6 +158,65 @@
             
                                   return data;
                                 }
+
+                                // Initialise ODE and solve it with JXG.Math.Numerics.rungeKutta()
+                                function ode2() {
+
+                                    var m1 = 0.75;
+                                    var m2 = 0.25;
+                                    var M = m1 + m2;
+                                    var Torb = 2.*Math.PI*Math.sqrt(a.Value()**3/M);
+                                    var Omega = 2.*Math.PI/Torb;
+
+                                    // evaluation interval
+                                    var I = [0, 25];
+                                    var I2 = [0,2.*Torb];
+                                    // Number of steps. 1000 should be enough
+                                    var N = 1000;
+                                    var Nt = 101; // number of timesteps -- keep low for now
+
+                                    // Solve ode
+                                    //var data = JXG.Math.Numerics.rungeKutta('euler', x0, I, N, f);
+                                    var data = [];
+                                    for (var i=0; i < Nt; i++){
+                                        data[i] = [];
+                                    }
+                                 
+                                    for (var i=0; i < Nt; i++){
+                                        var t = i*dt;
+                                        data[i][0] = 35.*Math.sin(Omega*t);
+                                        data[i][1] = 50.*Math.cos(Omega*t);
+                                    }
+
+
+                                  // for(var i=0; i<data.length; i++) {
+                                 //     data[i][0] *= a.Value();
+                                 // }
+            
+                                  // to plot the data against time we need the times where the equations were solved
+                                  // sg hacky fix -- make better later
+                                  
+                                  var q = 0.;
+                                  var h = 2.*Torb/Nt;
+                                  for(var i=0; i<data.length; i++) {
+                                      data[i].push(q);
+                                      q += h;
+                                  }
+
+                                  // to plot the data against time we need the times where the equations were solved
+                                  //var time = 0.;
+                                  //var timestep = 2.*Torb/Nt;//h2 = (I2[1]-I2[0])/N; // this is dt, get from Nt and Torb
+                                  //for(var i=0; i<Nt; i++) {
+                                  //    data2[i].push(time); // add to array
+                                  //    time += timestep;
+                                  //}
+ 
+            
+                                  return data;
+                                }
+
+
+
 
                                 //function ode2(){
                                 //    //

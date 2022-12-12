@@ -357,9 +357,9 @@
                                                     // time array
                                                     tt[it] = it*dt;
 
-                                                    //var Omega_t = Omega*t;
-                                                    //var cosOmega_t = Math.cos(Omega_t);
-                                                    //var sinOmega_t = Math.sin(Omega_t);
+                                                    var Omega_t = Omega*t;
+                                                    var cosOmega_t = Math.cos(Omega_t);
+                                                    var sinOmega_t = Math.sin(Omega_t);
                                                     //
                                                     //X1_t[0] = prefac1*cosOmega_t;
                                                     //X1_t[1] = prefac1*sinOmega_t;
@@ -389,8 +389,8 @@
                                                     //hij_t_thph = get_hij_t_thetaphi(tt[it],m1,m2,R,dt,theta,phi);
 
                                                     // plot things                                                    
-                                                    plotarr1[it] = 35.*Math.sin(tt[it]);//Iij_t[0][0];////dddIij_t[0][0]*10000000.;
-                                                    plotarr2[it] = 65.*Math.cos(tt[it]);//Iij_t[0][1];////dddIij_t[0][1]*10000000.;
+                                                    plotarr1[it] = 35.*cosOmega_t;//Iij_t[0][0];////dddIij_t[0][0]*10000000.;
+                                                    plotarr2[it] = 65.*sinOmega_t;//Iij_t[0][1];////dddIij_t[0][1]*10000000.;
                                                     //plotarr3[it] = hij_t_thph[0][0]*1000000.;
                                                 }
 

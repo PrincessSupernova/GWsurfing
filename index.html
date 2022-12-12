@@ -71,15 +71,12 @@
                                 board = JXG.JSXGraph.initBoard('box', {boundingbox: [-1.5, 28.5, 28.5, -1.5], axis: true, grid: false});
            
                                 // Define sliders to dynamically change parameters of the equations and create text elements to describe them
-                                s = board.create('slider', [[20.0,26.0],[25.0,26.0],[0.0,0.3,1.0]],{name:'&epsilon;1',strokeColor:'magenta',fillColor:'magenta'});
-                                st = board.create('text', [20,25, "Birth rate predators"], {fixed:true});
+                                s = board.create('slider', [[20.0,26.0],[25.0,26.0],[0.0,0.3,1.0]],{name:'&epsilon;1',strokeColor:'black',fillColor:'black'});
                                 u = board.create('slider', [[20.0,24.0],[25.0,24.0],[0.0,0.7,1.0]],{name:'&epsilon;2',strokeColor:'black',fillColor:'black'});
-                                ut = board.create('text', [20,23, "Death rate predators"], {fixed:true});
            
                                 o = board.create('slider', [[10.0,26.0],[15.0,26.0],[0.0,0.1,1.0]],{name:'&gamma;1',strokeColor:'black',fillColor:'black'});
-                                ot = board.create('text', [10,25, "Death rate preys/per predator"], {fixed:true});
                                 p = board.create('slider', [[10.0,24.0],[15.0,24.0],[0.0,0.3,1.0]],{name:'&gamma;2',strokeColor:'black',fillColor:'black'});
-                                pt = board.create('text', [10,23, "Reproduction rate pred./per prey"], {fixed:true});
+                                x = board.create('slider', [[10.0,22.0],[15.0,22.0],[0.0,0.3,1.0]],{name:'&x',strokeColor:'black',fillColor:'black'});
            
                                 // Dynamic initial value as gliders on the y-axis
                                 startpred = board.create('glider', [0, 10, board.defaultAxes.y], {name:'Preys',strokeColor:'red',fillColor:'red'});

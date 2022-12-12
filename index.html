@@ -129,23 +129,25 @@
             
                                   // Solve ode
                                   var data = JXG.Math.Numerics.rungeKutta('euler', x0, I, N, f);
-                                  var data2 = [];
+                                  //var data2 = [];
             
                                   // to plot the data against time we need the times where the equations were solved
-                                  var q = I[0];
-                                  var h = (I[1]-I[0])/N;
+                                  // sg hacky fix -- make better later
+
+                                  var q = 0.;
+                                  var h = 2.*Torb/Nt;
                                   for(var i=0; i<data.length; i++) {
                                       data[i].push(q);
                                       q += h;
                                   }
 
-                                  // to plot the data against time we need the times where the equations were solved
-                                  var time = 0.;
-                                  var timestep = 2.*Torb/Nt;//h2 = (I2[1]-I2[0])/N; // this is dt, get from Nt and Torb
-                                  for(var i=0; i<Nt; i++) {
-                                      data2[i].push(time); // add to array
-                                      time += timestep;
-                                  }
+                                  //// to plot the data against time we need the times where the equations were solved
+                                  //var time = 0.;
+                                  //var timestep = 2.*Torb/Nt;//h2 = (I2[1]-I2[0])/N; // this is dt, get from Nt and Torb
+                                  //for(var i=0; i<Nt; i++) {
+                                  //    data2[i].push(time); // add to array
+                                  //    time += timestep;
+                                  //}
  
             
                                   return data;
@@ -173,7 +175,7 @@
                                     this.dataX = [];
                                     this.dataY = [];
                                     for(var i=0; i<data.length; i++) {
-                                        this.dataX[i] = 1000.*t[i];
+                                        this.dataX[i] = t[i];
                                         this.dataY[i] = data[i][0];
                                     }
                                 }
@@ -185,7 +187,7 @@
                                     this.dataX = [];
                                     this.dataY = [];
                                     for(var i=0; i<data.length; i++) {
-                                        this.dataX[i] = 1000.*t[i];
+                                        this.dataX[i] = t[i];
                                         this.dataY[i] = data[i][1];
                                       }
                                   }

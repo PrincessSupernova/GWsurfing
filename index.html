@@ -232,7 +232,7 @@
 
            
                                 // get data points
-                                var data = ode2();
+                                var data = ode();
                                 // sg test
                                 //var Omega = ode2();
                                 //var Torb = 2.*Math.PI/Omega;
@@ -258,7 +258,7 @@
                                 // Plot Predator
                                 g3 = board.create('curve', [1000.*t, datapred], {strokeColor:'magenta', strokeWidth:'2px'});
                                 g3.updateDataArray = function() {
-                                    var data = ode2();
+                                    var data = ode();
                                     this.dataX = [];
                                     this.dataY = [];
                                     for(var i=0; i<data.length; i++) {

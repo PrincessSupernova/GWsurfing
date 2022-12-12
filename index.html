@@ -153,6 +153,16 @@
                                   return data;
                                 }
 
+                                function ode2(){
+                                    //
+                                    var m1 = 0.75;
+                                    var m2 = 0.25;
+                                    var M = m1 + m2;
+                                    var Torb = 2.*Math.PI*Math.sqrt(a.Value()**3/M);
+                                    var Omega = 2.*Math.PI/Torb; 
+
+                                }
+
 
            
                                 // get data points
@@ -160,13 +170,19 @@
                               
                                 // copy data to arrays so we can plot it using JXG.Curve
                                 var t = [];
+                                var time = []
                                 var dataprey = [];
                                 var datapred = [];
+                                var datatest = []
                                 for(var i=0; i<data.length; i++) {
                                   t[i] = data[i][2];
                                   datapred[i] = data[i][0];
                                   dataprey[i] = data[i][1];
                                 }
+
+                                //for (var i=0; i < Nt; i++){
+                                //    time[i] = i*dt;
+                                //}
            
                                 // Plot Predator
                                 g3 = board.create('curve', [t, datapred], {strokeColor:'magenta', strokeWidth:'2px'});

@@ -270,6 +270,8 @@
                                                     return hij_t_thph; // this is a 3x3 array
                                                 }
 
+//                                                function get_sint(t
+
                                                 //////// graphics stuff
 
                                                 // coordinates of top left corner
@@ -387,8 +389,8 @@
                                                     //hij_t_thph = get_hij_t_thetaphi(tt[it],m1,m2,R,dt,theta,phi);
 
                                                     // plot things                                                    
-                                                    plotarr1[it] = 35.;//Iij_t[0][0];////dddIij_t[0][0]*10000000.;
-                                                    plotarr2[it] = 65.;//Iij_t[0][1];////dddIij_t[0][1]*10000000.;
+                                                    plotarr1[it] = 35.*Math.sin(tt[i]);//Iij_t[0][0];////dddIij_t[0][0]*10000000.;
+                                                    plotarr2[it] = 65.*Math.cos(tt[i]);//Iij_t[0][1];////dddIij_t[0][1]*10000000.;
                                                     //plotarr3[it] = hij_t_thph[0][0]*1000000.;
                                                 }
 

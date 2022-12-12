@@ -170,9 +170,9 @@
                                 // get data points
                                 var data = ode();
                                 // sg test
-                                var Omega = ode2();
-                                var Torb = 2.*Math.PI/Omega;
-                                var dt = 2.*Torb/Nt;
+                                //var Omega = ode2();
+                                //var Torb = 2.*Math.PI/Omega;
+                                //var dt = 2.*Torb/Nt;
                               
                                 // copy data to arrays so we can plot it using JXG.Curve
                                 var t = [];
@@ -186,10 +186,10 @@
                                   dataprey[i] = data[i][1];
                                 }
 
-                                for (var i=0; i < Nt; i++){
-                                    time[i] = i*dt;
-                                    datatest[i] = 30.*Math.sin(Omega*time[i]);
-                                }
+                                //for (var i=0; i < Nt; i++){
+                                //    time[i] = i*dt;
+                                //    datatest[i] = 30.*Math.sin(Omega*time[i]);
+                                //}
            
                                 // Plot Predator
                                 g3 = board.create('curve', [t, datapred], {strokeColor:'magenta', strokeWidth:'2px'});

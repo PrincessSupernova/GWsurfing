@@ -83,13 +83,14 @@
                                 a = board.create('slider', [[0.1*BRx,0.65*TLy],[0.3*BRx,0.65*TLy],[0.0,0.3,1.0]],{name:'a',strokeColor:'black',fillColor:'black'});
            
                                 // Dynamic initial value as gliders on the y-axis
-                                startpred = board.create('glider', [0, 10, board.defaultAxes.y], {name:'Preys',strokeColor:'red',fillColor:'red'});
+                                startpmagenta = board.create('glider', [0, 10, board.defaultAxes.y], {name:'Preys',strokeColor:'magenta',fillColor:'magenta'});
                                 startprey = board.create('glider', [0, 5, board.defaultAxes.y], {name:'Predators',strokeColor:'blue',fillColor:'blue'});
                               
                               
                                 // Variables for the JXG.Curves
                                 var g3 = null;
                                 var g4 = null;
+                                var g5 = null;
            
                                 // Initialise ODE and solve it with JXG.Math.Numerics.rungeKutta()
                                 function ode() {
@@ -160,6 +161,7 @@
                                     var M = m1 + m2;
                                     var Torb = 2.*Math.PI*Math.sqrt(a.Value()**3/M);
                                     var Omega = 2.*Math.PI/Torb; 
+                                    return Omega;
 
                                 }
 
@@ -167,6 +169,10 @@
            
                                 // get data points
                                 var data = ode();
+                                // sg test
+                                var Omega = ode2();
+                                var Torb = 2.*Math.PI/Omega;
+                                var dt = 2.*Torb/Nt;
                               
                                 // copy data to arrays so we can plot it using JXG.Curve
                                 var t = [];
@@ -180,9 +186,10 @@
                                   dataprey[i] = data[i][1];
                                 }
 
-                                //for (var i=0; i < Nt; i++){
-                                //    time[i] = i*dt;
-                                //}
+                                for (var i=0; i < Nt; i++){
+                                    time[i] = i*dt;
+                                    datatest[i] = 30.*Math.sin(Omega*time[i]);
+                                }
            
                                 // Plot Predator
                                 g3 = board.create('curve', [t, datapred], {strokeColor:'magenta', strokeWidth:'2px'});
@@ -207,6 +214,28 @@
                                         this.dataY[i] = data[i][1];
                                       }
                                   }
+
+                                // Plot SG test
+                                g5 = board.create('curve', [time, datatest], {strokeColor:'magenta', strokeWidth:'2px'});
+                                g5.updateDataArray = function() {
+                                    var Omega = ode2();
+
+                                    var Torb = 2.*Math.PI/Omega;
+                                    var dt = 2.*Torb/Nt;
+                              
+                                    for (var i=0; i < Nt; i++){
+                                        time[i] = i*dt;
+                                        datatest[i] = 30.*Math.sin(Omega*time[i]);
+                                    }
+
+                                    this.dataX = [];
+                                    this.dataY = [];
+                                    for(var i=0; i<Nt; i++) {
+                                        this.dataX[i] = time[i];
+                                        this.dataY[i] = datatest[i];
+                                    }
+                                }
+ 
 
                             </script>
 

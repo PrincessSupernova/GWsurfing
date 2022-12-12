@@ -391,7 +391,7 @@
                                                     //hij_t_thph = get_hij_t_thetaphi(tt[it],m1,m2,R,dt,theta,phi);
 
                                                     // plot things                                                    
-                                                    plotarr1[it] = x*cosOmega_t;//Iij_t[0][0];////dddIij_t[0][0]*10000000.;
+                                                    plotarr1[it] = scfac.Value()*cosOmega_t;//Iij_t[0][0];////dddIij_t[0][0]*10000000.;
                                                     plotarr2[it] = 65.*sinOmega_t;//Iij_t[0][1];////dddIij_t[0][1]*10000000.;
                                                     //plotarr3[it] = hij_t_thph[0][0]*1000000.;
                                                 }
@@ -400,7 +400,7 @@
  
 //                                                var c = board.create('curve',[tt,X1x],{strokeColor:'magenta',strokeWidth:3});                                                
                                                 var c = board.create('curve',[tt,plotarr1],{strokeColor:'magenta',strokeWidth:3});
-                                                var d = board.create('curve',[tt,plotarr2],{strokeColor:'green',strokeWidth:3});
+                                                var d = board.create('curve',[tt,plotarr2],{strokeColor:'black',strokeWidth:3});
 
 
 

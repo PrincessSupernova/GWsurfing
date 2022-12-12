@@ -61,21 +61,21 @@
                             <script type="text/javascript">
 
                                 // coordinates of top left corner
-                                //var TLx = -700;
-                                var TLx = -1.5;
-                                //var TLy = 100;
-                                var TLy = 28.5;
+                                var TLx = -700;
+                                //var TLx = -1.5;
+                                var TLy = 100;
+                                //var TLy = 28.5;
                                 // coordinates of bottom right corner
-                                //var BRx = 12650;
-                                var BRx = 28.5;
-                                //var BRy = -100;
-                                var BRy = -1.5;
+                                var BRx = 12650;
+                                //var BRx = 28.5;
+                                var BRy = -100;
+                                //var BRy = -1.5;
            
                                 // Initialise board
                                 board = JXG.JSXGraph.initBoard('box', {boundingbox: [TLx, TLy, BRx, BRy], axis: true, grid: false});
            
                                 // Define sliders to dynamically change parameters of the equations and create text elements to describe them
-                                s = board.create('slider', [[20.0,26.0],[25.0,26.0],[0.0,0.3,1.0]],{name:'&epsilon;1',strokeColor:'magenta',fillColor:'magenta'});
+                                s = board.create('slider', [[20.0,26.0],[25.0,26.0],[0.0,0.3,1.0]],{name:'&epsilon;1',strokeColor:'green',fillColor:'green'});
                                 u = board.create('slider', [[20.0,24.0],[25.0,24.0],[0.0,0.7,1.0]],{name:'&epsilon;2',strokeColor:'black',fillColor:'black'});
            
                                 o = board.create('slider', [[10.0,26.0],[15.0,26.0],[0.0,0.1,1.0]],{name:'&gamma;1',strokeColor:'black',fillColor:'black'});
@@ -125,7 +125,6 @@
                                   var data = JXG.Math.Numerics.rungeKutta('euler', x0, I, N, f);
             
                                   // to plot the data against time we need the times where the equations were solved
-                                  var t = [];
                                   var q = I[0];
                                   var h = (I[1]-I[0])/N;
                                   for(var i=0; i<data.length; i++) {

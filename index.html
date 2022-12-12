@@ -397,11 +397,14 @@
                                                 }
 
 ////                                                
- 
+                                                var c = brd.create('curve',[
+                                                          function(t){return t;},
+                                                          function(t){return x.Value()*Math.sin(Omega*t);},
+                                                          0, 2*Torb],{strokeColor:'#aa2233',strokeWidth:3});
 //                                                var c = board.create('curve',[tt,X1x],{strokeColor:'magenta',strokeWidth:3});                                                
 //                                                var c = board.create('curve',[tt,35.*Math.cos(Omega*tt)],{strokeColor:'magenta',strokeWidth:3});
-                                                var c = board.create('curve',[tt,plotarr1],{strokeColor:'magenta',strokeWidth:3});
-                                                var d = board.create('curve',[tt,plotarr2],{strokeColor:'green',strokeWidth:3});
+                                                var d = board.create('curve',[tt,plotarr1],{strokeColor:'magenta',strokeWidth:3});
+                                                //var d = board.create('curve',[tt,plotarr2],{strokeColor:'green',strokeWidth:3});
 
                                                 board.unsuspendUpdate(); 
            

@@ -329,10 +329,10 @@
                                                 //}
 
  
-                                                var tt = [Nt];
-                                                var plotarr1 = [Nt];
-                                                var plotarr2 = [Nt];
-                                                var plotarr3 = [Nt];
+                                                var tt = [];
+                                                var plotarr1 = [];
+                                                var plotarr2 = [];
+                                                var plotarr3 = [];
 
                                                 //tt[0] = 0;
                                                 //var Iij_t0 = get_Iij_t(0,m1,m2,R);
@@ -345,8 +345,8 @@
                                                 ////dddIij_t1 = get_dddIij_t(tt[Nt-1],m1,m2,R,dt,edgeFLAG=1);
                                                 //plotarr1[Nt-1] = Iij_t1[0,0];//dddIij_t1[0][0]*10000000.; 
                                                 //plotarr2[Nt-1] = Iij_t1[0,1];//dddIij_t1[0][1]*10000000.;
-                                                var X1_t = [3];
-                                                var X2_t = [3];
+                                                //var X1_t = [3];
+                                                //var X2_t = [3];
 
                                                 var prefac1 = mass2*R/M;
                                                 var prefac2  =-mass1*R/M;
@@ -355,30 +355,29 @@
                                                     // time array
                                                     tt[it] = it*dt;
 
-                                                    var Omega_t = Omega*t;
-                                                    var cosOmega_t = Math.cos(Omega_t);
-                                                    var sinOmega_t = Math.sin(Omega_t);
-
-                                                    X1_t[0] = prefac1*cosOmega_t;
-                                                    X1_t[1] = prefac1*sinOmega_t;
-                                                    X1_t[2] = 0;
-
-                                                    X2_t[0] = prefac2*cosOmega_t;
-                                                    X2_t[1] = prefac2*sinOmega_t;
-                                                    X2_t[2] = 0;
- 
+                                                    //var Omega_t = Omega*t;
+                                                    //var cosOmega_t = Math.cos(Omega_t);
+                                                    //var sinOmega_t = Math.sin(Omega_t);
+                                                    //
+                                                    //X1_t[0] = prefac1*cosOmega_t;
+                                                    //X1_t[1] = prefac1*sinOmega_t;
+                                                    //X1_t[2] = 0;
+                                                    //
+                                                    //X2_t[0] = prefac2*cosOmega_t;
+                                                    //X2_t[1] = prefac2*sinOmega_t;
+                                                    //X2_t[2] = 0;
+                                                    //
                                                                                                         
-                                                    var Iij_t = [];
-                                                    for (var i = 0; i < 3; i++){
-                                                        Iij_t[i] = [];
-
-
-                                                    }
-                                                    for (var i = 0; i < 3; i++){    
-                                                        for (var j = 0; j < 3; j++){
-                                                            Iij_t[i][j] = mass1*X1_t[i]*X1_t[j] + mass2*X2_t[i]*X2_t[j];
-                                                        }
-                                                    }
+                                                    //var Iij_t = [];
+                                                    //for (var i = 0; i < 3; i++){
+                                                    //    Iij_t[i] = [];
+                                                    //
+                                                    //}
+                                                    //for (var i = 0; i < 3; i++){    
+                                                    //    for (var j = 0; j < 3; j++){
+                                                    //        Iij_t[i][j] = mass1*X1_t[i]*X1_t[j] + mass2*X2_t[i]*X2_t[j];
+                                                    //    }
+                                                    //}
 
 
 

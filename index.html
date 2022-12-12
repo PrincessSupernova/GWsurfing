@@ -59,12 +59,19 @@
 
                         <div id="box" class="jxgbox" style="width:500px; height:500px;"></div>
                             <script type="text/javascript">
-             
+
+                                // coordinates of top left corner
+                                var TLx = -700;
+                                var TLy = 100;
+                                // coordinates of bottom right corner
+                                var BRx = 12650;
+                                var BRy = -100;
+           
                                 // Initialise board
                                 board = JXG.JSXGraph.initBoard('box', {boundingbox: [-1.5, 28.5, 28.5, -1.5], axis: true, grid: false});
            
                                 // Define sliders to dynamically change parameters of the equations and create text elements to describe them
-                                s = board.create('slider', [[20.0,26.0],[25.0,26.0],[0.0,0.3,1.0]],{name:'&epsilon;1',strokeColor:'black',fillColor:'black'});
+                                s = board.create('slider', [[20.0,26.0],[25.0,26.0],[0.0,0.3,1.0]],{name:'&epsilon;1',strokeColor:'magenta',fillColor:'magenta'});
                                 st = board.create('text', [20,25, "Birth rate predators"], {fixed:true});
                                 u = board.create('slider', [[20.0,24.0],[25.0,24.0],[0.0,0.7,1.0]],{name:'&epsilon;2',strokeColor:'black',fillColor:'black'});
                                 ut = board.create('text', [20,23, "Death rate predators"], {fixed:true});

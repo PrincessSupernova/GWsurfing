@@ -61,22 +61,26 @@
                             <script type="text/javascript">
 
                                 // coordinates of top left corner
-                                var TLx = -700;
-                                var TLy = 100;
+                                //var TLx = -700;
+                                var TLx = -1.5;
+                                //var TLy = 100;
+                                var TLy = 28.5;
                                 // coordinates of bottom right corner
-                                var BRx = 12650;
-                                var BRy = -100;
+                                //var BRx = 12650;
+                                var BRx = 28.5;
+                                //var BRy = -100;
+                                var BRy = -1.5;
            
                                 // Initialise board
-                                board = JXG.JSXGraph.initBoard('box', {boundingbox: [-1.5, 28.5, 28.5, -1.5], axis: true, grid: false});
+                                board = JXG.JSXGraph.initBoard('box', {boundingbox: [TLx, TLy, BRx, BRy], axis: true, grid: false});
            
                                 // Define sliders to dynamically change parameters of the equations and create text elements to describe them
-                                s = board.create('slider', [[20.0,26.0],[25.0,26.0],[0.0,0.3,1.0]],{name:'&epsilon;1',strokeColor:'black',fillColor:'black'});
+                                s = board.create('slider', [[20.0,26.0],[25.0,26.0],[0.0,0.3,1.0]],{name:'&epsilon;1',strokeColor:'magenta',fillColor:'magenta'});
                                 u = board.create('slider', [[20.0,24.0],[25.0,24.0],[0.0,0.7,1.0]],{name:'&epsilon;2',strokeColor:'black',fillColor:'black'});
            
                                 o = board.create('slider', [[10.0,26.0],[15.0,26.0],[0.0,0.1,1.0]],{name:'&gamma;1',strokeColor:'black',fillColor:'black'});
                                 p = board.create('slider', [[10.0,24.0],[15.0,24.0],[0.0,0.3,1.0]],{name:'&gamma;2',strokeColor:'black',fillColor:'black'});
-                                x = board.create('slider', [[10.0,22.0],[15.0,22.0],[0.0,0.3,1.0]],{name:'x',strokeColor:'black',fillColor:'black'});
+                                a = board.create('slider', [[10.0,22.0],[15.0,22.0],[0.0,0.3,1.0]],{name:'a',strokeColor:'black',fillColor:'black'});
            
                                 // Dynamic initial value as gliders on the y-axis
                                 startpred = board.create('glider', [0, 10, board.defaultAxes.y], {name:'Preys',strokeColor:'red',fillColor:'red'});
@@ -89,8 +93,14 @@
            
                                 // Initialise ODE and solve it with JXG.Math.Numerics.rungeKutta()
                                 function ode() {
+
+
+                                    Torb = 2.*Math.PI*Math.sqrt(a.Value()**3/(m1.Value() + m2.Value()));
+                                    Omega = 2.*Math.PI/Torb;
+
                                     // evaluation interval
                                     var I = [0, 25];
+                                    var I2 = [0,2.*Torb];
                                     // Number of steps. 1000 should be enough
                                     var N = 1000;
             
@@ -142,7 +152,7 @@
                                 }
            
                                 // Plot Predator
-                                g3 = board.create('curve', [t, x.Value()*datapred], {strokeColor:'red', strokeWidth:'2px'});
+                                g3 = board.create('curve', [t, datapred], {strokeColor:'red', strokeWidth:'2px'});
                                 g3.updateDataArray = function() {
                                     var data = ode();
                                     this.dataX = [];

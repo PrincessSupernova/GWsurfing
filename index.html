@@ -75,7 +75,7 @@
                                 board = JXG.JSXGraph.initBoard('box', {boundingbox: [TLx, TLy, BRx, BRy], axis: true, grid: false});
            
                                 // Define sliders to dynamically change parameters of the equations and create text elements to describe them
-                                s = board.create('slider', [[0.6*BRx,0.85*TLy],[0.8*BRx,0.85*TLy],[0.0,0.3,1.0]],{name:'&epsilon;1',strokeColor:'magenta',fillColor:'magenta'});
+                                s = board.create('slider', [[0.6*BRx,0.85*TLy],[0.8*BRx,0.85*TLy],[0.0,0.3,1.0]],{name:'&epsilon;1',strokeColor:'green',fillColor:'green'});
                                 u = board.create('slider', [[0.6*BRx,0.75*TLy],[0.8*BRx,0.75*TLy],[0.0,0.7,1.0]],{name:'&epsilon;2',strokeColor:'black',fillColor:'black'});
            
                                 o = board.create('slider', [[0.1*BRx,0.85*TLy],[0.3*BRx,0.85*TLy],[0.0,0.1,1.0]],{name:'&gamma;1',strokeColor:'black',fillColor:'black'});
@@ -223,7 +223,7 @@
                                 var dataprey = [];
                                 var datapred = [];
                                 var datatest = []
-                                for(var i=0; i<Nt; i++) {
+                                for(var i=0; i<data.length; i++) {
                                   t[i] = data[i][2];
                                   datapred[i] = data[i][0];
                                   dataprey[i] = data[i][1];
@@ -242,7 +242,7 @@
 
                                     this.dataX = [];
                                     this.dataY = [];
-                                    for(var i=0; i<Nt; i++) {
+                                    for(var i=0; i<data.length; i++) {
                                         this.dataX[i] = data[i][2]*1000.;
                                         this.dataY[i] = data[i][0];
                                     }
@@ -254,7 +254,7 @@
                                     var data = ode();
                                     this.dataX = [];
                                     this.dataY = [];
-                                    for(var i=0; i<Nt; i++) {
+                                    for(var i=0; i<data.length; i++) {
                                         this.dataX[i] = data[i][2]*1000.;
                                         this.dataY[i] = data[i][1];
                                       }

@@ -415,7 +415,7 @@
           
                                             // Define sliders to dynamically change parameters of the equations and create text elements to describe them
 
-                                            s = board.create('slider', [[0.6*BRx,0.85*TLy],[0.8*BRx,0.85*TLy],[0.0,0.3,1.0]],{name:'&epsilon;1',strokeColor:'green',fillColor:'green'});
+                                            s = board.create('slider', [[0.6*BRx,0.85*TLy],[0.8*BRx,0.85*TLy],[0.0,0.3,1.0]],{name:'&epsilon;1',strokeColor:'magenta',fillColor:'magenta'});
                                             u = board.create('slider', [[0.6*BRx,0.75*TLy],[0.8*BRx,0.75*TLy],[0.0,0.7,1.0]],{name:'&epsilon;2',strokeColor:'black',fillColor:'black'});
            
                                             o = board.create('slider', [[0.1*BRx,0.85*TLy],[0.3*BRx,0.85*TLy],[0.0,0.1,1.0]],{name:'&gamma;1',strokeColor:'black',fillColor:'black'});
@@ -425,7 +425,6 @@
                                             // Dynamic initial value as gliders on the y-axis
                                             startpred = board.create('glider', [0, 10, board.defaultAxes.y], {name:'Preys',strokeColor:'magenta',fillColor:'magenta'});
                                             startprey = board.create('glider', [0, 5, board.defaultAxes.y], {name:'Predators',strokeColor:'blue',fillColor:'blue'});
-                                          
                                           
                                             // Variables for the JXG.Curves
                                             var g3 = null;
@@ -478,8 +477,8 @@
                                                 }
                                               
                                                 for (var i = 0; i < data.length; i++){
-                                                    data[i][0] = (2.*a.Value())*Math.cos(2.*data[i][2]);
-                                                    data[i][1] = a.Value()*Math.sin(data[i][2]);
+                                                    data[i][0] = (2.*a.Value())*Math.cos(2.*Omega*data[i][2]);
+                                                    data[i][1] = a.Value()*Math.sin(Omega*data[i][2]);
                                                 }
                                               
                                                 return data;
@@ -519,8 +518,8 @@
                                                 for(var i=0; i<data.length; i++) {
                                                     this.dataX[i] = t[i];
                                                     this.dataY[i] = data[i][1];
-                                                  }
-                                              }
+                                                }
+                                            }
 
                                             </script>
 
@@ -530,7 +529,7 @@
 		    					this is your work.
 		    				-->
 		    				<p class="copyright">&copy; Untitled. Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
-		    			</footer>
+                    </footer>
                     
 		    	</div>
                     

@@ -415,7 +415,7 @@
           
                                             // Define sliders to dynamically change parameters of the equations and create text elements to describe them
 
-                                            s = board.create('slider', [[0.6*BRx,0.85*TLy],[0.8*BRx,0.85*TLy],[0.0,0.3,1.0]],{name:'&epsilon;1',strokeColor:'green',fillColor:'green'});
+                                            s = board.create('slider', [[0.6*BRx,0.85*TLy],[0.8*BRx,0.85*TLy],[0.0,0.3,1.0]],{name:'&epsilon;1',strokeColor:'magenta',fillColor:'magenta'});
                                             u = board.create('slider', [[0.6*BRx,0.75*TLy],[0.8*BRx,0.75*TLy],[0.0,0.7,1.0]],{name:'&epsilon;2',strokeColor:'black',fillColor:'black'});
            
                                             o = board.create('slider', [[0.1*BRx,0.85*TLy],[0.3*BRx,0.85*TLy],[0.0,0.1,1.0]],{name:'&gamma;1',strokeColor:'black',fillColor:'black'});
@@ -468,7 +468,7 @@
                                               }
 
                                               for (var i = 0; i < data.length; i++){
-                                                  data[i][1] *= a.Value();
+                                                  data[i][1] = a.Value()*Math.sin(data[i][2]);
                                               }
            
                                               return data;

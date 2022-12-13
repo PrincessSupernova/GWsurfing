@@ -281,9 +281,9 @@
                                                 var BRx = 12650;
                                                 var BRy = -100;
                                                 
- //                                             //// Initialise board
- /                                              ////var board = JXG.JSXGraph.initBoard('box', {boundingbox: [TLx, TLy, BRx, BRy], axis: true, grid: false});
- //        
+ //                                             // Initialise board
+                                                var board = JXG.JSXGraph.initBoard('box', {boundingbox: [TLx, TLy, BRx, BRy], axis: true, grid: false});
+ //      
  //                                               board.suspendUpdate();
  //          
  //                                               // Define sliders to dynamically change parameters of the equations and create text elements to describe them
@@ -411,18 +411,28 @@
            
              
                                             // Initialise board
-                                            board = JXG.JSXGraph.initBoard('box', {boundingbox: [-1.5, 28.5, 28.5, -1.5], axis: true, grid: false});
+                                            //board = JXG.JSXGraph.initBoard('box', {boundingbox: [-1.5, 28.5, 28.5, -1.5], axis: true, grid: false});
           
                                             // Define sliders to dynamically change parameters of the equations and create text elements to describe them
-                                            s = board.create('slider', [[20.0,26.0],[25.0,26.0],[0.0,0.3,1.0]],{name:'&epsilon;1',strokeColor:'black',fillColor:'black'});
-                                            st = board.create('text', [20,25, "Birth rate predators"], {fixed:true});
-                                            u = board.create('slider', [[20.0,24.0],[25.0,24.0],[0.0,0.7,1.0]],{name:'&epsilon;2',strokeColor:'black',fillColor:'black'});
-                                            ut = board.create('text', [20,23, "Death rate predators"], {fixed:true});
+
+                                            s = board.create('slider', [[0.6*BRx,0.85*TLy],[0.8*BRx,0.85*TLy],[0.0,0.3,1.0]],{name:'&epsilon;1',strokeColor:'green',fillColor:'green'});
+                                            u = board.create('slider', [[0.6*BRx,0.75*TLy],[0.8*BRx,0.75*TLy],[0.0,0.7,1.0]],{name:'&epsilon;2',strokeColor:'black',fillColor:'black'});
+           
+                                            o = board.create('slider', [[0.1*BRx,0.85*TLy],[0.3*BRx,0.85*TLy],[0.0,0.1,1.0]],{name:'&gamma;1',strokeColor:'black',fillColor:'black'});
+                                            p = board.create('slider', [[0.1*BRx,0.75*TLy],[0.3*BRx,0.75*TLy],[0.0,0.3,1.0]],{name:'&gamma;2',strokeColor:'black',fillColor:'black'});
+                                            a = board.create('slider', [[0.1*BRx,0.65*TLy],[0.3*BRx,0.65*TLy],[0.1,1.0,10.0]],{name:'a',strokeColor:'black',fillColor:'black'});
+           
+
+
+                                           // s = board.create('slider', [[20.0,26.0],[25.0,26.0],[0.0,0.3,1.0]],{name:'&epsilon;1',strokeColor:'black',fillColor:'black'});
+                                           // st = board.create('text', [20,25, "Birth rate predators"], {fixed:true});
+                                           // u = board.create('slider', [[20.0,24.0],[25.0,24.0],[0.0,0.7,1.0]],{name:'&epsilon;2',strokeColor:'black',fillColor:'black'});
+                                           // ut = board.create('text', [20,23, "Death rate predators"], {fixed:true});
           
-                                            o = board.create('slider', [[10.0,26.0],[15.0,26.0],[0.0,0.1,1.0]],{name:'&gamma;1',strokeColor:'black',fillColor:'black'});
-                                            ot = board.create('text', [10,25, "Death rate preys/per predator"], {fixed:true});
-                                            p = board.create('slider', [[10.0,24.0],[15.0,24.0],[0.0,0.3,1.0]],{name:'&gamma;2',strokeColor:'black',fillColor:'black'});
-                                            pt = board.create('text', [10,23, "Reproduction rate pred./per prey"], {fixed:true});
+                                           // o = board.create('slider', [[10.0,26.0],[15.0,26.0],[0.0,0.1,1.0]],{name:'&gamma;1',strokeColor:'black',fillColor:'black'});
+                                           // ot = board.create('text', [10,25, "Death rate preys/per predator"], {fixed:true});
+                                           // p = board.create('slider', [[10.0,24.0],[15.0,24.0],[0.0,0.3,1.0]],{name:'&gamma;2',strokeColor:'black',fillColor:'black'});
+                                           // pt = board.create('text', [10,23, "Reproduction rate pred./per prey"], {fixed:true});
           
                                             // Dynamic initial value as gliders on the y-axis
                                             startpred = board.create('glider', [0, 10, board.defaultAxes.y], {name:'Preys',strokeColor:'red',fillColor:'red'});

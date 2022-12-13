@@ -274,15 +274,15 @@
 
 //                                                //////// graphics stuff
 //
-//                                                // coordinates of top left corner
-//                                                var TLx = -700;
-//                                                var TLy = 100;
-//                                                // coordinates of bottom right corner
-//                                                var BRx = 12650;
-//                                               var BRy = -100;
-//                                                
- //                                               // Initialise board
- //                                               var board = JXG.JSXGraph.initBoard('box', {boundingbox: [TLx, TLy, BRx, BRy], axis: true, grid: false});
+                                                // coordinates of top left corner
+                                                var TLx = -700;
+                                                var TLy = 100;
+                                                // coordinates of bottom right corner
+                                                var BRx = 12650;
+                                                var BRy = -100;
+                                                
+ //                                             //// Initialise board
+ /                                              ////var board = JXG.JSXGraph.initBoard('box', {boundingbox: [TLx, TLy, BRx, BRy], axis: true, grid: false});
  //        
  //                                               board.suspendUpdate();
  //          
@@ -411,7 +411,7 @@
            
              
                                             // Initialise board
-                                            board = JXG.JSXGraph.initBoard('jxgbox', {boundingbox: [-1.5, 28.5, 28.5, -1.5], axis: true, grid: false});
+                                            board = JXG.JSXGraph.initBoard('box', {boundingbox: [-1.5, 28.5, 28.5, -1.5], axis: true, grid: false});
           
                                             // Define sliders to dynamically change parameters of the equations and create text elements to describe them
                                             s = board.create('slider', [[20.0,26.0],[25.0,26.0],[0.0,0.3,1.0]],{name:'&epsilon;1',strokeColor:'black',fillColor:'black'});

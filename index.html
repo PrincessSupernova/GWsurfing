@@ -434,7 +434,7 @@
                                             // Initialise ODE and solve it with JXG.Math.Numerics.rungeKutta()
                                             function ode() {
 
-                                                var mass1 = u.Value();
+                                                var mass1 = u.Value(); 
                                                 var mass2 = s.Value();
                                                 var M = mass1 + mass2;
                                                
@@ -443,7 +443,8 @@
                                                 var Omega = 2.*Math.PI/Torb;
 
                                                 // evaluation interval
-                                                var I = [0, 25];
+                                                //var I = [0, 25];
+                                                var I = [0,2.*Torb];
                                                 // Number of steps. 1000 should be enough
                                                 var N = 1000;
            
@@ -459,28 +460,29 @@
                                                     y[1] = -x[1]*(bprey - dprey*x[0]);
            
                                                     return y;
-                                              }
+                                                }
            
-                                              // Initial value
-                                              var x0 = [startpred.Y(), startprey.Y()];
-           
-                                              // Solve ode
-                                              var data = JXG.Math.Numerics.rungeKutta('euler', x0, I, N, f);
-           
-                                              // to plot the data against time we need the times where the equations were solved
-                                              var t = [];
-                                              var q = I[0];
-                                              var h = (I[1]-I[0])/N;
-                                              for(var i=0; i<data.length; i++) {
-                                                  data[i].push(q);
-                                                  q += h;
-                                              }
-
-                                              for (var i = 0; i < data.length; i++){
-                                                  data[i][1] = a.Value()*Math.sin(data[i][2]);
-                                              }
-           
-                                              return data;
+                                                // Initial value
+                                                var x0 = [startpred.Y(), startprey.Y()];
+                                              
+                                                // Solve ode
+                                                var data = JXG.Math.Numerics.rungeKutta('euler', x0, I, N, f);
+                                              
+                                                // to plot the data against time we need the times where the equations were solved
+                                                var t = [];
+                                                var q = I[0];
+                                                var h = (I[1]-I[0])/N;
+                                                for(var i=0; i<data.length; i++) {
+                                                    data[i].push(q);
+                                                    q += h;
+                                                }
+                                              
+                                                for (var i = 0; i < data.length; i++){
+                                                    data[i][0] = (2.*a.Value())*Math.cos(2.*data[i][2]);
+                                                    data[i][1] = a.Value()*Math.sin(data[i][2]);
+                                                }
+                                              
+                                                return data;
                                             }
           
                                             // get data points

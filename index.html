@@ -75,7 +75,7 @@
                                 board = JXG.JSXGraph.initBoard('box', {boundingbox: [TLx, TLy, BRx, BRy], axis: true, grid: false});
            
                                 // Define sliders to dynamically change parameters of the equations and create text elements to describe them
-                                s = board.create('slider', [[0.6*BRx,0.85*TLy],[0.8*BRx,0.85*TLy],[0.0,0.3,1.0]],{name:'&epsilon;1',strokeColor:'magenta',fillColor:'magenta'});
+                                s = board.create('slider', [[0.6*BRx,0.85*TLy],[0.8*BRx,0.85*TLy],[0.0,0.3,1.0]],{name:'&epsilon;1',strokeColor:'green',fillColor:'green'});
                                 u = board.create('slider', [[0.6*BRx,0.75*TLy],[0.8*BRx,0.75*TLy],[0.0,0.7,1.0]],{name:'&epsilon;2',strokeColor:'black',fillColor:'black'});
            
                                 o = board.create('slider', [[0.1*BRx,0.85*TLy],[0.3*BRx,0.85*TLy],[0.0,0.1,1.0]],{name:'&gamma;1',strokeColor:'black',fillColor:'black'});
@@ -211,7 +211,7 @@
                                 }
            
                                 // get data points
-                                var data = ode();
+                                var data = ode2();
                                 // sg test
                                 //var Omega = ode2();
                                 //var Torb = 2.*Math.PI/Omega;
@@ -237,7 +237,7 @@
                                 // Plot Predator
                                 g3 = board.create('curve', [t*1000., datapred], {strokeColor:'magenta', strokeWidth:'2px'});
                                 g3.updateDataArray = function() {
-                                    var data = ode();
+                                    var data = ode2();
                                     this.dataX = [];
                                     this.dataY = [];
                                     for(var i=0; i<data.length; i++) {
@@ -249,7 +249,7 @@
                                 // Plot Prey
                                 g4 = board.create('curve', [t*1000., dataprey], {strokeColor:'blue', strokeWidth:'2px'});
                                 g4.updateDataArray = function() {
-                                    var data = ode();
+                                    var data = ode2();
                                     this.dataX = [];
                                     this.dataY = [];
                                     for(var i=0; i<data.length; i++) {

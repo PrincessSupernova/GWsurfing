@@ -466,6 +466,10 @@
                                                   data[i].push(q);
                                                   q += h;
                                               }
+
+                                              for (var i = 0; i < data.length; i++){
+                                                  data[i][1] *= a.Value();
+                                              }
            
                                               return data;
                                             }

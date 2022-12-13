@@ -171,14 +171,17 @@
                                     //var data = JXG.Math.Numerics.rungeKutta('euler', x0, I, N, f);
                                     var data = [];
                                     for (var i=0; i < Nt; i++){
-                                        data[i].push([]);
+                                        var t = i*dt;
+                                        data[i].push(35.*Math.sin(Omega*t));
+                                        data[i].push(50.*Math.cos(Omega*t));                                        
+                                        data[i].push(t);
                                     }
                                  
-                                    for (var i=0; i < Nt; i++){
-                                        var t = i*dt;
-                                        data[i][0] = 35.*Math.sin(Omega*t);
-                                        data[i][1] = 50.*Math.cos(Omega*t);
-                                    }
+//                                    for (var i=0; i < Nt; i++){
+//                                        var t = i*dt;
+//                                        data[i][0] = 35.*Math.sin(Omega*t);
+//                                        data[i][1] = 50.*Math.cos(Omega*t);
+//                                    }
 
 
                                   // for(var i=0; i<data.length; i++) {
@@ -188,12 +191,12 @@
                                   // to plot the data against time we need the times where the equations were solved
                                   // sg hacky fix -- make better later
                                   
-                                  var q = 0.;
-                                  var h = 2.*Torb/Nt;
-                                  for(var i=0; i<data.length; i++) {
-                                      data[i].push(q);
-                                      q += h;
-                                  }
+//                                  var q = 0.;
+//                                  var h = 2.*Torb/Nt;
+//                                  for(var i=0; i<data.length; i++) {
+//                                      data[i].push(q);
+//                                      q += h;
+//                                  }
 
                                   // to plot the data against time we need the times where the equations were solved
                                   //var time = 0.;

@@ -169,7 +169,7 @@
 
                                     // Solve ode
                                     //var data = JXG.Math.Numerics.rungeKutta('euler', x0, I, N, f);
-                                    //var data = [];
+                                    var data = [];
                                     ////for (var i=0; i < Nt; i++){
                                     //    var t = i*dt;
                                     //    data[i].push(35.*Math.sin(Omega*t));
@@ -207,7 +207,15 @@
                                   //}
  
             
-                                  return Omega;
+                                  return data;
+                                }
+
+                                function test(){
+                                    var data = [];
+                                    for (var i = 0; i < Nt; i++){
+                                        data[i] = 0.;
+                                    }
+                                    return data;
                                 }
            
                                 // get data points

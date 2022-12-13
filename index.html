@@ -414,7 +414,6 @@
                                             //board = JXG.JSXGraph.initBoard('box', {boundingbox: [-1.5, 28.5, 28.5, -1.5], axis: true, grid: false});
           
                                             // Define sliders to dynamically change parameters of the equations and create text elements to describe them
-
                                             s = board.create('slider', [[0.6*BRx,0.85*TLy],[0.8*BRx,0.85*TLy],[0.0,0.3,1.0]],{name:'&epsilon;1',strokeColor:'green',fillColor:'green'});
                                             u = board.create('slider', [[0.6*BRx,0.75*TLy],[0.8*BRx,0.75*TLy],[0.0,0.7,1.0]],{name:'&epsilon;2',strokeColor:'black',fillColor:'black'});
            
@@ -446,6 +445,7 @@
                                                 var I = [0,2.*Torb];
                                                 // Number of steps. 1000 should be enough
                                                 var N = 1000;
+                                                var Nt = 202;
            
                                                 // Right hand side of the ODE dx/dt = f(t, x)
                                                 var f = function(t, x) {
@@ -466,9 +466,9 @@
                                               
                                                 // Solve ode
                                                 var data = JXG.Math.Numerics.rungeKutta('euler', x0, I, N, f);
-                                              
+                                                
                                                 // to plot the data against time we need the times where the equations were solved
-                                                var t = [];
+                                                //var t = [];
                                                 var q = I[0];
                                                 var h = (I[1]-I[0])/N;
                                                 for(var i=0; i<data.length; i++) {
@@ -478,7 +478,7 @@
                                               
                                                 for (var i = 0; i < data.length; i++){
                                                     data[i][0] = (2.*a.Value())*(Math.cos(2.*Omega*data[i][2]) + Math.sin(Omega*data[i][2]));
-                                                    data[i][1] = a.Value()*Math.sin(Omega*data[i][2]);
+                                                    data[i][1] = (1000.*mass1*M/R)*Math.sin(Omega*data[i][2]);
                                                 }
                                               
                                                 return data;

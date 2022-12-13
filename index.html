@@ -75,7 +75,7 @@
                                 board = JXG.JSXGraph.initBoard('box', {boundingbox: [TLx, TLy, BRx, BRy], axis: true, grid: false});
            
                                 // Define sliders to dynamically change parameters of the equations and create text elements to describe them
-                                s = board.create('slider', [[0.6*BRx,0.85*TLy],[0.8*BRx,0.85*TLy],[0.0,0.3,1.0]],{name:'&epsilon;1',strokeColor:'magenta',fillColor:'magenta'});
+                                s = board.create('slider', [[0.6*BRx,0.85*TLy],[0.8*BRx,0.85*TLy],[0.0,0.3,1.0]],{name:'&epsilon;1',strokeColor:'green',fillColor:'green'});
                                 u = board.create('slider', [[0.6*BRx,0.75*TLy],[0.8*BRx,0.75*TLy],[0.0,0.7,1.0]],{name:'&epsilon;2',strokeColor:'black',fillColor:'black'});
            
                                 o = board.create('slider', [[0.1*BRx,0.85*TLy],[0.3*BRx,0.85*TLy],[0.0,0.1,1.0]],{name:'&gamma;1',strokeColor:'black',fillColor:'black'});
@@ -166,16 +166,18 @@
                                     // Number of steps. 1000 should be enough
                                     var N = 1000;
                                     var Nt = 202; // number of timesteps -- keep low for now
+                                    var dt = 2.*Torb/Nt;
 
                                     // Solve ode
                                     //var data = JXG.Math.Numerics.rungeKutta('euler', x0, I, N, f);
                                     var data = [];
-                                    ////for (var i=0; i < Nt; i++){
-                                    //    var t = i*dt;
+                                    for (var i=0; i < Nt; i++){
+                                        var t = i*dt;
+                                        data[i] = 35.*Math.sin(Omega*t);
                                     //    data[i].push(35.*Math.sin(Omega*t));
                                     //    data[i].push(50.*Math.cos(Omega*t));                                        
                                     //    data[i].push(t);
-                                    //}
+                                    }
                                  
 //                                    for (var i=0; i < Nt; i++){
 //                                        var t = i*dt;
@@ -191,12 +193,12 @@
                                   // to plot the data against time we need the times where the equations were solved
                                   // sg hacky fix -- make better later
                                   
-//                                  var q = 0.;
-//                                  var h = 2.*Torb/Nt;
-//                                  for(var i=0; i<data.length; i++) {
-//                                      data[i].push(q);
-//                                      q += h;
-//                                  }
+                                  var q = 0.;
+                                  var h = 2.*Torb/Nt;
+                                  for(var i=0; i<data.length; i++) {
+                                      data[i].push(q);
+                                      q += h;
+                                  }
 
                                   // to plot the data against time we need the times where the equations were solved
                                   //var time = 0.;

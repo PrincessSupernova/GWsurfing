@@ -59,216 +59,216 @@
                                         <div id="box" class="jxgbox" style="width:500px; height:500px;"></div>
                                             <script type="text/javascript">
 
-                                                // function to compute Iij at time t
-                                                function get_Iij_t(t,m1,m2,R){
-                                                    // first get omega and Tor
-                                                    var M = m1 + m2;
-                                                    var Torb = 2.*Math.PI*Math.sqrt(R**3/M);
-                                                    var Omega = 2.*Math.PI/Torb;
-                                                    var Omega_t = Omega*t;
-                                                    var cosOmega_t = Math.cos(Omega_t);
-                                                    var sinOmega_t = Math.sin(Omega_t);
-                                                                                                        
-                                                    var X1_t = (mass2*R/M)*[cosOmega_t,sinOmega_t,0];
-                                                    var X2_t = (-mass1*R/M)*[cosOmega_t,sinOmega_t,0];
-                                                    var Iij_t = [];
-                                                    for (var i = 0; i < 3; i++){
-                                                        Iij_t[i] = [];
-                                                    }
-                                                    for (var i = 0; i < 3; i++){    
-                                                        for (var j = 0; j < 3; j++){
-                                                            Iij_t[i][j] = mass1*X1_t[i]*X1_t[j] + mass2*X2_t[i]*X2_t[j];
-                                                        }
-                                                    }
+                                               // // function to compute Iij at time t
+                                               // function get_Iij_t(t,m1,m2,R){
+                                               //     // first get omega and Tor
+                                               //     var M = m1 + m2;
+                                               //     var Torb = 2.*Math.PI*Math.sqrt(R**3/M);
+                                               //     var Omega = 2.*Math.PI/Torb;
+                                               //     var Omega_t = Omega*t;
+                                               //     var cosOmega_t = Math.cos(Omega_t);
+                                               //     var sinOmega_t = Math.sin(Omega_t);
+                                               //                                                         
+                                               //     var X1_t = (mass2*R/M)*[cosOmega_t,sinOmega_t,0];
+                                               //     var X2_t = (-mass1*R/M)*[cosOmega_t,sinOmega_t,0];
+                                               //     var Iij_t = [];
+                                               //     for (var i = 0; i < 3; i++){
+                                               //         Iij_t[i] = [];
+                                               //     }
+                                               //     for (var i = 0; i < 3; i++){    
+                                               //         for (var j = 0; j < 3; j++){
+                                               //             Iij_t[i][j] = mass1*X1_t[i]*X1_t[j] + mass2*X2_t[i]*X2_t[j];
+                                               //         }
+                                               //     }
 
-                                                    return Iij_t;
-                                                }
+                                               //     return Iij_t;
+                                               // }
 
-                                                // function to get first time derivative of Iij_t
-                                                function get_dIij_t(t,m1,m2,R,dt,edgeFLAG=0){
+                                               // // function to get first time derivative of Iij_t
+                                               // function get_dIij_t(t,m1,m2,R,dt,edgeFLAG=0){
 
-                                                    // output array 
-                                                    var dIij_t = [];
-                                                    // calculate Iij
-                                                    if (edgeFLAG){
-                                                        if (t==0) {
-                                                            var Iij_t0 = get_Iij_t(t,m1,m2,R);
-                                                            var Iij_t1 = get_Iij_t(t+dt,m1,m2,R);
-                                                            var Iij_t2 = get_Iij_t(t+2.*dt,m1,m2,R);
-                                                            for (var i = 0; i < 3; i++){
-                                                                dIij_t[i] = [];
-                                                                for (var j = 0; j < 3; j++){
-                                                                    dIij_t[i][j] = (-3.*Iij_t0[i][j] + 4.*Iij_t1[i][j] - Iij_t2[i][j])/(2.*dt);
-                                                                } 
-                                                            }
-                                                        } else {
-                                                            var Iij_t0 = get_Iij_t(t-2.*dt,m1,m2,R);
-                                                            var Iij_t1 = get_Iij_t(t-dt,m1,m2,R);
-                                                            var Iij_t2 = get_Iij_t(t,m1,m2,R);
-                                                            for (var i = 0; i < 3; i++){
-                                                                dIij_t[i] = [];
-                                                                for (var j = 0; j < 3; j++){
-                                                                    dIij_t[i][j] = (Iij_t0[i][j] - 4.*Iij_t1[i][j] + 3.*Iij_t2[i][j])/(2.*dt);
-                                                                }
-                                                            }    
-                                                        }
+                                               //     // output array 
+                                               //     var dIij_t = [];
+                                               //     // calculate Iij
+                                               //     if (edgeFLAG){
+                                               //         if (t==0) {
+                                               //             var Iij_t0 = get_Iij_t(t,m1,m2,R);
+                                               //             var Iij_t1 = get_Iij_t(t+dt,m1,m2,R);
+                                               //             var Iij_t2 = get_Iij_t(t+2.*dt,m1,m2,R);
+                                               //             for (var i = 0; i < 3; i++){
+                                               //                 dIij_t[i] = [];
+                                               //                 for (var j = 0; j < 3; j++){
+                                               //                     dIij_t[i][j] = (-3.*Iij_t0[i][j] + 4.*Iij_t1[i][j] - Iij_t2[i][j])/(2.*dt);
+                                               //                 } 
+                                               //             }
+                                               //         } else {
+                                               //             var Iij_t0 = get_Iij_t(t-2.*dt,m1,m2,R);
+                                               //             var Iij_t1 = get_Iij_t(t-dt,m1,m2,R);
+                                               //             var Iij_t2 = get_Iij_t(t,m1,m2,R);
+                                               //             for (var i = 0; i < 3; i++){
+                                               //                 dIij_t[i] = [];
+                                               //                 for (var j = 0; j < 3; j++){
+                                               //                     dIij_t[i][j] = (Iij_t0[i][j] - 4.*Iij_t1[i][j] + 3.*Iij_t2[i][j])/(2.*dt);
+                                               //                 }
+                                               //             }    
+                                               //         }
 
-                                                    } else {
-                                                        var Iij_tp1 = get_Iij_t(t+dt,m1,m2,R);
-                                                        var Iij_tm1 = get_Iij_t(t-dt,m1,m2,R);
-                                                        for (var i = 0; i < 3; i++){
-                                                            dIij_t[i] = [];
-                                                            for (var j = 0; j < 3; j++){
-                                                                dIij_t[i][j] = (Iij_tp1[i][j] - Iij_tm1[i][j])/(2.*dt);
-                                                            }
-                                                        }
-                                                    }
-                                                    return dIij_t; // this is a 3x3 array
-                                                } 
+                                               //     } else {
+                                               //         var Iij_tp1 = get_Iij_t(t+dt,m1,m2,R);
+                                               //         var Iij_tm1 = get_Iij_t(t-dt,m1,m2,R);
+                                               //         for (var i = 0; i < 3; i++){
+                                               //             dIij_t[i] = [];
+                                               //             for (var j = 0; j < 3; j++){
+                                               //                 dIij_t[i][j] = (Iij_tp1[i][j] - Iij_tm1[i][j])/(2.*dt);
+                                               //             }
+                                               //         }
+                                               //     }
+                                               //     return dIij_t; // this is a 3x3 array
+                                               // } 
                                                 
-                                               function get_ddIij_t(t,m1,m2,R,dt,edgeFLAG=0){
+                                              // function get_ddIij_t(t,m1,m2,R,dt,edgeFLAG=0){
 
-                                                    // output array 
-                                                    var ddIij_t = [];
-                                                    // calculate Iij
-                                                    if (edgeFLAG){
-                                                        if (t==0) {
-                                                            var dIij_t0 = get_dIij_t(t,m1,m2,R,dt,edgeFLAG=1);
-                                                            var dIij_t1 = get_dIij_t(t+dt,m1,m2,R,edgeFLAG=1);
-                                                            var dIij_t2 = get_dIij_t(t+2.*dt,m1,m2,R,edgeFLAG=1);
-                                                            for (var i = 0; i < 3; i++){
-                                                                ddIij_t[i] = [];
-                                                                for (var j = 0; j < 3; j++){
-                                                                    ddIij_t[i][j] = (-3.*dIij_t0[i][j] + 4.*dIij_t1[i][j] - dIij_t2[i][j])/(2.*dt);
-                                                                } 
-                                                            }
-                                                        } else {
-                                                            var dIij_t0 = get_dIij_t(t-2.*dt,m1,m2,R,edgeFLAG=1);
-                                                            var dIij_t1 = get_dIij_t(t-dt,m1,m2,R,edgeFLAG=1);
-                                                            var dIij_t2 = get_dIij_t(t,m1,m2,R,edgeFLAG=1);
-                                                            for (var i = 0; i < 3; i++){
-                                                                ddIij_t[i] = [];
-                                                                for (var j = 0; j < 3; j++){
-                                                                    ddIij_t[i][j] = (dIij_t0[i][j] - 4.*dIij_t1[i][j] + 3.*dIij_t2[i][j])/(2.*dt);
-                                                                }
-                                                            }    
-                                                        }
+                                              //      // output array 
+                                              //      var ddIij_t = [];
+                                              //      // calculate Iij
+                                              //      if (edgeFLAG){
+                                              //          if (t==0) {
+                                              //              var dIij_t0 = get_dIij_t(t,m1,m2,R,dt,edgeFLAG=1);
+                                              //              var dIij_t1 = get_dIij_t(t+dt,m1,m2,R,edgeFLAG=1);
+                                              //              var dIij_t2 = get_dIij_t(t+2.*dt,m1,m2,R,edgeFLAG=1);
+                                              //              for (var i = 0; i < 3; i++){
+                                              //                  ddIij_t[i] = [];
+                                              //                  for (var j = 0; j < 3; j++){
+                                              //                      ddIij_t[i][j] = (-3.*dIij_t0[i][j] + 4.*dIij_t1[i][j] - dIij_t2[i][j])/(2.*dt);
+                                              //                  } 
+                                              //              }
+                                              //          } else {
+                                              //              var dIij_t0 = get_dIij_t(t-2.*dt,m1,m2,R,edgeFLAG=1);
+                                              //              var dIij_t1 = get_dIij_t(t-dt,m1,m2,R,edgeFLAG=1);
+                                              //              var dIij_t2 = get_dIij_t(t,m1,m2,R,edgeFLAG=1);
+                                              //              for (var i = 0; i < 3; i++){
+                                              //                  ddIij_t[i] = [];
+                                              //                  for (var j = 0; j < 3; j++){
+                                              //                      ddIij_t[i][j] = (dIij_t0[i][j] - 4.*dIij_t1[i][j] + 3.*dIij_t2[i][j])/(2.*dt);
+                                              //                  }
+                                              //              }    
+                                              //          }
 
-                                                    } else {
-                                                        var dIij_tp1 = get_dIij_t(t+dt,m1,m2,R,dt);
-                                                        var dIij_tm1 = get_dIij_t(t-dt,m1,m2,R,dt);
-                                                        for (var i = 0; i < 3; i++){
-                                                            ddIij_t[i] = [];
-                                                            for (var j = 0; j < 3; j++){
-                                                                ddIij_t[i][j] = (dIij_tp1[i][j] - dIij_tm1[i][j])/(2.*dt);
-                                                            }
-                                                        }
-                                                    }
-                                                    return ddIij_t; // this is a 3x3 array
-                                                }    
+                                              //      } else {
+                                              //          var dIij_tp1 = get_dIij_t(t+dt,m1,m2,R,dt);
+                                              //          var dIij_tm1 = get_dIij_t(t-dt,m1,m2,R,dt);
+                                              //          for (var i = 0; i < 3; i++){
+                                              //              ddIij_t[i] = [];
+                                              //              for (var j = 0; j < 3; j++){
+                                              //                  ddIij_t[i][j] = (dIij_tp1[i][j] - dIij_tm1[i][j])/(2.*dt);
+                                              //              }
+                                              //          }
+                                              //      }
+                                              //      return ddIij_t; // this is a 3x3 array
+                                              //  }    
 
-                                                function get_dddIij_t(t,m1,m2,R,dt,edgeFLAG=0){
+                                                //function get_dddIij_t(t,m1,m2,R,dt,edgeFLAG=0){
 
-                                                    // output array 
-                                                    var dddIij_t = [];
-                                                    // calculate Iij
-                                                    if (edgeFLAG){
-                                                        if (t==0) {
-                                                            var ddIij_t0 = get_ddIij_t(t,m1,m2,R,dt,edgeFLAG=1);
-                                                            var ddIij_t1 = get_ddIij_t(t+dt,m1,m2,R,edgeFLAG=1);
-                                                            var ddIij_t2 = get_ddIij_t(t+2.*dt,m1,m2,R,edgeFLAG=1);
-                                                            for (var i = 0; i < 3; i++){
-                                                                dddIij_t[i] = [];
-                                                                for (var j = 0; j < 3; j++){
-                                                                    dddIij_t[i][j] = (-3.*ddIij_t0[i][j] + 4.*ddIij_t1[i][j] - ddIij_t2[i][j])/(2.*dt);
-                                                                } 
-                                                            }
-                                                        } else {
-                                                            var ddIij_t0 = get_ddIij_t(t-2.*dt,m1,m2,R,edgeFLAG=1);
-                                                            var ddIij_t1 = get_ddIij_t(t-dt,m1,m2,R,edgeFLAG=1);
-                                                            var ddIij_t2 = get_ddIij_t(t,m1,m2,R,edgeFLAG=1);
-                                                            for (var i = 0; i < 3; i++){
-                                                                dddIij_t[i] = [];
-                                                                for (var j = 0; j < 3; j++){
-                                                                    dddIij_t[i][j] = (ddIij_t0[i][j] - 4.*ddIij_t1[i][j] + 3.*ddIij_t2[i][j])/(2.*dt);
-                                                                }
-                                                            }    
-                                                        }
+                                                //    // output array 
+                                                //    var dddIij_t = [];
+                                                //    // calculate Iij
+                                                //    if (edgeFLAG){
+                                                //        if (t==0) {
+                                                //            var ddIij_t0 = get_ddIij_t(t,m1,m2,R,dt,edgeFLAG=1);
+                                                //            var ddIij_t1 = get_ddIij_t(t+dt,m1,m2,R,edgeFLAG=1);
+                                                //            var ddIij_t2 = get_ddIij_t(t+2.*dt,m1,m2,R,edgeFLAG=1);
+                                                //            for (var i = 0; i < 3; i++){
+                                                //                dddIij_t[i] = [];
+                                                //                for (var j = 0; j < 3; j++){
+                                                //                    dddIij_t[i][j] = (-3.*ddIij_t0[i][j] + 4.*ddIij_t1[i][j] - ddIij_t2[i][j])/(2.*dt);
+                                                //                } 
+                                                //            }
+                                                //        } else {
+                                                //            var ddIij_t0 = get_ddIij_t(t-2.*dt,m1,m2,R,edgeFLAG=1);
+                                                //            var ddIij_t1 = get_ddIij_t(t-dt,m1,m2,R,edgeFLAG=1);
+                                                //            var ddIij_t2 = get_ddIij_t(t,m1,m2,R,edgeFLAG=1);
+                                                //            for (var i = 0; i < 3; i++){
+                                                //                dddIij_t[i] = [];
+                                                //                for (var j = 0; j < 3; j++){
+                                                //                    dddIij_t[i][j] = (ddIij_t0[i][j] - 4.*ddIij_t1[i][j] + 3.*ddIij_t2[i][j])/(2.*dt);
+                                                //                }
+                                                //            }    
+                                                //        }
 
-                                                    } else {
-                                                        var ddIij_tp1 = get_ddIij_t(t+dt,m1,m2,R,dt);
-                                                        var ddIij_tm1 = get_ddIij_t(t-dt,m1,m2,R,dt);
-                                                        for (var i = 0; i < 3; i++){
-                                                            dddIij_t[i] = [];
-                                                            for (var j = 0; j < 3; j++){
-                                                                dddIij_t[i][j] = (ddIij_tp1[i][j] - ddIij_tm1[i][j])/(2.*dt);
-                                                            }
-                                                        }
-                                                    }
-                                                    return dddIij_t; // this is a 3x3 array
-                                                }
+                                                //    } else {
+                                                //        var ddIij_tp1 = get_ddIij_t(t+dt,m1,m2,R,dt);
+                                                //        var ddIij_tm1 = get_ddIij_t(t-dt,m1,m2,R,dt);
+                                                //        for (var i = 0; i < 3; i++){
+                                                //            dddIij_t[i] = [];
+                                                //            for (var j = 0; j < 3; j++){
+                                                //                dddIij_t[i][j] = (ddIij_tp1[i][j] - ddIij_tm1[i][j])/(2.*dt);
+                                                //            }
+                                                //        }
+                                                //    }
+                                                //    return dddIij_t; // this is a 3x3 array
+                                                //}
                                                     
 
-                                                // array to get ni projection vector in direction theta,phi
-                                                function get_ni_thetaphi(theta,phi){                                            
-                                                    var ni_thph = [Math.sin(theta)*Math.cos(phi),Math.sin(theta)*Math.sin(phi),Math.cos(theta)]; 
-                                                    return ni_thph; // this is a 3x1 array
-                                                }
+                                                //// array to get ni projection vector in direction theta,phi
+                                                //function get_ni_thetaphi(theta,phi){                                            
+                                                //    var ni_thph = [Math.sin(theta)*Math.cos(phi),Math.sin(theta)*Math.sin(phi),Math.cos(theta)]; 
+                                                //    return ni_thph; // this is a 3x1 array
+                                                //}
 
-                                                function get_Pij_thetaphi(theta,phi){
-                                                    var ni_thph = get_ni_thetaphi(theta,phi);
-                                                    var Pij_thph = [];
-                                                    for (var i=0;i<3;i++){
-                                                        Pij[i] = [];
-                                                        for (var j=0;j<3;j++){
-                                                            if (i==j) {
-                                                                Pij_thph[i][j] = 1. - ni_thph[i]*ni_thph[j];                                                   //            Pij_thph[ith][iph][i][j] = 1. - ni_thph[ith,iph,i]*ni_thph[ith,iph,j];
-                                                            } else {
-                                                                Pij_thph[i][j] = -ni_thph[i]*ni_thph[j];  
-                                                            }
-                                                        }
-                                                    }
-                                                    return Pij_thph; // this is a 3x3 array
-                                                }
+                                              //  function get_Pij_thetaphi(theta,phi){
+                                              //      var ni_thph = get_ni_thetaphi(theta,phi);
+                                              //      var Pij_thph = [];
+                                              //      for (var i=0;i<3;i++){
+                                              //          Pij[i] = [];
+                                              //          for (var j=0;j<3;j++){
+                                              //              if (i==j) {
+                                              //                  Pij_thph[i][j] = 1. - ni_thph[i]*ni_thph[j];                                                   //            Pij_thph[ith][iph][i][j] = 1. - ni_thph[ith,iph,i]*ni_thph[ith,iph,j];
+                                              //              } else {
+                                              //                  Pij_thph[i][j] = -ni_thph[i]*ni_thph[j];  
+                                              //              }
+                                              //          }
+                                              //      }
+                                              //      return Pij_thph; // this is a 3x3 array
+                                              //  }
 
-                                                function get_Lijkl_thetaphi(theta,phi){
-                                                    var Pij_thph = get_Pij_thetaphi(theta,phi);
-                                                    var Lijkl_thph = [];
-                                                    for (var i = 0; i < 3; i++){
-                                                        Lijkl_thph[i] = []; 
-                                                        for (var j = 0; j < 3; j++){
-                                                            Lijkl_thph[i][j] = [];
-                                                            for (var k = 0; k < 3; k++){
-                                                                Lijkl_thph[i][j][k] = [];
-                                                                for (var l = 0; l < 3; l++){
-                                                                    Lijkl_thph[i][j][k][l] = Pij_thph[i][k]*Pij_thph[j][l]-0.5*Pij_thph[i][j]*Pij_thph[k][l];
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                    return Lijkl_thph; // this is a 3x3x3x3 array
-                                                }
+                                               // function get_Lijkl_thetaphi(theta,phi){
+                                               //     var Pij_thph = get_Pij_thetaphi(theta,phi);
+                                               //     var Lijkl_thph = [];
+                                               //     for (var i = 0; i < 3; i++){
+                                               //         Lijkl_thph[i] = []; 
+                                               //         for (var j = 0; j < 3; j++){
+                                               //             Lijkl_thph[i][j] = [];
+                                               //             for (var k = 0; k < 3; k++){
+                                               //                 Lijkl_thph[i][j][k] = [];
+                                               //                 for (var l = 0; l < 3; l++){
+                                               //                     Lijkl_thph[i][j][k][l] = Pij_thph[i][k]*Pij_thph[j][l]-0.5*Pij_thph[i][j]*Pij_thph[k][l];
+                                               //                 }
+                                               //             }
+                                               //         }
+                                               //     }
+                                               //     return Lijkl_thph; // this is a 3x3x3x3 array
+                                               // }
 
-                                                function get_hij_t_thetaphi(t,m1,m2,R,dt,theta,phi,edgeFLAG=0){
+                                               // function get_hij_t_thetaphi(t,m1,m2,R,dt,theta,phi,edgeFLAG=0){
 
-                                                    var ddIij_t = get_ddIij_t(t,m1,m2,R,dt,edgeFLAG=0);
-                                                    var Lijkl_thph = get_Lijkl_thetaphi(theta,phi);
-//                                                  var ddIij = get_ddIij();
-                                                    var hij_t_thph = [];
-                                                    for (var i = 0; i < 3; i++){
-                                                        hij_t_thph[i] = [];
-                                                        for (var j = 0; j < 3; j++){
-                                                            // start sum
-                                                            hij_t_thph[i][j] = 0.;
-                                                            for (var k = 0; k < 3; k++){
-                                                                for (var l = 0; l < 3; l++){
-                                                                    hij_t_thph[i][j] += Lijkl_thph[i][j][k][l]*ddIij_t[k,l];
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                    return hij_t_thph; // this is a 3x3 array
-                                                }
+                                               //     var ddIij_t = get_ddIij_t(t,m1,m2,R,dt,edgeFLAG=0);
+                                               //     var Lijkl_thph = get_Lijkl_thetaphi(theta,phi);
+//                                             //     var ddIij = get_ddIij();
+                                               //     var hij_t_thph = [];
+                                               //     for (var i = 0; i < 3; i++){
+                                               //         hij_t_thph[i] = [];
+                                               //         for (var j = 0; j < 3; j++){
+                                               //             // start sum
+                                               //             hij_t_thph[i][j] = 0.;
+                                               //             for (var k = 0; k < 3; k++){
+                                               //                 for (var l = 0; l < 3; l++){
+                                               //                     hij_t_thph[i][j] += Lijkl_thph[i][j][k][l]*ddIij_t[k,l];
+                                               //                 }
+                                               //             }
+                                               //         }
+                                               //     }
+                                               //     return hij_t_thph; // this is a 3x3 array
+                                               // }
 
 //                                                function get_sint(t
 
@@ -410,104 +410,104 @@
 //                                                board.unsuspendUpdate(); 
            
              
-    // Initialise board
-    board = JXG.JSXGraph.initBoard('jxgbox', {boundingbox: [-1.5, 28.5, 28.5, -1.5], axis: true, grid: false});
-
-    // Define sliders to dynamically change parameters of the equations and create text elements to describe them
-    s = board.create('slider', [[20.0,26.0],[25.0,26.0],[0.0,0.3,1.0]],{name:'&epsilon;1',strokeColor:'black',fillColor:'black'});
-    st = board.create('text', [20,25, "Birth rate predators"], {fixed:true});
-    u = board.create('slider', [[20.0,24.0],[25.0,24.0],[0.0,0.7,1.0]],{name:'&epsilon;2',strokeColor:'black',fillColor:'black'});
-    ut = board.create('text', [20,23, "Death rate predators"], {fixed:true});
-
-    o = board.create('slider', [[10.0,26.0],[15.0,26.0],[0.0,0.1,1.0]],{name:'&gamma;1',strokeColor:'black',fillColor:'black'});
-    ot = board.create('text', [10,25, "Death rate preys/per predator"], {fixed:true});
-    p = board.create('slider', [[10.0,24.0],[15.0,24.0],[0.0,0.3,1.0]],{name:'&gamma;2',strokeColor:'black',fillColor:'black'});
-    pt = board.create('text', [10,23, "Reproduction rate pred./per prey"], {fixed:true});
-
-    // Dynamic initial value as gliders on the y-axis
-    startpred = board.create('glider', [0, 10, board.defaultAxes.y], {name:'Preys',strokeColor:'red',fillColor:'red'});
-    startprey = board.create('glider', [0, 5, board.defaultAxes.y], {name:'Predators',strokeColor:'blue',fillColor:'blue'});
-  
-  
-    // Variables for the JXG.Curves
-    var g3 = null;
-    var g4 = null;
-
-    // Initialise ODE and solve it with JXG.Math.Numerics.rungeKutta()
-    function ode() {
-        // evaluation interval
-        var I = [0, 25];
-        // Number of steps. 1000 should be enough
-        var N = 1000;
- 
-        // Right hand side of the ODE dx/dt = f(t, x)
-        var f = function(t, x) {
-            var bpred = s.Value();//0.3;
-            var bprey = u.Value();//0.7;
-            var dpred = o.Value();//0.1;
-            var dprey = p.Value();//0.3;
- 
-            var y = [];
-            y[0] = x[0]*(bpred - dpred*x[1]);
-            y[1] = -x[1]*(bprey - dprey*x[0]);
- 
-            return y;
-      }
- 
-      // Initial value
-      var x0 = [startpred.Y(), startprey.Y()];
- 
-      // Solve ode
-      var data = JXG.Math.Numerics.rungeKutta('euler', x0, I, N, f);
- 
-      // to plot the data against time we need the times where the equations were solved
-      var t = [];
-      var q = I[0];
-      var h = (I[1]-I[0])/N;
-      for(var i=0; i<data.length; i++) {
-          data[i].push(q);
-          q += h;
-      }
- 
-      return data;
-    }
-
-    // get data points
-    var data = ode();
-  
-    // copy data to arrays so we can plot it using JXG.Curve
-    var t = [];
-    var dataprey = [];
-    var datapred = [];
-    for(var i=0; i<data.length; i++) {
-      t[i] = data[i][2];
-      datapred[i] = data[i][0];
-      dataprey[i] = data[i][1];
-    }
-
-    // Plot Predator
-    g3 = board.create('curve', [t, datapred], {strokeColor:'red', strokeWidth:'2px'});
-    g3.updateDataArray = function() {
-        var data = ode();
-        this.dataX = [];
-        this.dataY = [];
-        for(var i=0; i<data.length; i++) {
-            this.dataX[i] = t[i];
-            this.dataY[i] = data[i][0];
-        }
-    }
-
-    // Plot Prey
-    g4 = board.create('curve', [t, dataprey], {strokeColor:'blue', strokeWidth:'2px'});
-    g4.updateDataArray = function() {
-        var data = ode();
-        this.dataX = [];
-        this.dataY = [];
-        for(var i=0; i<data.length; i++) {
-            this.dataX[i] = t[i];
-            this.dataY[i] = data[i][1];
-          }
-      }
+                                            // Initialise board
+                                            board = JXG.JSXGraph.initBoard('jxgbox', {boundingbox: [-1.5, 28.5, 28.5, -1.5], axis: true, grid: false});
+          
+                                            // Define sliders to dynamically change parameters of the equations and create text elements to describe them
+                                            s = board.create('slider', [[20.0,26.0],[25.0,26.0],[0.0,0.3,1.0]],{name:'&epsilon;1',strokeColor:'black',fillColor:'black'});
+                                            st = board.create('text', [20,25, "Birth rate predators"], {fixed:true});
+                                            u = board.create('slider', [[20.0,24.0],[25.0,24.0],[0.0,0.7,1.0]],{name:'&epsilon;2',strokeColor:'black',fillColor:'black'});
+                                            ut = board.create('text', [20,23, "Death rate predators"], {fixed:true});
+          
+                                            o = board.create('slider', [[10.0,26.0],[15.0,26.0],[0.0,0.1,1.0]],{name:'&gamma;1',strokeColor:'black',fillColor:'black'});
+                                            ot = board.create('text', [10,25, "Death rate preys/per predator"], {fixed:true});
+                                            p = board.create('slider', [[10.0,24.0],[15.0,24.0],[0.0,0.3,1.0]],{name:'&gamma;2',strokeColor:'black',fillColor:'black'});
+                                            pt = board.create('text', [10,23, "Reproduction rate pred./per prey"], {fixed:true});
+          
+                                            // Dynamic initial value as gliders on the y-axis
+                                            startpred = board.create('glider', [0, 10, board.defaultAxes.y], {name:'Preys',strokeColor:'red',fillColor:'red'});
+                                            startprey = board.create('glider', [0, 5, board.defaultAxes.y], {name:'Predators',strokeColor:'blue',fillColor:'blue'});
+                                          
+                                          
+                                            // Variables for the JXG.Curves
+                                            var g3 = null;
+                                            var g4 = null;
+          
+                                            // Initialise ODE and solve it with JXG.Math.Numerics.rungeKutta()
+                                            function ode() {
+                                                // evaluation interval
+                                                var I = [0, 25];
+                                                // Number of steps. 1000 should be enough
+                                                var N = 1000;
+           
+                                                // Right hand side of the ODE dx/dt = f(t, x)
+                                                var f = function(t, x) {
+                                                    var bpred = s.Value();//0.3;
+                                                    var bprey = u.Value();//0.7;
+                                                    var dpred = o.Value();//0.1;
+                                                    var dprey = p.Value();//0.3;
+           
+                                                    var y = [];
+                                                    y[0] = x[0]*(bpred - dpred*x[1]);
+                                                    y[1] = -x[1]*(bprey - dprey*x[0]);
+           
+                                                    return y;
+                                              }
+           
+                                              // Initial value
+                                              var x0 = [startpred.Y(), startprey.Y()];
+           
+                                              // Solve ode
+                                              var data = JXG.Math.Numerics.rungeKutta('euler', x0, I, N, f);
+           
+                                              // to plot the data against time we need the times where the equations were solved
+                                              var t = [];
+                                              var q = I[0];
+                                              var h = (I[1]-I[0])/N;
+                                              for(var i=0; i<data.length; i++) {
+                                                  data[i].push(q);
+                                                  q += h;
+                                              }
+           
+                                              return data;
+                                            }
+          
+                                            // get data points
+                                            var data = ode();
+                                          
+                                            // copy data to arrays so we can plot it using JXG.Curve
+                                            var t = [];
+                                            var dataprey = [];
+                                            var datapred = [];
+                                            for(var i=0; i<data.length; i++) {
+                                              t[i] = data[i][2];
+                                              datapred[i] = data[i][0];
+                                              dataprey[i] = data[i][1];
+                                            }
+          
+                                            // Plot Predator
+                                            g3 = board.create('curve', [t, datapred], {strokeColor:'red', strokeWidth:'2px'});
+                                            g3.updateDataArray = function() {
+                                                var data = ode();
+                                                this.dataX = [];
+                                                this.dataY = [];
+                                                for(var i=0; i<data.length; i++) {
+                                                    this.dataX[i] = t[i];
+                                                    this.dataY[i] = data[i][0];
+                                                }
+                                            }
+          
+                                            // Plot Prey
+                                            g4 = board.create('curve', [t, dataprey], {strokeColor:'blue', strokeWidth:'2px'});
+                                            g4.updateDataArray = function() {
+                                                var data = ode();
+                                                this.dataX = [];
+                                                this.dataY = [];
+                                                for(var i=0; i<data.length; i++) {
+                                                    this.dataX[i] = t[i];
+                                                    this.dataY[i] = data[i][1];
+                                                  }
+                                              }
 
                                             </script>
 

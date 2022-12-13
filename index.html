@@ -165,13 +165,13 @@
                                     var I2 = [0,2.*Torb];
                                     // Number of steps. 1000 should be enough
                                     var N = 1000;
-                                    var Nt = 101; // number of timesteps -- keep low for now
+                                    var Nt = 202; // number of timesteps -- keep low for now
 
                                     // Solve ode
                                     //var data = JXG.Math.Numerics.rungeKutta('euler', x0, I, N, f);
                                     var data = [];
                                     for (var i=0; i < Nt; i++){
-                                        data[i] = [];
+                                        data[i].push([]);
                                     }
                                  
                                     for (var i=0; i < Nt; i++){

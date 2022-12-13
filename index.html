@@ -56,246 +56,460 @@
 								<img src="images/gw-surfing.jpg" style="width:280px; height:280px; object-fit: cover;">
 							</div>
 						</div>
+                                        <div id="box" class="jxgbox" style="width:500px; height:500px;"></div>
+                                            <script type="text/javascript">
 
-                        <div id="box" class="jxgbox" style="width:500px; height:500px;"></div>
-                            <script type="text/javascript">
+                                                // function to compute Iij at time t
+                                                function get_Iij_t(t,m1,m2,R){
+                                                    // first get omega and Tor
+                                                    var M = m1 + m2;
+                                                    var Torb = 2.*Math.PI*Math.sqrt(R**3/M);
+                                                    var Omega = 2.*Math.PI/Torb;
+                                                    var Omega_t = Omega*t;
+                                                    var cosOmega_t = Math.cos(Omega_t);
+                                                    var sinOmega_t = Math.sin(Omega_t);
+                                                                                                        
+                                                    var X1_t = (mass2*R/M)*[cosOmega_t,sinOmega_t,0];
+                                                    var X2_t = (-mass1*R/M)*[cosOmega_t,sinOmega_t,0];
+                                                    var Iij_t = [];
+                                                    for (var i = 0; i < 3; i++){
+                                                        Iij_t[i] = [];
+                                                    }
+                                                    for (var i = 0; i < 3; i++){    
+                                                        for (var j = 0; j < 3; j++){
+                                                            Iij_t[i][j] = mass1*X1_t[i]*X1_t[j] + mass2*X2_t[i]*X2_t[j];
+                                                        }
+                                                    }
 
-                                // coordinates of top left corner
-                                var TLx = -700;
-                                //var TLx = -1.5;
-                                var TLy = 100;
-                                //var TLy = 28.5;
-                                // coordinates of bottom right corner
-                                var BRx = 12650;
-                                //var BRx = 28.5;
-                                var BRy = -100;
-                                //var BRy = -1.5;
+                                                    return Iij_t;
+                                                }
+
+                                                // function to get first time derivative of Iij_t
+                                                function get_dIij_t(t,m1,m2,R,dt,edgeFLAG=0){
+
+                                                    // output array 
+                                                    var dIij_t = [];
+                                                    // calculate Iij
+                                                    if (edgeFLAG){
+                                                        if (t==0) {
+                                                            var Iij_t0 = get_Iij_t(t,m1,m2,R);
+                                                            var Iij_t1 = get_Iij_t(t+dt,m1,m2,R);
+                                                            var Iij_t2 = get_Iij_t(t+2.*dt,m1,m2,R);
+                                                            for (var i = 0; i < 3; i++){
+                                                                dIij_t[i] = [];
+                                                                for (var j = 0; j < 3; j++){
+                                                                    dIij_t[i][j] = (-3.*Iij_t0[i][j] + 4.*Iij_t1[i][j] - Iij_t2[i][j])/(2.*dt);
+                                                                } 
+                                                            }
+                                                        } else {
+                                                            var Iij_t0 = get_Iij_t(t-2.*dt,m1,m2,R);
+                                                            var Iij_t1 = get_Iij_t(t-dt,m1,m2,R);
+                                                            var Iij_t2 = get_Iij_t(t,m1,m2,R);
+                                                            for (var i = 0; i < 3; i++){
+                                                                dIij_t[i] = [];
+                                                                for (var j = 0; j < 3; j++){
+                                                                    dIij_t[i][j] = (Iij_t0[i][j] - 4.*Iij_t1[i][j] + 3.*Iij_t2[i][j])/(2.*dt);
+                                                                }
+                                                            }    
+                                                        }
+
+                                                    } else {
+                                                        var Iij_tp1 = get_Iij_t(t+dt,m1,m2,R);
+                                                        var Iij_tm1 = get_Iij_t(t-dt,m1,m2,R);
+                                                        for (var i = 0; i < 3; i++){
+                                                            dIij_t[i] = [];
+                                                            for (var j = 0; j < 3; j++){
+                                                                dIij_t[i][j] = (Iij_tp1[i][j] - Iij_tm1[i][j])/(2.*dt);
+                                                            }
+                                                        }
+                                                    }
+                                                    return dIij_t; // this is a 3x3 array
+                                                } 
+                                                
+                                               function get_ddIij_t(t,m1,m2,R,dt,edgeFLAG=0){
+
+                                                    // output array 
+                                                    var ddIij_t = [];
+                                                    // calculate Iij
+                                                    if (edgeFLAG){
+                                                        if (t==0) {
+                                                            var dIij_t0 = get_dIij_t(t,m1,m2,R,dt,edgeFLAG=1);
+                                                            var dIij_t1 = get_dIij_t(t+dt,m1,m2,R,edgeFLAG=1);
+                                                            var dIij_t2 = get_dIij_t(t+2.*dt,m1,m2,R,edgeFLAG=1);
+                                                            for (var i = 0; i < 3; i++){
+                                                                ddIij_t[i] = [];
+                                                                for (var j = 0; j < 3; j++){
+                                                                    ddIij_t[i][j] = (-3.*dIij_t0[i][j] + 4.*dIij_t1[i][j] - dIij_t2[i][j])/(2.*dt);
+                                                                } 
+                                                            }
+                                                        } else {
+                                                            var dIij_t0 = get_dIij_t(t-2.*dt,m1,m2,R,edgeFLAG=1);
+                                                            var dIij_t1 = get_dIij_t(t-dt,m1,m2,R,edgeFLAG=1);
+                                                            var dIij_t2 = get_dIij_t(t,m1,m2,R,edgeFLAG=1);
+                                                            for (var i = 0; i < 3; i++){
+                                                                ddIij_t[i] = [];
+                                                                for (var j = 0; j < 3; j++){
+                                                                    ddIij_t[i][j] = (dIij_t0[i][j] - 4.*dIij_t1[i][j] + 3.*dIij_t2[i][j])/(2.*dt);
+                                                                }
+                                                            }    
+                                                        }
+
+                                                    } else {
+                                                        var dIij_tp1 = get_dIij_t(t+dt,m1,m2,R,dt);
+                                                        var dIij_tm1 = get_dIij_t(t-dt,m1,m2,R,dt);
+                                                        for (var i = 0; i < 3; i++){
+                                                            ddIij_t[i] = [];
+                                                            for (var j = 0; j < 3; j++){
+                                                                ddIij_t[i][j] = (dIij_tp1[i][j] - dIij_tm1[i][j])/(2.*dt);
+                                                            }
+                                                        }
+                                                    }
+                                                    return ddIij_t; // this is a 3x3 array
+                                                }    
+
+                                                function get_dddIij_t(t,m1,m2,R,dt,edgeFLAG=0){
+
+                                                    // output array 
+                                                    var dddIij_t = [];
+                                                    // calculate Iij
+                                                    if (edgeFLAG){
+                                                        if (t==0) {
+                                                            var ddIij_t0 = get_ddIij_t(t,m1,m2,R,dt,edgeFLAG=1);
+                                                            var ddIij_t1 = get_ddIij_t(t+dt,m1,m2,R,edgeFLAG=1);
+                                                            var ddIij_t2 = get_ddIij_t(t+2.*dt,m1,m2,R,edgeFLAG=1);
+                                                            for (var i = 0; i < 3; i++){
+                                                                dddIij_t[i] = [];
+                                                                for (var j = 0; j < 3; j++){
+                                                                    dddIij_t[i][j] = (-3.*ddIij_t0[i][j] + 4.*ddIij_t1[i][j] - ddIij_t2[i][j])/(2.*dt);
+                                                                } 
+                                                            }
+                                                        } else {
+                                                            var ddIij_t0 = get_ddIij_t(t-2.*dt,m1,m2,R,edgeFLAG=1);
+                                                            var ddIij_t1 = get_ddIij_t(t-dt,m1,m2,R,edgeFLAG=1);
+                                                            var ddIij_t2 = get_ddIij_t(t,m1,m2,R,edgeFLAG=1);
+                                                            for (var i = 0; i < 3; i++){
+                                                                dddIij_t[i] = [];
+                                                                for (var j = 0; j < 3; j++){
+                                                                    dddIij_t[i][j] = (ddIij_t0[i][j] - 4.*ddIij_t1[i][j] + 3.*ddIij_t2[i][j])/(2.*dt);
+                                                                }
+                                                            }    
+                                                        }
+
+                                                    } else {
+                                                        var ddIij_tp1 = get_ddIij_t(t+dt,m1,m2,R,dt);
+                                                        var ddIij_tm1 = get_ddIij_t(t-dt,m1,m2,R,dt);
+                                                        for (var i = 0; i < 3; i++){
+                                                            dddIij_t[i] = [];
+                                                            for (var j = 0; j < 3; j++){
+                                                                dddIij_t[i][j] = (ddIij_tp1[i][j] - ddIij_tm1[i][j])/(2.*dt);
+                                                            }
+                                                        }
+                                                    }
+                                                    return dddIij_t; // this is a 3x3 array
+                                                }
+                                                    
+
+                                                // array to get ni projection vector in direction theta,phi
+                                                function get_ni_thetaphi(theta,phi){                                            
+                                                    var ni_thph = [Math.sin(theta)*Math.cos(phi),Math.sin(theta)*Math.sin(phi),Math.cos(theta)]; 
+                                                    return ni_thph; // this is a 3x1 array
+                                                }
+
+                                                function get_Pij_thetaphi(theta,phi){
+                                                    var ni_thph = get_ni_thetaphi(theta,phi);
+                                                    var Pij_thph = [];
+                                                    for (var i=0;i<3;i++){
+                                                        Pij[i] = [];
+                                                        for (var j=0;j<3;j++){
+                                                            if (i==j) {
+                                                                Pij_thph[i][j] = 1. - ni_thph[i]*ni_thph[j];                                                   //            Pij_thph[ith][iph][i][j] = 1. - ni_thph[ith,iph,i]*ni_thph[ith,iph,j];
+                                                            } else {
+                                                                Pij_thph[i][j] = -ni_thph[i]*ni_thph[j];  
+                                                            }
+                                                        }
+                                                    }
+                                                    return Pij_thph; // this is a 3x3 array
+                                                }
+
+                                                function get_Lijkl_thetaphi(theta,phi){
+                                                    var Pij_thph = get_Pij_thetaphi(theta,phi);
+                                                    var Lijkl_thph = [];
+                                                    for (var i = 0; i < 3; i++){
+                                                        Lijkl_thph[i] = []; 
+                                                        for (var j = 0; j < 3; j++){
+                                                            Lijkl_thph[i][j] = [];
+                                                            for (var k = 0; k < 3; k++){
+                                                                Lijkl_thph[i][j][k] = [];
+                                                                for (var l = 0; l < 3; l++){
+                                                                    Lijkl_thph[i][j][k][l] = Pij_thph[i][k]*Pij_thph[j][l]-0.5*Pij_thph[i][j]*Pij_thph[k][l];
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    return Lijkl_thph; // this is a 3x3x3x3 array
+                                                }
+
+                                                function get_hij_t_thetaphi(t,m1,m2,R,dt,theta,phi,edgeFLAG=0){
+
+                                                    var ddIij_t = get_ddIij_t(t,m1,m2,R,dt,edgeFLAG=0);
+                                                    var Lijkl_thph = get_Lijkl_thetaphi(theta,phi);
+//                                                  var ddIij = get_ddIij();
+                                                    var hij_t_thph = [];
+                                                    for (var i = 0; i < 3; i++){
+                                                        hij_t_thph[i] = [];
+                                                        for (var j = 0; j < 3; j++){
+                                                            // start sum
+                                                            hij_t_thph[i][j] = 0.;
+                                                            for (var k = 0; k < 3; k++){
+                                                                for (var l = 0; l < 3; l++){
+                                                                    hij_t_thph[i][j] += Lijkl_thph[i][j][k][l]*ddIij_t[k,l];
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    return hij_t_thph; // this is a 3x3 array
+                                                }
+
+//                                                function get_sint(t
+
+//                                                //////// graphics stuff
+//
+//                                                // coordinates of top left corner
+//                                                var TLx = -700;
+//                                                var TLy = 100;
+//                                                // coordinates of bottom right corner
+//                                                var BRx = 12650;
+//                                               var BRy = -100;
+//                                                
+ //                                               // Initialise board
+ //                                               var board = JXG.JSXGraph.initBoard('box', {boundingbox: [TLx, TLy, BRx, BRy], axis: true, grid: false});
+ //        
+ //                                               board.suspendUpdate();
+ //          
+ //                                               // Define sliders to dynamically change parameters of the equations and create text elements to describe them
+ //                                               //st = board.create('text', [20,25, "Birth rate predators"], {fixed:true})
+ //                                               a = board.create('slider', [[8000,90],[10000,90],[50,100,200]],{name:'R',strokeColor:'black',fillColor:'black'});
+ //                                               m1 = board.create('slider', [[8000,80],[10000,80],[0.1,0.75,1.0]],{name:'m1',strokeColor:'black',fillColor:'black'});
+ //                                               m2 = board.create('slider', [[8000,70],[10000,70],[0.1,0.25,1.0]],{name:'m2',strokeColor:'black',fillColor:'black'});
+ //                                               scfac = board.create('slider', [[8000,60],[10000,60],[30,45,60]],{name:'x',strokeColor:'black',fillColor:'black'}); 
+ //
+ //                                               var mass1 = m1.Value();
+ //                                               var mass2 = m2.Value();
+ //                                               var x = scfac.Value();
+ //                                               var M = mass1 + mass2;
+ //                                               var R = a.Value();
+ //                                               var Torb = 2.*Math.PI*Math.sqrt(R**3/M);
+ //                                               var Omega = 2.*Math.PI/Torb;
+ //
+ //                                               // more variables for calculations
+ //                                               var Nt = 202; // number of time steps to use
+ //                                               var Nth = 41; // number of steps in cos theta to use
+ //                                               var Nph = 30; // number of steps in phi to use
+ //                                               var dt = 2.*Torb/Nt; // time steps
+ //
+ //
+//
+//                                                //// arrays for theta+sin/cos
+//                                                //var dcostheta = 2./(Nth-1);
+//                                                //var theta = [];
+//                                                //var costheta = [];
+//                                                //var sintheta = [];
+//                                                //for (var i=0; i<Nth;i++){
+//                                                //    costheta[i] = -1. + i*dcostheta;
+//                                                //    theta[i] = Math.acos(costheta[i]);
+ //                                               //    sintheta[i] = Math.sin(theta[i]);
+ //
+ //                                               //}
+ //
+ //                                               //// arrays for phi+sin/cos
+ //                                               //var dphi = 2.*Math.PI/Nph
+ //                                               //var phi = [];
+ //                                               //var cosphi = [];
+ //                                               //var sinphi = [];
+ //                                               //for (var i=0; i<Nph;i++){
+ //                                               //    phi[i] = i*dphi;
+ //                                               //    cosphi[i] = Math.cos(phi[i]);
+ //                                               //    sinphi[i] = Math.sin(phi[i]);
+ //                                               //}
+ //
+ //
+ //                                               var tt = [];
+ //                                               var plotarr1 = [];
+ //                                               var plotarr2 = [];
+ //                                               var plotarr3 = [];
+ //
+ //                                               //tt[0] = 0;
+ //                                               //var Iij_t0 = get_Iij_t(0,m1,m2,R);
+ //                                               ////dddIij_t0 = get_dddIij_t(0,m1,m2,R,dt,edgeFLAG=1);
+ //                                               //plotarr1[0] = Iij_t0[0,0];//65.;//dddIij_t0[0][0]*10000000.; 
+ //                                               //plotarr2[0] = Iij_t0[0,1];//35.;//dddIij_t[0][1]*10000000.; 
+ //
+ //                                               //tt[Nt-1] = (Nt-1)*dt;
+ //                                               //var Iij_t1 = get_Iij_t(tt[Nt-1],m1,m2,R);
+ //                                               ////dddIij_t1 = get_dddIij_t(tt[Nt-1],m1,m2,R,dt,edgeFLAG=1);
+ //                                               //plotarr1[Nt-1] = Iij_t1[0,0];//dddIij_t1[0][0]*10000000.; 
+ //                                               //plotarr2[Nt-1] = Iij_t1[0,1];//dddIij_t1[0][1]*10000000.;
+ //                                               //var X1_t = [3];
+ //                                               //var X2_t = [3];
+ //
+ //                                               var prefac1 = mass2*R/M;
+ //                                               var prefac2  =-mass1*R/M;
+ //                                               // comment for change purposes -- testing git
+ //                                               for (var it=0;it<Nt;it++){
+ //                                                   // time array
+ //                                                   tt[it] = it*dt;
+ //
+ //                                                   var Omega_t = Omega*tt[it];
+ //                                                   var cosOmega_t = Math.cos(Omega_t);
+ //                                                   var sinOmega_t = Math.sin(Omega_t);
+ //                                                   //
+ //                                                   //X1_t[0] = prefac1*cosOmega_t;
+ //                                                   //X1_t[1] = prefac1*sinOmega_t;
+ //                                                   //X1_t[2] = 0;
+ //                                                   //
+ //                                                   //X2_t[0] = prefac2*cosOmega_t;
+ //                                                   //X2_t[1] = prefac2*sinOmega_t;
+ //                                                   //X2_t[2] = 0;
+ //                                                   //
+ //                                                                                                       
+ //                                                   //var Iij_t = [];
+ //                                                   //for (var i = 0; i < 3; i++){
+ //                                                   //    Iij_t[i] = [];
+ //                                                   //
+ //                                                   //}
+ //                                                   //for (var i = 0; i < 3; i++){    
+ //                                                   //    for (var j = 0; j < 3; j++){
+ //                                                   //        Iij_t[i][j] = mass1*X1_t[i]*X1_t[j] + mass2*X2_t[i]*X2_t[j];
+ //                                                   //    }
+ //                                                   //}
+ //
+ //
+ //
+ //                                                   //var Iij_t = get_Iij_t(tt[i],m1,m2,R);
+ //
+ //                                                   //dddIij_t = get_dddIij_t(tt[it],m1,m2,R,dt);
+ //                                                   //hij_t_thph = get_hij_t_thetaphi(tt[it],m1,m2,R,dt,theta,phi);
+//
+//                                                    // plot things                                                    
+//                                                    plotarr1[it] = 35.*cosOmega_t;//Iij_t[0][0];////dddIij_t[0][0]*10000000.;
+//                                                    plotarr2[it] = 65.*sinOmega_t;//Iij_t[0][1];////dddIij_t[0][1]*10000000.;
+//                                                    //plotarr3[it] = hij_t_thph[0][0]*1000000.;
+//                                                }
+//
+//////                                                
+//                                                 var c = brd.create('curve',[
+//                                                          function(t){return t;},
+//                                                          function(t){return x.Value()*Math.sin(Omega*t);},
+//                                                          0, 4.*Math.PI*Math.sqrt(a.Value()**3/(m1.Value() + m2.Value()))],
+//                                                          {strokeColor:'#aa2233',strokeWidth:3});
+////                                                var c = board.create('curve',[tt,X1x],{strokeColor:'magenta',strokeWidth:3});                                                
+////                                                var c = board.create('curve',[tt,35.*Math.cos(Omega*tt)],{strokeColor:'magenta',strokeWidth:3});
+ //                                               //var c = board.create('curve',[tt,plotarr1],{strokeColor:'magenta',strokeWidth:3});
+ //                                               //var d = board.create('curve',[tt,plotarr2],{strokeColor:'green',strokeWidth:3});
+ //
+//                                                board.unsuspendUpdate(); 
            
-                                // Initialise board
-                                board = JXG.JSXGraph.initBoard('box', {boundingbox: [TLx, TLy, BRx, BRy], axis: true, grid: false});
-           
-                                // Define sliders to dynamically change parameters of the equations and create text elements to describe them
-                                s = board.create('slider', [[0.6*BRx,0.85*TLy],[0.8*BRx,0.85*TLy],[0.0,0.3,1.0]],{name:'&epsilon;1',strokeColor:'green',fillColor:'green'});
-                                u = board.create('slider', [[0.6*BRx,0.75*TLy],[0.8*BRx,0.75*TLy],[0.0,0.7,1.0]],{name:'&epsilon;2',strokeColor:'black',fillColor:'black'});
-           
-                                o = board.create('slider', [[0.1*BRx,0.85*TLy],[0.3*BRx,0.85*TLy],[0.0,0.1,1.0]],{name:'&gamma;1',strokeColor:'black',fillColor:'black'});
-                                p = board.create('slider', [[0.1*BRx,0.75*TLy],[0.3*BRx,0.75*TLy],[0.0,0.3,1.0]],{name:'&gamma;2',strokeColor:'black',fillColor:'black'});
-                                a = board.create('slider', [[0.1*BRx,0.65*TLy],[0.3*BRx,0.65*TLy],[0.1,1.0,10.0]],{name:'a',strokeColor:'black',fillColor:'black'});
-           
-                                // Dynamic initial value as gliders on the y-axis
-                                startpred = board.create('glider', [0, 10, board.defaultAxes.y], {name:'Preys',strokeColor:'magenta',fillColor:'magenta'});
-                                startprey = board.create('glider', [0, 5, board.defaultAxes.y], {name:'Predators',strokeColor:'blue',fillColor:'blue'});
-                              
-                              
-                                // Variables for the JXG.Curves
-                                var g3 = null;
-                                var g4 = null;
-                                var g5 = null;
-           
-                                // Initialise ODE and solve it with JXG.Math.Numerics.rungeKutta()
-                                function ode() {
+             
+    // Initialise board
+    board = JXG.JSXGraph.initBoard('jxgbox', {boundingbox: [-1.5, 28.5, 28.5, -1.5], axis: true, grid: false});
 
-                                    var m1 = 0.75;
-                                    var m2 = 0.25;
-                                    var M = m1 + m2;
-                                    var Torb = 2.*Math.PI*Math.sqrt(a.Value()**3/M);
-                                    var Omega = 2.*Math.PI/Torb;
+    // Define sliders to dynamically change parameters of the equations and create text elements to describe them
+    s = board.create('slider', [[20.0,26.0],[25.0,26.0],[0.0,0.3,1.0]],{name:'&epsilon;1',strokeColor:'black',fillColor:'black'});
+    st = board.create('text', [20,25, "Birth rate predators"], {fixed:true});
+    u = board.create('slider', [[20.0,24.0],[25.0,24.0],[0.0,0.7,1.0]],{name:'&epsilon;2',strokeColor:'black',fillColor:'black'});
+    ut = board.create('text', [20,23, "Death rate predators"], {fixed:true});
 
-                                    // evaluation interval
-                                    var I = [0, 25];
-                                    var I2 = [0,2.*Torb];
-                                    // Number of steps. 1000 should be enough
-                                    var N = 1000;
-                                    var Nt = 101; // number of timesteps -- keep low for now
+    o = board.create('slider', [[10.0,26.0],[15.0,26.0],[0.0,0.1,1.0]],{name:'&gamma;1',strokeColor:'black',fillColor:'black'});
+    ot = board.create('text', [10,25, "Death rate preys/per predator"], {fixed:true});
+    p = board.create('slider', [[10.0,24.0],[15.0,24.0],[0.0,0.3,1.0]],{name:'&gamma;2',strokeColor:'black',fillColor:'black'});
+    pt = board.create('text', [10,23, "Reproduction rate pred./per prey"], {fixed:true});
 
-                                    // Right hand side of the ODE dx/dt = f(t, x)
-                                    var f = function(t, x) {
-                                        var R = a.Value();
-                                        var Torb = 2.*Math.PI*Math.sqrt(a.Value()**3/M); 
+    // Dynamic initial value as gliders on the y-axis
+    startpred = board.create('glider', [0, 10, board.defaultAxes.y], {name:'Preys',strokeColor:'red',fillColor:'red'});
+    startprey = board.create('glider', [0, 5, board.defaultAxes.y], {name:'Predators',strokeColor:'blue',fillColor:'blue'});
+  
+  
+    // Variables for the JXG.Curves
+    var g3 = null;
+    var g4 = null;
 
-                                        var bpred = s.Value();//0.3;
-                                        var bprey = u.Value();//0.7;
-                                        var dpred = o.Value();//0.1;
-                                        var dprey = p.Value();//0.3;
-            
-                                        var y = [];
-                                        y[0] = x[0]*(bpred - dpred*x[1]);
-                                        y[1] = -x[1]*(bprey - dprey*x[0]);
-            
-                                        return y;
-                                    }
-            
-                                  // Initial value
-                                  var x0 = [startpred.Y(), startprey.Y()];
-            
-                                  // Solve ode
-                                  var data = JXG.Math.Numerics.rungeKutta('euler', x0, I, N, f);
-                                  //var data2 = [];
-
-
-                                  for(var i=0; i<data.length; i++) {
-                                      data[i][0] *= a.Value();
-                                  }
-            
-                                  // to plot the data against time we need the times where the equations were solved
-                                  // sg hacky fix -- make better later
-                                  
-                                  var q = I[0];
-                                  var h = (I[1]-I[0])/N;
-                                  for(var i=0; i<data.length; i++) {
-                                      data[i].push(q);
-                                      q += h;
-                                  }
-
-                                  
-                                  return data;
-                                }
-
-                                // Initialise ODE and solve it with JXG.Math.Numerics.rungeKutta()
-                                function ode2() {
-
-                                    var m1 = 0.75;
-                                    var m2 = 0.25;
-                                    var M = m1 + m2;
-                                    var Torb = 2.*Math.PI*Math.sqrt(a.Value()**3/M);
-                                    var Omega = 2.*Math.PI/Torb;
-
-                                    // evaluation interval
-                                    var I = [0, 25];
-                                    var I2 = [0,2.*Torb];
-                                    // Number of steps. 1000 should be enough
-                                    var N = 1000;
-                                    var Nt = 202; // number of timesteps -- keep low for now
-                                    var dt = 2.*Torb/Nt;
-
-                                    // Solve ode
-                                    //var data = JXG.Math.Numerics.rungeKutta('euler', x0, I, N, f);
-                                    var data = [];
-                                    for (var i=0; i < Nt; i++){
-                                        var t = i*dt;
-                                        data[i] = 35.*Math.sin(Omega*t);
-                                    //    data[i].push(35.*Math.sin(Omega*t));
-                                    //    data[i].push(50.*Math.cos(Omega*t));                                        
-                                    //    data[i].push(t);
-                                    }
-                                 
-//                                    for (var i=0; i < Nt; i++){
-//                                        var t = i*dt;
-//                                        data[i][0] = 35.*Math.sin(Omega*t);
-//                                        data[i][1] = 50.*Math.cos(Omega*t);
-//                                    }
-
-
-                                  // for(var i=0; i<data.length; i++) {
-                                 //     data[i][0] *= a.Value();
-                                 // }
-            
-                                  // to plot the data against time we need the times where the equations were solved
-                                  // sg hacky fix -- make better later
-                                  
-                                  var q = 0.;
-                                  var h = 2.*Torb/Nt;
-                                  for(var i=0; i<data.length; i++) {
-                                      data[i].push(q);
-                                      q += h;
-                                  }
-
-                                  // to plot the data against time we need the times where the equations were solved
-                                  //var time = 0.;
-                                  //var timestep = 2.*Torb/Nt;//h2 = (I2[1]-I2[0])/N; // this is dt, get from Nt and Torb
-                                  //for(var i=0; i<Nt; i++) {
-                                  //    data2[i].push(time); // add to array
-                                  //    time += timestep;
-                                  //}
+    // Initialise ODE and solve it with JXG.Math.Numerics.rungeKutta()
+    function ode() {
+        // evaluation interval
+        var I = [0, 25];
+        // Number of steps. 1000 should be enough
+        var N = 1000;
  
-            
-                                  return data;
-                                }
+        // Right hand side of the ODE dx/dt = f(t, x)
+        var f = function(t, x) {
+            var bpred = s.Value();//0.3;
+            var bprey = u.Value();//0.7;
+            var dpred = o.Value();//0.1;
+            var dprey = p.Value();//0.3;
+ 
+            var y = [];
+            y[0] = x[0]*(bpred - dpred*x[1]);
+            y[1] = -x[1]*(bprey - dprey*x[0]);
+ 
+            return y;
+      }
+ 
+      // Initial value
+      var x0 = [startpred.Y(), startprey.Y()];
+ 
+      // Solve ode
+      var data = JXG.Math.Numerics.rungeKutta('euler', x0, I, N, f);
+ 
+      // to plot the data against time we need the times where the equations were solved
+      var t = [];
+      var q = I[0];
+      var h = (I[1]-I[0])/N;
+      for(var i=0; i<data.length; i++) {
+          data[i].push(q);
+          q += h;
+      }
+ 
+      return data;
+    }
 
-                                function test(){
-                                    var data = [];
-                                    for (var i = 0; i < Nt; i++){
-                                        data[i] = 0.;
-                                    }
-                                    return data;
-                                }
-           
-                                // get data points
-                                var data = ode();
-                                // sg test
-                                //var Omega = ode2();
-                                //var Torb = 2.*Math.PI/Omega;
-                                //var dt = 2.*Torb/Nt;
-                              
-                                // copy data to arrays so we can plot it using JXG.Curve
-                                var t = [];
-                                var time = []
-                                var dataprey = [];
-                                var datapred = [];
-                                var datatest = []
-                                for(var i=0; i<data.length; i++) {
-                                  t[i] = data[i][2];
-                                  datapred[i] = data[i][0];
-                                  dataprey[i] = data[i][1];
-                                }
+    // get data points
+    var data = ode();
+  
+    // copy data to arrays so we can plot it using JXG.Curve
+    var t = [];
+    var dataprey = [];
+    var datapred = [];
+    for(var i=0; i<data.length; i++) {
+      t[i] = data[i][2];
+      datapred[i] = data[i][0];
+      dataprey[i] = data[i][1];
+    }
 
-                                //for (var i=0; i < Nt; i++){
-                                //    time[i] = i*dt;
-                                //    datatest[i] = 30.*Math.sin(Omega*time[i]);
-                                //}
-           
-                                // Plot Predator
-                                g3 = board.create('curve', [t*1000., datapred], {strokeColor:'magenta', strokeWidth:'2px'});
-                                g3.updateDataArray = function() {
-                                    var data = ode();
-                                    //var Omega = ode2();
+    // Plot Predator
+    g3 = board.create('curve', [t, datapred], {strokeColor:'red', strokeWidth:'2px'});
+    g3.updateDataArray = function() {
+        var data = ode();
+        this.dataX = [];
+        this.dataY = [];
+        for(var i=0; i<data.length; i++) {
+            this.dataX[i] = t[i];
+            this.dataY[i] = data[i][0];
+        }
+    }
 
-                                    this.dataX = [];
-                                    this.dataY = [];
-                                    for(var i=0; i<data.length; i++) {
-                                        this.dataX[i] = data[i][2]*1000.;
-                                        this.dataY[i] = data[i][0];
-                                    }
-                                }
-           
-                                // Plot Prey
-                                g4 = board.create('curve', [t*1000., dataprey], {strokeColor:'blue', strokeWidth:'2px'});
-                                g4.updateDataArray = function() {
-                                    var data = ode();
-                                    this.dataX = [];
-                                    this.dataY = [];
-                                    for(var i=0; i<data.length; i++) {
-                                        this.dataX[i] = data[i][2]*1000.;
-                                        this.dataY[i] = data[i][1];
-                                      }
-                                  }
+    // Plot Prey
+    g4 = board.create('curve', [t, dataprey], {strokeColor:'blue', strokeWidth:'2px'});
+    g4.updateDataArray = function() {
+        var data = ode();
+        this.dataX = [];
+        this.dataY = [];
+        for(var i=0; i<data.length; i++) {
+            this.dataX[i] = t[i];
+            this.dataY[i] = data[i][1];
+          }
+      }
 
-//                                // Plot SG test
-//                                g5 = board.create('curve', [time, datatest], {strokeColor:'magenta', strokeWidth:'2px'});
-//                                g5.updateDataArray = function() {
-//                                    var Omega = ode2();
-
- //                                     var time = [];
-//                                      var datatest = [];
-//
-//                                    var Torb = 2.*Math.PI/Omega;
-//                                    var dt = 2.*Torb/Nt;
-//                              
-//                                    for (var i=0; i < Nt; i++){
-//                                        time[i] = i*dt;
-//                                        datatest[i] = 30.*Math.sin(Omega*time[i]);
-//                                    }
-//
-//                                    this.dataX = [];
-//                                    this.dataY = [];
-//                                    for(var i=0; i<Nt; i++) {
-//                                        this.dataX[i] = time[i];
-//                                        this.dataY[i] = datatest[i];
-//                                    }
-//                                }
-// 
-
-                            </script>
+                                            </script>
 
 					<!-- This is the footer that appears at the bottom of the page -->
 					<footer id="footer">

@@ -477,7 +477,7 @@
                                                 }
                                               
                                                 for (var i = 0; i < data.length; i++){
-                                                    data[i][0] = (2.*a.Value())*(Math.cos(2.*Omega*data[i][2]) + Math.sin(Omega*data[i][2]));
+                                                    data[i][0] = (3000.*mass2*M/R)*(Math.cos(2.*Omega*data[i][2]) + Math.sin(Omega*data[i][2]));
                                                     data[i][1] = (1000.*mass1*M/R)*Math.sin(Omega*data[i][2]);
                                                 }
                                               

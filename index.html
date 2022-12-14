@@ -88,47 +88,47 @@
                                                     return Iij_t;
                                                 }
 
-                                                // function to get first time derivative of Iij_t
-                                                function get_dIij_t(t,m1,m2,R,dt,edgeFLAG=0){
+                                                //// function to get first time derivative of Iij_t
+                                                //function get_dIij_t(t,m1,m2,R,dt,edgeFLAG=0){
 
-                                                    // output array 
-                                                    var dIij_t = [];
-                                                    // calculate Iij
-                                                    if (edgeFLAG){
-                                                        if (t==0) {
-                                                            var Iij_t0 = get_Iij_t(t,m1,m2,R);
-                                                            var Iij_t1 = get_Iij_t(t+dt,m1,m2,R);
-                                                            var Iij_t2 = get_Iij_t(t+2.*dt,m1,m2,R);
-                                                            for (var i = 0; i < 3; i++){
-                                                                dIij_t[i] = [];
-                                                                for (var j = 0; j < 3; j++){
-                                                                    dIij_t[i][j] = (-3.*Iij_t0[i][j] + 4.*Iij_t1[i][j] - Iij_t2[i][j])/(2.*dt);
-                                                                } 
-                                                            }
-                                                        } else {
-                                                            var Iij_t0 = get_Iij_t(t-2.*dt,m1,m2,R);
-                                                            var Iij_t1 = get_Iij_t(t-dt,m1,m2,R);
-                                                            var Iij_t2 = get_Iij_t(t,m1,m2,R);
-                                                            for (var i = 0; i < 3; i++){
-                                                                dIij_t[i] = [];
-                                                                for (var j = 0; j < 3; j++){
-                                                                    dIij_t[i][j] = (Iij_t0[i][j] - 4.*Iij_t1[i][j] + 3.*Iij_t2[i][j])/(2.*dt);
-                                                                }
-                                                            }    
-                                                        }
+                                                //    // output array 
+                                                //    var dIij_t = [];
+                                                //    // calculate Iij
+                                                //    if (edgeFLAG){
+                                                //        if (t==0) {
+                                                //            var Iij_t0 = get_Iij_t(t,m1,m2,R);
+                                                //            var Iij_t1 = get_Iij_t(t+dt,m1,m2,R);
+                                                //            var Iij_t2 = get_Iij_t(t+2.*dt,m1,m2,R);
+                                                //            for (var i = 0; i < 3; i++){
+                                                //                dIij_t[i] = [];
+                                                //                for (var j = 0; j < 3; j++){
+                                                //                    dIij_t[i][j] = (-3.*Iij_t0[i][j] + 4.*Iij_t1[i][j] - Iij_t2[i][j])/(2.*dt);
+                                                //                } 
+                                                //            }
+                                                //        } else {
+                                                //            var Iij_t0 = get_Iij_t(t-2.*dt,m1,m2,R);
+                                                //            var Iij_t1 = get_Iij_t(t-dt,m1,m2,R);
+                                                //            var Iij_t2 = get_Iij_t(t,m1,m2,R);
+                                                //            for (var i = 0; i < 3; i++){
+                                                //                dIij_t[i] = [];
+                                                //                for (var j = 0; j < 3; j++){
+                                                //                    dIij_t[i][j] = (Iij_t0[i][j] - 4.*Iij_t1[i][j] + 3.*Iij_t2[i][j])/(2.*dt);
+                                                //                }
+                                                //            }    
+                                                //        }
 
-                                                    } else {
-                                                        var Iij_tp1 = get_Iij_t(t+dt,m1,m2,R);
-                                                        var Iij_tm1 = get_Iij_t(t-dt,m1,m2,R);
-                                                        for (var i = 0; i < 3; i++){
-                                                            dIij_t[i] = [];
-                                                            for (var j = 0; j < 3; j++){
-                                                                dIij_t[i][j] = (Iij_tp1[i][j] - Iij_tm1[i][j])/(2.*dt);
-                                                            }
-                                                        }
-                                                    }
-                                                    return dIij_t; // this is a 3x3 array
-                                                } 
+                                                //    } else {
+                                                //        var Iij_tp1 = get_Iij_t(t+dt,m1,m2,R);
+                                                //        var Iij_tm1 = get_Iij_t(t-dt,m1,m2,R);
+                                                //        for (var i = 0; i < 3; i++){
+                                                //            dIij_t[i] = [];
+                                                //            for (var j = 0; j < 3; j++){
+                                                //                dIij_t[i][j] = (Iij_tp1[i][j] - Iij_tm1[i][j])/(2.*dt);
+                                                //            }
+                                                //        }
+                                                //    }
+                                                //    return dIij_t; // this is a 3x3 array
+                                                //} 
                                                 
                                               // function get_ddIij_t(t,m1,m2,R,dt,edgeFLAG=0){
 
@@ -410,7 +410,7 @@
                                             board = JXG.JSXGraph.initBoard('box', {boundingbox: [TLx, TLy, BRx, BRy], axis: true, grid: false});
           
                                             // Define sliders to dynamically change parameters of the equations and create text elements to describe them
-                                            s = board.create('slider', [[0.6*BRx,0.85*TLy],[0.8*BRx,0.85*TLy],[0.0,0.25,1.0]],{name:'m2',strokeColor:'magenta',fillColor:'magenta'});
+                                            s = board.create('slider', [[0.6*BRx,0.85*TLy],[0.8*BRx,0.85*TLy],[0.0,0.25,1.0]],{name:'m2',strokeColor:'green',fillColor:'green'});
                                             u = board.create('slider', [[0.6*BRx,0.75*TLy],[0.8*BRx,0.75*TLy],[0.0,0.75,1.0]],{name:'m1',strokeColor:'black',fillColor:'black'});
            
                                             o = board.create('slider', [[0.1*BRx,0.85*TLy],[0.3*BRx,0.85*TLy],[0.0,0.1,1.0]],{name:'&gamma;1',strokeColor:'black',fillColor:'black'});

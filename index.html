@@ -291,20 +291,7 @@
  //                                               board.suspendUpdate();
  //          
  //                                               // Define sliders to dynamically change parameters of the equations and create text elements to describe them
- //                                               //st = board.create('text', [20,25, "Birth rate predators"], {fixed:true})
- //                                               a = board.create('slider', [[8000,90],[10000,90],[50,100,200]],{name:'R',strokeColor:'black',fillColor:'black'});
- //                                               m1 = board.create('slider', [[8000,80],[10000,80],[0.1,0.75,1.0]],{name:'m1',strokeColor:'black',fillColor:'black'});
- //                                               m2 = board.create('slider', [[8000,70],[10000,70],[0.1,0.25,1.0]],{name:'m2',strokeColor:'black',fillColor:'black'});
- //                                               scfac = board.create('slider', [[8000,60],[10000,60],[30,45,60]],{name:'x',strokeColor:'black',fillColor:'black'}); 
- //
- //                                               var mass1 = m1.Value();
- //                                               var mass2 = m2.Value();
- //                                               var x = scfac.Value();
- //                                               var M = mass1 + mass2;
- //                                               var R = a.Value();
- //                                               var Torb = 2.*Math.PI*Math.sqrt(R**3/M);
- //                                               var Omega = 2.*Math.PI/Torb;
- //
+ //                                 
  //                                               // more variables for calculations
  //                                               var Nt = 202; // number of time steps to use
  //                                               var Nth = 41; // number of steps in cos theta to use
@@ -423,7 +410,7 @@
                                             board = JXG.JSXGraph.initBoard('box', {boundingbox: [TLx, TLy, BRx, BRy], axis: true, grid: false});
           
                                             // Define sliders to dynamically change parameters of the equations and create text elements to describe them
-                                            s = board.create('slider', [[0.6*BRx,0.85*TLy],[0.8*BRx,0.85*TLy],[0.0,0.25,1.0]],{name:'m2',strokeColor:'green',fillColor:'green'});
+                                            s = board.create('slider', [[0.6*BRx,0.85*TLy],[0.8*BRx,0.85*TLy],[0.0,0.25,1.0]],{name:'m2',strokeColor:'magenta',fillColor:'magenta'});
                                             u = board.create('slider', [[0.6*BRx,0.75*TLy],[0.8*BRx,0.75*TLy],[0.0,0.75,1.0]],{name:'m1',strokeColor:'black',fillColor:'black'});
            
                                             o = board.create('slider', [[0.1*BRx,0.85*TLy],[0.3*BRx,0.85*TLy],[0.0,0.1,1.0]],{name:'&gamma;1',strokeColor:'black',fillColor:'black'});
@@ -499,12 +486,9 @@
                                                 var m2R_M = mass2*R/M; 
                                                 var m1R_M = mass1*R/M;
 
-                                                var Iij_t = [];
- 
 //                                                for (var i = 0; i<data.length; i++){
                                                 for (var it = 0; it<data.length; it++){
 
-                                                    Iij_t[it] = [];
 
                                                     //var Omega_t = Omega*data[it][2];
                                                     //var cosOmega_t = Math.cos(Omega_t);
@@ -514,7 +498,6 @@
                                                     //var X2_t = [m1R_M*cosOmega_t,m1R_M*sinOmega_t,0];
 
 //                                                    var dIij_t = get_dIij_t(data[it][2],mass1,mass2,R);
-
                                                     //var Iij_tp1 = get_Iij_t(data[it+1][2],mass1,mass2,R);
                                                     var Iij_t = get_Iij_t(data[it][2],mass1,mass2,R); 
                                                     //var Iij_tm1 = get_Iij_t(data[it-1][2],mass1,mass2,R);

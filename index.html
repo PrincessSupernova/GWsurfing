@@ -492,31 +492,31 @@
                                             var dataprey = [];
                                             var datapred = [];
                                             for(var i=0; i<data.length; i++) {
-                                              t[i] = data[i][2]*1000.;
+                                              t[i] = data[i][2];
                                               datapred[i] = data[i][0];
                                               dataprey[i] = data[i][1];
                                             }
           
                                             // Plot Predator
-                                            g3 = board.create('curve', [t, datapred], {strokeColor:'magenta', strokeWidth:'2px'});
+                                            g3 = board.create('curve', [t*1000., datapred], {strokeColor:'magenta', strokeWidth:'2px'});
                                             g3.updateDataArray = function() {
                                                 var data = ode();
                                                 this.dataX = [];
                                                 this.dataY = [];
                                                 for(var i=0; i<data.length; i++) {
-                                                    this.dataX[i] = t[i];
+                                                    this.dataX[i] = t[i]*1000.;
                                                     this.dataY[i] = data[i][0];
                                                 }
                                             }
           
                                             // Plot Prey
-                                            g4 = board.create('curve', [t, dataprey], {strokeColor:'blue', strokeWidth:'2px'});
+                                            g4 = board.create('curve', [t*1000., dataprey], {strokeColor:'blue', strokeWidth:'2px'});
                                             g4.updateDataArray = function() {
                                                 var data = ode();
                                                 this.dataX = [];
                                                 this.dataY = [];
                                                 for(var i=0; i<data.length; i++) {
-                                                    this.dataX[i] = t[i];
+                                                    this.dataX[i] = t[i]*1000.;
                                                     this.dataY[i] = data[i][1];
                                                 }
                                             }

@@ -410,16 +410,16 @@
 //                                                board.unsuspendUpdate(); 
            
                                             // coordinates of top left corner
-                                            var TLx = -1.5;//-700;
-                                            var TLy = 28.5;//100;
+                                            var TLx = -700;//-1.5;
+                                            var TLy = 100;//28.5;
                                             // coordinates of bottom right corner
-                                            var BRx = 28.5;//12650;
-                                            var BRy = -1.5//-100; 
+                                            var BRx = 12650;//28.5;
+                                            var BRy = -100;//-1.5; 
                                             // Initialise board
                                             board = JXG.JSXGraph.initBoard('box', {boundingbox: [TLx, TLy, BRx, BRy], axis: true, grid: false});
           
                                             // Define sliders to dynamically change parameters of the equations and create text elements to describe them
-                                            s = board.create('slider', [[0.6*BRx,0.85*TLy],[0.8*BRx,0.85*TLy],[0.0,0.3,1.0]],{name:'&epsilon;1',strokeColor:'magenta',fillColor:'magenta'});
+                                            s = board.create('slider', [[0.6*BRx,0.85*TLy],[0.8*BRx,0.85*TLy],[0.0,0.3,1.0]],{name:'&epsilon;1',strokeColor:'green',fillColor:'green'});
                                             u = board.create('slider', [[0.6*BRx,0.75*TLy],[0.8*BRx,0.75*TLy],[0.0,0.7,1.0]],{name:'&epsilon;2',strokeColor:'black',fillColor:'black'});
            
                                             o = board.create('slider', [[0.1*BRx,0.85*TLy],[0.3*BRx,0.85*TLy],[0.0,0.1,1.0]],{name:'&gamma;1',strokeColor:'black',fillColor:'black'});

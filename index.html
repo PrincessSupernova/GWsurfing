@@ -423,7 +423,7 @@
                                             board = JXG.JSXGraph.initBoard('box', {boundingbox: [TLx, TLy, BRx, BRy], axis: true, grid: false});
           
                                             // Define sliders to dynamically change parameters of the equations and create text elements to describe them
-                                            s = board.create('slider', [[0.6*BRx,0.85*TLy],[0.8*BRx,0.85*TLy],[0.0,0.25,1.0]],{name:'m2',strokeColor:'magenta',fillColor:'magenta'});
+                                            s = board.create('slider', [[0.6*BRx,0.85*TLy],[0.8*BRx,0.85*TLy],[0.0,0.25,1.0]],{name:'m2',strokeColor:'green',fillColor:'green'});
                                             u = board.create('slider', [[0.6*BRx,0.75*TLy],[0.8*BRx,0.75*TLy],[0.0,0.75,1.0]],{name:'m1',strokeColor:'black',fillColor:'black'});
            
                                             o = board.create('slider', [[0.1*BRx,0.85*TLy],[0.3*BRx,0.85*TLy],[0.0,0.1,1.0]],{name:'&gamma;1',strokeColor:'black',fillColor:'black'});
@@ -499,12 +499,13 @@
                                                 var m2R_M = mass2*R/M; 
                                                 var m1R_M = mass1*R/M;
 
-                                                //var Iij_t = [];
+                                                var dIij_t = [];
  
 //                                                for (var i = 0; i<data.length; i++){
-                                                for (var it = 0; it<data.length; it++){
+                                                for (var it = 1; it<data.length-1; it++){
 
-                                                    
+                                                    dIij_t[i] = [];
+
                                                     var Omega_t = Omega*data[it][2];
                                                     var cosOmega_t = Math.cos(Omega_t);
                                                     var sinOmega_t = Math.sin(Omega_t);
@@ -513,9 +514,14 @@
                                                     var X2_t = [m1R_M*cosOmega_t,m1R_M*sinOmega_t,0];
 
 //                                                    var dIij_t = get_dIij_t(data[it][2],mass1,mass2,R);
-                                                    var Iij_t = get_Iij_t(data[it][2],mass1,mass2,R);
+                                                    var Iij_tp1 = get_Iij_t(data[it+1][2],mass1,mass2,R);
+                                                    var Iij_tm1 = get_Iij_t(data[it-1][2],mass1,mass2,R);
 
-
+                                                    for (var i=0; i<3; i++){
+                                                        for (var j=0; j<3; j++){
+                                                            dIij_t[i][j] = (Iij_tp1[i][j] - Iij_tm1[i][j])/(data[it+1][2]-data[it-1][2]);
+                                                        }
+                                                    }
                                                     //for (var i=0;i<3;i++){
                                                     //    Iij_t[i] = [];
                                                     //    for (var j = 0; j < 3; j++){
@@ -524,7 +530,10 @@
                                                     //}
 
                                                     data[it][0] = (R/5.)*Math.cos(2.*Omega_t);
-                                                    data[it][1] = 0.01*Iij_t[0][0];//dIij_t[0][0];//X1_t[1] + 20.;
+//                                                    data[it][1] = 0.01*Iij_t[0][0];
+                                                    data[it][1] = dIij_t[0][0];
+
+
                                                 }
                                               
                                                 return data;

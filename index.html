@@ -441,8 +441,8 @@
                                                 var Omega = 2.*Math.PI/Torb;
 
                                                 // evaluation interval
-                                                var I = [0, 25];
-                                                //var I = [0,2.*Torb];
+                                                //var I = [0, 25];
+                                                var I = [0,2.*Torb];
                                                 // Number of steps. 1000 should be enough
                                                 var N = 1000;
                                                 var Nt = 202;
@@ -480,6 +480,11 @@
                                                 //    data[i][0] = (100.*mass2*M/R)*(Math.cos(2.*Omega*data[i][2]) + Math.sin(Omega*data[i][2]));
                                                 //    data[i][1] = (100.*mass1*M/R)*Math.sin(Omega*data[i][2]);
                                                 //}
+
+                                                for (var i = 0; i<data.length; i++){
+                                                    data[i][0] = 35.*Math.cos(Omega*data[i][2]);
+                                                    data[i][1] = 65.*R*Math.sin(Omega*data[i][2]);
+                                                }
                                               
                                                 return data;
                                             }

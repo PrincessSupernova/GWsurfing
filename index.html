@@ -419,7 +419,7 @@
                                             board = JXG.JSXGraph.initBoard('box', {boundingbox: [TLx, TLy, BRx, BRy], axis: true, grid: false});
           
                                             // Define sliders to dynamically change parameters of the equations and create text elements to describe them
-                                            s = board.create('slider', [[0.6*BRx,0.85*TLy],[0.8*BRx,0.85*TLy],[0.0,0.25,1.0]],{name:'m2',strokeColor:'green',fillColor:'green'});
+                                            s = board.create('slider', [[0.6*BRx,0.85*TLy],[0.8*BRx,0.85*TLy],[0.0,0.25,1.0]],{name:'m2',strokeColor:'magenta',fillColor:'magenta'});
                                             u = board.create('slider', [[0.6*BRx,0.75*TLy],[0.8*BRx,0.75*TLy],[0.0,0.75,1.0]],{name:'m1',strokeColor:'black',fillColor:'black'});
            
                                             o = board.create('slider', [[0.1*BRx,0.85*TLy],[0.3*BRx,0.85*TLy],[0.0,0.1,1.0]],{name:'&gamma;1',strokeColor:'black',fillColor:'black'});
@@ -503,7 +503,7 @@
                                                     var X2_t = (-mass1*R/M)*[cosOmega_t,sinOmega_t,0];
  
                                                     data[i][0] = (R/5.)*Math.cos(2.*Omega*data[i][2]);
-                                                    data[i][1] = 5000.*X2_t[1];
+                                                    data[i][1] = 5000.*(mass2*R/M)*sinOmega_t;
                                                 }
                                               
                                                 return data;

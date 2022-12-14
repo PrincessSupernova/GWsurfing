@@ -476,7 +476,8 @@
                                                 //var t = [];
                                                 var q = I[0];
                                                 var h = (I[1]-I[0])/N;
-                                                for(var i=0; i<data.length; i++) {
+//                                                for(var i=0; i<data.length; i++) {
+                                                for(var i=0; i<N; i++) {
                                                     data[i].push(q);
                                                     q += h;
                                                 }
@@ -486,7 +487,8 @@
                                                 //    data[i][1] = (100.*mass1*M/R)*Math.sin(Omega*data[i][2]);
                                                 //}
 
-                                                for (var i = 0; i<data.length; i++){
+//                                                for (var i = 0; i<data.length; i++){
+                                                for (var i = 0; i<N; i++){
                                                     data[i][0] = 10.*Math.cos(Omega*data[i][2]);
                                                     data[i][1] = 10.*Math.sin(Omega*data[i][2]);
                                                 }

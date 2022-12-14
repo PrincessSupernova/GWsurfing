@@ -414,7 +414,7 @@
                                             //board = JXG.JSXGraph.initBoard('box', {boundingbox: [-1.5, 28.5, 28.5, -1.5], axis: true, grid: false});
           
                                             // Define sliders to dynamically change parameters of the equations and create text elements to describe them
-                                            s = board.create('slider', [[0.6*BRx,0.85*TLy],[0.8*BRx,0.85*TLy],[0.0,0.3,1.0]],{name:'&epsilon;1',strokeColor:'green',fillColor:'green'});
+                                            s = board.create('slider', [[0.6*BRx,0.85*TLy],[0.8*BRx,0.85*TLy],[0.0,0.3,1.0]],{name:'&epsilon;1',strokeColor:'magenta',fillColor:'magenta'});
                                             u = board.create('slider', [[0.6*BRx,0.75*TLy],[0.8*BRx,0.75*TLy],[0.0,0.7,1.0]],{name:'&epsilon;2',strokeColor:'black',fillColor:'black'});
            
                                             o = board.create('slider', [[0.1*BRx,0.85*TLy],[0.3*BRx,0.85*TLy],[0.0,0.1,1.0]],{name:'&gamma;1',strokeColor:'black',fillColor:'black'});
@@ -476,10 +476,10 @@
                                                     q += h;
                                                 }
                                               
-                                                for (var i = 0; i < data.length; i++){
-                                                    data[i][0] = (100.*mass2*M/R)*(Math.cos(2.*Omega*data[i][2]) + Math.sin(Omega*data[i][2]));
-                                                    data[i][1] = (100.*mass1*M/R)*Math.sin(Omega*data[i][2]);
-                                                }
+                                                //for (var i = 0; i < data.length; i++){
+                                                //    data[i][0] = (100.*mass2*M/R)*(Math.cos(2.*Omega*data[i][2]) + Math.sin(Omega*data[i][2]));
+                                                //    data[i][1] = (100.*mass1*M/R)*Math.sin(Omega*data[i][2]);
+                                                //}
                                               
                                                 return data;
                                             }

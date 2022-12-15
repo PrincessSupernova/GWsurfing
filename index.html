@@ -422,28 +422,10 @@
                                                 }
                                              
 
-//                                              for(var i = 0; i < 3; i)
-                                                var m2R_M = mass2*R/M; 
-                                                var m1R_M = mass1*R/M;
 
                                                 //var dIij_t = [];
 
-                                          //for (var i=0; i < 3; i++){
-                                          //    dIij_t[i] = [];
-                                           // }
-
-                                                //var Iij_t0 = get_Iij_t(0,mass1,mass2,R);
-                                                //var Iij_t1 = get_Iij_t(data[1][2],mass1,mass2,R);
-                                                //var Iij_t2 = get_Iij_t(data[2][2],mass1,mass2,R);
-
-                                                //for (var i=0; i < 3; i++){
-                                                //    dIij_t[i] = [];
-                                                //    for (var j=0; j<3; j++){
-                                                //        dIij_t[i][j] = (-3.*Iij_t0[i][j] + 4.*Iij_t1[i][j] - Iij_t2[i][j])/(2.*dt);
-                                                //    }
-                                                //}
-
-                                                //data[0][1] = dIij_t[0][0];
+d
 
                                                 //var Iij_t0 = get_Iij_t(data[N-3][2],m1,m2,R);
                                                 //var Iij_t1 = get_Iij_t(data[N-2][2],m1,m2,R);
@@ -464,10 +446,48 @@
                                                 var dIij_t = [];
                                                 for (var i = 0; i < 3; i++){
                                                     dIij_t[i] = [];
+
                                                 }
 
+                                                var Nm1 = N-1;
                                                 for (var it = 0; it<data.length; it++){
 
+                                                    if (it==0){
+                                                        var Iij_t0 = get_Iij_t(data[0][2],mass1,mass2,R);
+                                                        var Iij_t1 = get_Iij_t(data[1][2],mass1,mass2,R); 
+                                                        var Iij_t2 = get_Iij_t(data[2][2],mass1,mass2,R); 
+ 
+                                                        for (var i = 0; i < 3; i++){
+                                                            for (var j = 0; j < 3; j++){
+                                                                dIij_t[i][j] = (-3.*Iij_t0[i][j] + 4.*Iij_t1[i][j] - Iij_t2[i][j])/(2.*dt);
+                                                            }
+                                                        }
+
+                                                    } else if (it==Nm1){
+
+                                                        var Iij_t0 = get_Iij_t(data[N-3][2],mass1,mass2,R);
+                                                        var Iij_t1 = get_Iij_t(data[N-2][2],mass1,mass2,R); 
+                                                        var Iij_t2 = get_Iij_t(data[N-1][2],mass1,mass2,R); 
+ 
+                                                        for (var i = 0; i < 3; i++){
+                                                            for (var j = 0; j < 3; j++){
+                                                                dIij_t[i][j] = (Iij_t0[i][j] - 4.*Iij_t1[i][j] + 3.*Iij_t2[i][j])/(2.*dt);
+                                                            }
+                                                        }
+ 
+                                                    } else {
+
+                                                        var Iij_tm1 = get_Iij_t(data[it-1][2],mass1,mass2,R); 
+                                                        var Iij_tp1 = get_Iij_t(data[it+1][2],mass1,mass2,R); 
+
+                                                        for (var i=0; i < 3; i++){
+                                                            for (var j=0; j < 3; j++){
+                                                                dIij_t[i][j] = (Iij_tp1[i][j] - Iij_tm1[i][j])/(2.*dt);    
+                                                            }                                                        
+                                                        }
+
+                                                    }
+                                                
                                                     //var Iij_tm1 = get_Iij_t(data[it-1][2],mass1,mass2,R); 
                                                     var Iij_t = get_Iij_t(data[it][2],mass1,mass2,R); 
 
@@ -494,20 +514,8 @@
 //                                                    var Iij_t = get_Iij_t(data[it][2],mass1,mass2,R); 
                                                     //var Iij_tm1 = get_Iij_t(data[it-1][2],mass1,mass2,R);
 
-                                                    //for (var i=0; i<3; i++){
-                                                    //    for (var j=0; j<3; j++){
-                                                    //        dIij_t[i][j] = (Iij_tp1[i][j] - Iij_tm1[i][j])/(data[it+1][2]-data[it-1][2]);
-                                                    //    }
-                                                    //}
-                                                    //for (var i=0;i<3;i++){
-                                                    //    Iij_t[i] = [];
-                                                    //    for (var j = 0; j < 3; j++){
-                                                    //        Iij_t[i][j] = mass1*X1_t[i]*X1_t[j] + mass2*X2_t[i]*X2_t[j];    
-                                                    //    }    
-                                                    //}
 
                                                     data[it][0] = (R/5.)*Math.cos(2.*Omega_t);
-//                                                    data[it][1] = 0.01*Iij_t[0][0];
                                                     //data[it][1] = dIij_t[0][0];
                                                     data[it][1] = 0.01*Iij_t[0][0];
 

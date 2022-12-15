@@ -357,7 +357,7 @@
                                             board = JXG.JSXGraph.initBoard('box', {boundingbox: [TLx, TLy, BRx, BRy], axis: true, grid: false});
           
                                             // Define sliders to dynamically change parameters of the equations and create text elements to describe them
-                                            s = board.create('slider', [[0.6*BRx,0.85*TLy],[0.8*BRx,0.85*TLy],[0.0,0.25,1.0]],{name:'m2',strokeColor:'magenta',fillColor:'magenta'});
+                                            s = board.create('slider', [[0.6*BRx,0.85*TLy],[0.8*BRx,0.85*TLy],[0.0,0.25,1.0]],{name:'m2',strokeColor:'green',fillColor:'green'});
                                             u = board.create('slider', [[0.6*BRx,0.75*TLy],[0.8*BRx,0.75*TLy],[0.0,0.75,1.0]],{name:'m1',strokeColor:'black',fillColor:'black'});
            
                                             o = board.create('slider', [[0.1*BRx,0.85*TLy],[0.3*BRx,0.85*TLy],[0.0,0.1,1.0]],{name:'&gamma;1',strokeColor:'black',fillColor:'black'});
@@ -422,35 +422,10 @@
                                                 }
                                              
 
-
-                                                //var dIij_t = [];
-
-d
-
-                                                //var Iij_t0 = get_Iij_t(data[N-3][2],m1,m2,R);
-                                                //var Iij_t1 = get_Iij_t(data[N-2][2],m1,m2,R);
-                                                //var Iij_t2 = get_Iij_t(data[N-1][2],m1,m2,R);
-                                                //for (var i = 0; i < 3; i++){
-                                                ////                dIij_t[i] = [];
-                                                //    for (var j = 0; j < 3; j++){
-                                                //        dIij_t[i][j] = (Iij_t0[i][j] - 4.*Iij_t1[i][j] + 3.*Iij_t2[i][j])/(2.*dt);
-                                                //    }
-                                                //}
-
-                                                //var Iij_t0 = get_Iij_t(data[0][2],mass1,mass2,R);
-                                                //data[0][1] = Iij_t0[0][0];
-                                                //var Iij_tN = get_Iij_t(data[N-1][2],mass1,mass2,R); 
-                                                //data[N-1][1] = Iij_tN[0][0];                                                 
-
-                                                // array for derivative
-                                                //var dIij_t = [];
-                                                //for (var i = 0; i < 3; i++){
-                                                //    dIij_t[i] = [];
-
-                                                //}
-
                                                 //var Nm1 = N-1;
                                                 for (var it = 0; it<data.length; it++){
+
+                                                    var Iij_t = get_Iij_t(data[it][2],mass1,mass2,R);
 
                                                  //   if (it==0){
                                                  //       var Iij_t0 = get_Iij_t(data[0][2],mass1,mass2,R);
@@ -489,7 +464,7 @@ d
                                                  //   }
                                                 
                                                     //var Iij_tm1 = get_Iij_t(data[it-1][2],mass1,mass2,R); 
-                                                    var Iij_t = get_Iij_t(data[it][2],mass1,mass2,R); 
+                                                    //var Iij_t = get_Iij_t(data[it][2],mass1,mass2,R); 
 
 
                                                     //var Iij_tp1 = get_Iij_t(data[it+1][2],mass1,mass2,R); 

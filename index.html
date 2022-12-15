@@ -410,7 +410,7 @@
                                             board = JXG.JSXGraph.initBoard('box', {boundingbox: [TLx, TLy, BRx, BRy], axis: true, grid: false});
           
                                             // Define sliders to dynamically change parameters of the equations and create text elements to describe them
-                                            s = board.create('slider', [[0.6*BRx,0.85*TLy],[0.8*BRx,0.85*TLy],[0.0,0.25,1.0]],{name:'m2',strokeColor:'green',fillColor:'green'});
+                                            s = board.create('slider', [[0.6*BRx,0.85*TLy],[0.8*BRx,0.85*TLy],[0.0,0.25,1.0]],{name:'m2',strokeColor:'magenta',fillColor:'magenta'});
                                             u = board.create('slider', [[0.6*BRx,0.75*TLy],[0.8*BRx,0.75*TLy],[0.0,0.75,1.0]],{name:'m1',strokeColor:'black',fillColor:'black'});
            
                                             o = board.create('slider', [[0.1*BRx,0.85*TLy],[0.3*BRx,0.85*TLy],[0.0,0.1,1.0]],{name:'&gamma;1',strokeColor:'black',fillColor:'black'});
@@ -474,15 +474,7 @@
                                                     q += h;
                                                 }
                                              
-//                                                var Iij = [];
-//                                                for (var i = 0; i < N)
-                                                //for (var i = 0; i < data.length; i++){
-                                                //    data[i][0] = (100.*mass2*M/R)*(Math.cos(2.*Omega*data[i][2]) + Math.sin(Omega*data[i][2]));
-                                                //    data[i][1] = (100.*mass1*M/R)*Math.sin(Omega*data[i][2]);
-                                                //}
 
-//                                                var X1 = [];
-//                                                X1[0] = 
 //                                              for(var i = 0; i < 3; i)
                                                 var m2R_M = mass2*R/M; 
                                                 var m1R_M = mass1*R/M;
@@ -518,7 +510,7 @@
 
                                                 var Iij_t0 = get_Iij_t(data[0][2],mass1,mass2,R);
                                                 data[0][1] = Iij_t0[0][0];
-                                                var Iij_tN = get_Iij_t(data[Nt-1][2],mass1,mass2,R); 
+                                                var Iij_tN = get_Iij_t(data[N-1][2],mass1,mass2,R); 
                                                 data[N-1][1] = Iij_tN[0][0];                                                 
 
                                                 for (var it = 1; it<(data.length-1); it++){

@@ -459,7 +459,7 @@
                                                 this.dataY = [];
                                                 for(var i=0; i<data.length; i++) {
                                                     this.dataX[i] = data[i][2];
-                                                    this.dataY[i] = data[i][0];
+                                                    this.dataY[i] = 50.*Math.sin(Omega*data[i][2]);//data[i][0];
                                                 }
                                             }
           
@@ -471,7 +471,7 @@
                                                 this.dataY = [];
                                                 for(var i=0; i<data.length; i++) {
                                                     this.dataX[i] = data[i][2];
-                                                    this.dataY[i] = data[i][1];
+                                                    this.dataY[i] = 35;//data[i][1];
                                                 }
                                             }
 

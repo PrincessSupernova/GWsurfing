@@ -70,7 +70,7 @@
                                                 board = JXG.JSXGraph.initBoard('box', {boundingbox: [TLx, TLy, BRx, BRy], axis: true, grid: false});
           
                                                 // Define sliders to dynamically change parameters of the equations and create text elements to describe them
-                                                s = board.create('slider', [[0.6*BRx,0.85*TLy],[0.8*BRx,0.85*TLy],[0.1,0.25,1.0]],{name:'&epsilon;1',strokeColor:'green',fillColor:'green'});
+                                                s = board.create('slider', [[0.6*BRx,0.85*TLy],[0.8*BRx,0.85*TLy],[0.1,0.25,1.0]],{name:'&epsilon;1',strokeColor:'magenta',fillColor:'magenta'});
                                                 u = board.create('slider', [[0.6*BRx,0.75*TLy],[0.8*BRx,0.75*TLy],[0.1,0.75,1.0]],{name:'&epsilon;2',strokeColor:'black',fillColor:'black'});
 
                                                 o = board.create('slider', [[0.1*BRx,0.85*TLy],[0.3*BRx,0.85*TLy],[0.0,0.1,1.0]],{name:'&gamma;1',strokeColor:'black',fillColor:'black'});
@@ -142,6 +142,38 @@
                                                     var I = [0, 2.*Torb];
                                                     // Number of steps. 1000 should be enough
                                                     var N = 1000;
+                                                    // 3x3 array for mass qudrupole moment
+                                                    var Iij_t = [];
+                                                    for (var i = 0; i < 3; i++){
+                                                        Iij_t[i] = [];
+                                                    }
+
+                                                //    var Omega_t = Omega*t;
+                                                //    var cosOmega_t = Math.cos(Omega_t);
+                                                //    var sinOmega_t = Math.sin(Omega_t);
+
+                                                //    var m2R_M = m2*R/M;
+                                                //    var m1R_M = -m1*R/M;
+                                                //                                                        
+                                                //    var X1_t = [m2R_M*cosOmega_t,m2R_M*sinOmega_t,0];
+                                                //    var X2_t = [m1R_M*cosOmega_t,m1R_M*sinOmega_t,0];
+                                                //    var Iij_t = [];
+                                                //    for (var i = 0; i < 3; i++){
+                                                //        Iij_t[i] = [];
+                                                //    }
+                                                //    for (var i = 0; i < 3; i++){   
+                                                //        for (var j = 0; j < 3; j++){
+                                                //            Iij_t[i][j] = m1*X1_t[i]*X1_t[j] + m2*X2_t[i]*X2_t[j];
+                                                //        }
+                                                //    }
+
+                                                //    return Iij_t;
+                                                //}
+
+
+
+
+                                                    
                                                 
                                                     // Right hand side of the ODE dx/dt = f(t, x)
                                                     var f = function(t, x) {
@@ -173,7 +205,7 @@
                                                     }
 
                                                     for (var i=0; i <data.length; i++){
-                                                        data[i][0] = 50.;
+                                                        data[i][0] = 35.;
                                                         data[i][1] = 20.+15*Math.sin(Omega*data[i][2]);
                                                     }
                                                

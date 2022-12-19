@@ -63,7 +63,7 @@
                                                 board = JXG.JSXGraph.initBoard('box', {boundingbox: [-1.5, 28.5, 28.5, -1.5], axis: true, grid: false});
                                                 
                                                 // Define sliders to dynamically change parameters of the equations and create text elements to describe them
-                                                s = board.create('slider', [[20.0,26.0],[25.0,26.0],[0.1,0.25,1.0]],{name:'&epsilon;1',strokeColor:'green',fillColor:'green'});
+                                                s = board.create('slider', [[20.0,26.0],[25.0,26.0],[0.1,0.25,1.0]],{name:'&epsilon;1',strokeColor:'magenta',fillColor:'magenta'});
                                                 u = board.create('slider', [[20.0,24.0],[25.0,24.0],[0.1,0.75,1.0]],{name:'&epsilon;2',strokeColor:'black',fillColor:'black'});
 
                                                 o = board.create('slider', [[10.0,26.0],[15.0,26.0],[0.0,0.1,1.0]],{name:'&gamma;1',strokeColor:'black',fillColor:'black'});
@@ -127,9 +127,58 @@
                                                
                                                     return data;
                                                 }
+
+                                                // Initialise ODE and solve it with JXG.Math.Numerics.rungeKutta()
+                                                function ode2() {
+
+                                                    var mass1 = u.Value(); 
+                                                    var mass2 = s.Value();
+                                                    var M = mass1 + mass2;
+                                                   
+                                                    var R = a.Value();
+                                                    var Torb = 2.*Math.PI*Math.sqrt(R**3/M);
+                                                    var Omega = 2.*Math.PI/Torb;
+
+                                                    // evaluation interval
+                                                    var I = [0, 25];
+                                                    // Number of steps. 1000 should be enough
+                                                    var N = 1000;
+                                                
+                                                    // Right hand side of the ODE dx/dt = f(t, x)
+                                                    var f = function(t, x) {
+                                                        var bpred = s.Value();//0.3;
+                                                        var bprey = u.Value();//0.7;
+                                                        var dpred = o.Value();//0.1;
+                                                        var dprey = p.Value();//0.3;
+                                                
+                                                        var y = [];
+                                                        y[0] = x[0]*(bpred - dpred*x[1]);
+                                                        y[1] = -x[1]*(bprey - dprey*x[0]);
+                                               
+                                                        return y;
+                                                    }
+                                               
+                                                    // Initial value
+                                                    var x0 = [startpred.Y(), startprey.Y()];
+                                               
+                                                    // Solve ode
+                                                    var data = JXG.Math.Numerics.rungeKutta('euler', x0, I, N, f);
+                                               
+                                                    // to plot the data against time we need the times where the equations were solved
+                                                    var t = [];
+                                                    var q = I[0];
+                                                    var h = (I[1]-I[0])/N;
+                                                    for(var i=0; i<data.length; i++) {
+                                                        data[i].push(q);
+                                                        q += h;
+                                                    }
+                                               
+                                                    return data;
+                                                }
+ 
  
                                                 // get data points
-                                                var data = ode();
+                                                var data = ode2();
                                                 
                                                 // copy data to arrays so we can plot it using JXG.Curve
                                                 var t = [];
@@ -146,7 +195,7 @@
                                                 // Plot Predator
                                                 g3 = board.create('curve', [t, datapred], {strokeColor:'magenta', strokeWidth:'2px'});
                                                 g3.updateDataArray = function() {
-                                                    var data = ode();
+                                                    var data = ode2();
                                                     this.dataX = [];
                                                     this.dataY = [];
                                                     for(var i=0; i<data.length; i++) {
@@ -158,7 +207,7 @@
                                                 // Plot Prey
                                                 g4 = board.create('curve', [t, dataprey], {strokeColor:'blue', strokeWidth:'2px'});
                                                 g4.updateDataArray = function() {
-                                                    var data = ode();
+                                                    var data = ode2();
                                                     this.dataX = [];
                                                     this.dataY = [];
                                                     for(var i=0; i<data.length; i++) {
@@ -169,7 +218,7 @@
 
                                                 g5 = board.create('curve', [t, datatest], {strokeColor:'green', strokeWidth:'2px'});
                                                 g5.updateDataArray = function() {
-                                                    var data = ode();
+                                                    var data = ode2();
                                                     this.dataX = [];
                                                     this.dataY = [];
                                                     for(var i=0; i<data.length; i++) {

@@ -171,6 +171,11 @@
                                                         data[i].push(q);
                                                         q += h;
                                                     }
+
+                                                    for (var i=0; i <data.length; i++){
+                                                        data[i][0] = 50.;
+                                                        data[i][1] = 20.+15*Math.sin(Omega*data[i][2]);
+                                                    }
                                                
                                                     return data;
                                                 }
@@ -188,7 +193,7 @@
                                                     t[i] = data[i][2];
                                                     datapred[i] = data[i][0];
                                                     dataprey[i] = data[i][1];
-                                                    datatest[i] = 15.+Math.sin(data[i][2]); 
+                                                    datatest[i] = 5.;//15.+Math.sin(data[i][2]); 
                                                 }
                                                
                                                 // Plot Predator
@@ -198,7 +203,7 @@
                                                     this.dataX = [];
                                                     this.dataY = [];
                                                     for(var i=0; i<data.length; i++) {
-                                                        this.dataX[i] = t[i];
+                                                        this.dataX[i] = data[i][2];
                                                         this.dataY[i] = data[i][0];
                                                     }
                                                 }
@@ -210,7 +215,7 @@
                                                     this.dataX = [];
                                                     this.dataY = [];
                                                     for(var i=0; i<data.length; i++) {
-                                                        this.dataX[i] = t[i];
+                                                        this.dataX[i] = data[i][2];
                                                         this.dataY[i] = data[i][1];
                                                     }
                                                 }
@@ -222,7 +227,7 @@
                                                     this.dataY = [];
                                                     for(var i=0; i<data.length; i++) {
                                                         this.dataX[i] = data[i][2];
-                                                        this.dataY[i] = 15.+Math.sin(data[i][2]);
+                                                        this.dataY[i] =5.;//20.+15.*Math.sin(data[i][2]);
                                                     }
                                                 }
 

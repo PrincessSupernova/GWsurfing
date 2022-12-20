@@ -140,7 +140,7 @@
                                                 board = JXG.JSXGraph.initBoard('box', {boundingbox: [TLx, TLy, BRx, BRy], axis: true, grid: false});
           
                                                 // Define sliders to dynamically change parameters of the equations and create text elements to describe them
-                                                s = board.create('slider', [[0.1*BRx,0.85*TLy],[0.3*BRx,0.85*TLy],[0.1,0.25,1.0]],{name:'m2',strokeColor:'green',fillColor:'green'});
+                                                s = board.create('slider', [[0.1*BRx,0.85*TLy],[0.3*BRx,0.85*TLy],[0.1,0.25,1.0]],{name:'m2',strokeColor:'magenta',fillColor:'magenta'});
                                                 u = board.create('slider', [[0.1*BRx,0.75*TLy],[0.3*BRx,0.75*TLy],[0.1,0.75,1.0]],{name:'m1',strokeColor:'black',fillColor:'black'});
                                                 a = board.create('slider', [[0.1*BRx,0.65*TLy],[0.3*BRx,0.65*TLy],[1.,100.,200.]],{name:'a',strokeColor:'black',fillColor:'black'});
 
@@ -171,28 +171,18 @@
 
                                                     // evaluation interval
                                                     var I = [0,2.*Torb];
-                                                    //var I = [0, 25];
                                                     // Number of steps. 1000 should be enough
                                                     var N = 1000;
                                                     var dt = 2.*Torb/N;
 
                                                     var data = [];
+                                                    var q = I[0];
                                                     for(var it=0; it<N; it++){
                                                         data[it] = [];
-                                                        for(var i = 0; i < 4; i++){
+                                                        for(var i = 0; i < 3; i++){
                                                             data[it][i] = 0.;
                                                         }
-                                                    }
-
-                                                    // Solve ode
-                                                    //var data = JXG.Math.Numerics.rungeKutta('euler', x0, I, N, f);
-                                               
-                                                    // to plot the data against time we need the times where the equations were solved
-                                                    var t = [];
-                                                    var q = I[0];
-                                                    for(var i=0; i<data.length; i++) {
-                                                        data[i].push(q);
-                                                        q += dt;
+                                                        data[it][0] = it*dt;
                                                     }
 
                                                     var dddIij_t = [];
@@ -209,14 +199,14 @@
 
                                                     for(var it = 3; it < data.length-3; it++){
 
-                                                        var Iij_tm3 = get_Iij_t(data[it-3][2],mass1,mass2,R);
-                                                        var Iij_tm1 = get_Iij_t(data[it-1][2],mass1,mass2,R);
-                                                        var Iij_t = get_Iij_t(data[it][2],mass1,mass2,R);
-                                                        var Iij_tp1 = get_Iij_t(data[it+1][2],mass1,mass2,R);
-                                                        var Iij_tp3 = get_Iij_t(data[it+2][2],mass1,mass2,R);
+                                                        var Iij_tm3 = get_Iij_t(data[it-3][0],mass1,mass2,R);
+                                                        var Iij_tm1 = get_Iij_t(data[it-1][0],mass1,mass2,R);
+                                                        var Iij_t = get_Iij_t(data[it][0],mass1,mass2,R);
+                                                        var Iij_tp1 = get_Iij_t(data[it+1][0],mass1,mass2,R);
+                                                        var Iij_tp3 = get_Iij_t(data[it+2][0],mass1,mass2,R);
  
                                                        // 
-                                                        var Omega_t = Omega*data[it][2]; 
+                                                        var Omega_t = Omega*data[it][0]; 
                                                         var cosOmega_t = Math.cos(Omega_t);
                                                         //var sinOmega_t = Math.sin(Omega_t);
 
@@ -248,8 +238,8 @@
                                                             }
                                                         }
 
-                                                        data[it][0] = dddIij_t[0][0]*1e4;
-                                                        data[it][1] = dhij_thph_t[0][1]*1e2;//dddIij_t[0][1]*1e4;//10. + 10.*cosOmega_t;
+                                                        data[it][1] = dddIij_t[0][0]*1e4;
+                                                        data[it][2] = dhij_thph_t[0][1]*1e2;//dddIij_t[0][1]*1e4;//10. + 10.*cosOmega_t;
 
                                                           //Calculate the wave tensor by contracting the projection tensor with the multipole expansion
  // for ith in range(Nth):
@@ -269,12 +259,12 @@
 
                                                     }
 
-                                                    data[0][0] = 0;
                                                     data[0][1] = 0;
-                                                    data[1][0] = 0;
+                                                    data[0][2] = 0;
                                                     data[1][1] = 0;
-                                                    data[2][0] = 0;
+                                                    data[1][2] = 0;
                                                     data[2][1] = 0;
+                                                    data[2][2] = 0;
 
                                                     data[N-1][0] = 0;
                                                     data[N-1][1] = 0;
@@ -298,9 +288,9 @@
                                                 var datapred = [];
                                                 var datatest = [];
                                                 for(var i=0; i<data.length; i++) {
-                                                    t[i] = data[i][2];
-                                                    datapred[i] = data[i][0];
-                                                    dataprey[i] = data[i][1];
+                                                    t[i] = data[i][0];
+                                                    datapred[i] = data[i][1];
+                                                    dataprey[i] = data[i][2];
                                                     datatest[i] = 50.;//15.+Math.sin(data[i][2]); 
                                                 }
                                                
@@ -311,8 +301,8 @@
                                                     this.dataX = [];
                                                     this.dataY = [];
                                                     for(var i=0; i<data.length; i++) {
-                                                        this.dataX[i] = data[i][2];
-                                                        this.dataY[i] = data[i][0];
+                                                        this.dataX[i] = data[i][0];
+                                                        this.dataY[i] = data[i][1];
                                                     }
                                                 }
                                                
@@ -323,8 +313,8 @@
                                                     this.dataX = [];
                                                     this.dataY = [];
                                                     for(var i=0; i<data.length; i++) {
-                                                        this.dataX[i] = data[i][2];
-                                                        this.dataY[i] = data[i][1];
+                                                        this.dataX[i] = data[i][0];
+                                                        this.dataY[i] = data[i][2];
                                                     }
                                                 }
 

@@ -70,7 +70,7 @@
                                                 board = JXG.JSXGraph.initBoard('box', {boundingbox: [TLx, TLy, BRx, BRy], axis: true, grid: false});
           
                                                 // Define sliders to dynamically change parameters of the equations and create text elements to describe them
-                                                s = board.create('slider', [[0.6*BRx,0.85*TLy],[0.8*BRx,0.85*TLy],[0.1,0.25,1.0]],{name:'&epsilon;1',strokeColor:'magenta',fillColor:'magenta'});
+                                                s = board.create('slider', [[0.6*BRx,0.85*TLy],[0.8*BRx,0.85*TLy],[0.1,0.25,1.0]],{name:'&epsilon;1',strokeColor:'green',fillColor:'green'});
                                                 u = board.create('slider', [[0.6*BRx,0.75*TLy],[0.8*BRx,0.75*TLy],[0.1,0.75,1.0]],{name:'&epsilon;2',strokeColor:'black',fillColor:'black'});
 
                                                 o = board.create('slider', [[0.1*BRx,0.85*TLy],[0.3*BRx,0.85*TLy],[0.0,0.1,1.0]],{name:'&gamma;1',strokeColor:'black',fillColor:'black'});
@@ -156,17 +156,6 @@
                                                     for (var i = 0; i < 3; i++){
                                                         Iij_t[i] = [];
                                                     }
-
-                                                //    var Omega_t = Omega*t;
-                                                
-
-                                                //    return Iij_t;
-                                                //}
-
-
-
-
-                                                    
                                                 
                                                     // Right hand side of the ODE dx/dt = f(t, x)
                                                     var f = function(t, x) {
@@ -243,32 +232,32 @@
                                                     t[i] = data[i][2];
                                                     datapred[i] = data[i][0];
                                                     dataprey[i] = data[i][1];
-                                                    datatest[i] = 5.;//15.+Math.sin(data[i][2]); 
+                                                    datatest[i] = 50.;//15.+Math.sin(data[i][2]); 
                                                 }
                                                
-                                                // Plot Predator
-                                                g3 = board.create('curve', [t, datapred], {strokeColor:'magenta', strokeWidth:'2px'});
-                                                g3.updateDataArray = function() {
-                                                    var data = ode();
-                                                    this.dataX = [];
-                                                    this.dataY = [];
-                                                    for(var i=0; i<data.length; i++) {
-                                                        this.dataX[i] = data[i][2];
-                                                        this.dataY[i] = data[i][0];
-                                                    }
-                                                }
+                                                //// Plot Predator
+                                                //g3 = board.create('curve', [t, datapred], {strokeColor:'magenta', strokeWidth:'2px'});
+                                                //g3.updateDataArray = function() {
+                                                //    var data = ode();
+                                                //    this.dataX = [];
+                                                //    this.dataY = [];
+                                                //    for(var i=0; i<data.length; i++) {
+                                                //        this.dataX[i] = data[i][2];
+                                                //        this.dataY[i] = data[i][0];
+                                                //    }
+                                                //}
                                                
-                                                // Plot Prey
-                                                g4 = board.create('curve', [t, dataprey], {strokeColor:'blue', strokeWidth:'2px'});
-                                                g4.updateDataArray = function() {
-                                                    var data = ode();
-                                                    this.dataX = [];
-                                                    this.dataY = [];
-                                                    for(var i=0; i<data.length; i++) {
-                                                        this.dataX[i] = data[i][2];
-                                                        this.dataY[i] = data[i][1];
-                                                    }
-                                                }
+                                                //// Plot Prey
+                                                //g4 = board.create('curve', [t, dataprey], {strokeColor:'blue', strokeWidth:'2px'});
+                                                //g4.updateDataArray = function() {
+                                                //    var data = ode();
+                                                //    this.dataX = [];
+                                                //    this.dataY = [];
+                                                //    for(var i=0; i<data.length; i++) {
+                                                //        this.dataX[i] = data[i][2];
+                                                //        this.dataY[i] = data[i][1];
+                                                //    }
+                                                //}
 
                                                 g5 = board.create('curve', [t, datatest], {strokeColor:'green', strokeWidth:'2px'});
                                                 g5.updateDataArray = function() {
@@ -277,7 +266,7 @@
                                                     this.dataY = [];
                                                     for(var i=0; i<data.length; i++) {
                                                         this.dataX[i] = data[i][2];
-                                                        this.dataY[i] =5.;//20.+15.*Math.sin(data[i][2]);
+                                                        this.dataY[i] =50.;//20.+15.*Math.sin(data[i][2]);
                                                     }
                                                 }
 

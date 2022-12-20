@@ -140,7 +140,7 @@
                                                 board = JXG.JSXGraph.initBoard('box', {boundingbox: [TLx, TLy, BRx, BRy], axis: true, grid: false});
           
                                                 // Define sliders to dynamically change parameters of the equations and create text elements to describe them
-                                                s = board.create('slider', [[0.1*BRx,0.85*TLy],[0.3*BRx,0.85*TLy],[0.1,0.25,1.0]],{name:'m2',strokeColor:'magenta',fillColor:'magenta'});
+                                                s = board.create('slider', [[0.1*BRx,0.85*TLy],[0.3*BRx,0.85*TLy],[0.1,0.25,1.0]],{name:'m2',strokeColor:'green',fillColor:'green'});
                                                 u = board.create('slider', [[0.1*BRx,0.75*TLy],[0.3*BRx,0.75*TLy],[0.1,0.75,1.0]],{name:'m1',strokeColor:'black',fillColor:'black'});
                                                 a = board.create('slider', [[0.1*BRx,0.65*TLy],[0.3*BRx,0.65*TLy],[1.,100.,200.]],{name:'a',strokeColor:'black',fillColor:'black'});
 
@@ -175,28 +175,11 @@
                                                     // Number of steps. 1000 should be enough
                                                     var N = 1000;
                                                     var dt = 2.*Torb/N;
-                                                
-                                                    // Right hand side of the ODE dx/dt = f(t, x)
-                                                    var f = function(t, x) {
-                                                        var bpred = s.Value();//0.3;
-                                                        var bprey = u.Value();//0.7;
-                                                        var dpred = 0.1;
-                                                        var dprey = 0.3;
-                                                
-                                                        var y = [];
-                                                        y[0] = x[0]*(bpred - dpred*x[1]);
-                                                        y[1] = -x[1]*(bprey - dprey*x[0]);
-                                               
-                                                        return y;
-                                                    }
-                                               
-                                                    // Initial value
-                                                    var x0 = [10,5];
-                                              
+
                                                     var data = [];
                                                     for(var it=0; it<N; it++){
                                                         data[it] = [];
-                                                        for(var i=0; i <2; i++){
+                                                        for(var i = 0; i < 4; i++){
                                                             data[it][i] = 0.;
                                                         }
                                                     }
@@ -207,10 +190,9 @@
                                                     // to plot the data against time we need the times where the equations were solved
                                                     var t = [];
                                                     var q = I[0];
-                                                    var h = (I[1]-I[0])/N;
                                                     for(var i=0; i<data.length; i++) {
                                                         data[i].push(q);
-                                                        q += h;
+                                                        q += dt;
                                                     }
 
                                                     var dddIij_t = [];

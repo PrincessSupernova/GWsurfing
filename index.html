@@ -70,7 +70,7 @@
                                                 board = JXG.JSXGraph.initBoard('box', {boundingbox: [TLx, TLy, BRx, BRy], axis: true, grid: false});
           
                                                 // Define sliders to dynamically change parameters of the equations and create text elements to describe them
-                                                s = board.create('slider', [[0.6*BRx,0.85*TLy],[0.8*BRx,0.85*TLy],[0.1,0.25,1.0]],{name:'&epsilon;1',strokeColor:'magenta',fillColor:'magenta'});
+                                                s = board.create('slider', [[0.6*BRx,0.85*TLy],[0.8*BRx,0.85*TLy],[0.1,0.25,1.0]],{name:'&epsilon;1',strokeColor:'green',fillColor:'green'});
                                                 u = board.create('slider', [[0.6*BRx,0.75*TLy],[0.8*BRx,0.75*TLy],[0.1,0.75,1.0]],{name:'&epsilon;2',strokeColor:'black',fillColor:'black'});
 
                                                 o = board.create('slider', [[0.1*BRx,0.85*TLy],[0.3*BRx,0.85*TLy],[0.0,0.1,1.0]],{name:'&gamma;1',strokeColor:'black',fillColor:'black'});
@@ -97,6 +97,10 @@
                                                     var R = a.Value();
                                                     var Torb = 2.*Math.PI*Math.sqrt(R**3/M);
                                                     var Omega = 2.*Math.PI/Torb;
+
+                                                    var m2R_M = mass2*R/M;
+                                                    var m1R_M = -mass1*R/M;
+
 
                                                     // evaluation interval
                                                     var I = [0,2.*Torb];
@@ -133,6 +137,20 @@
                                                         q += h;
                                                     }
 
+                                                    //for (var it=0; it<data.length; it++){
+
+                                                    //    var time = data[it][2];
+                                                    //    
+                                                    //    var Omega_t = Omega*time;
+
+                                                    //    var cosOmega_t = Math.cos(Omega_t);
+                                                    //    var sinOmega_t = Math.sin(Omega_t);
+
+
+                                                //  //                                                      
+                                                    //    var X1_t = [m2R_M*cosOmega_t,m2R_M*sinOmega_t,0];
+                                                    //    var X2_t = [m1R_M*cosOmega_t,m1R_M*sinOmega_t,0];
+ 
 
                                                     for(var i =0; i < data.length; i++){
                                                         data[i][1] = 50. + 10.*Math.sin(Omega*data[i][2]);

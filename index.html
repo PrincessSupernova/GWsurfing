@@ -140,7 +140,7 @@
                                                 board = JXG.JSXGraph.initBoard('box', {boundingbox: [TLx, TLy, BRx, BRy], axis: true, grid: false});
           
                                                 // Define sliders to dynamically change parameters of the equations and create text elements to describe them
-                                                s = board.create('slider', [[0.1*BRx,0.85*TLy],[0.3*BRx,0.85*TLy],[0.1,0.25,1.0]],{name:'m2',strokeColor:'green',fillColor:'green'});
+                                                s = board.create('slider', [[0.1*BRx,0.85*TLy],[0.3*BRx,0.85*TLy],[0.1,0.25,1.0]],{name:'m2',strokeColor:'magenta',fillColor:'magenta'});
                                                 u = board.create('slider', [[0.1*BRx,0.75*TLy],[0.3*BRx,0.75*TLy],[0.1,0.75,1.0]],{name:'m1',strokeColor:'black',fillColor:'black'});
                                                 a = board.create('slider', [[0.1*BRx,0.65*TLy],[0.3*BRx,0.65*TLy],[1.,100.,200.]],{name:'a',strokeColor:'black',fillColor:'black'});
 
@@ -248,16 +248,15 @@
                                                             }
                                                         }
 
-                                                        //for (var i = 0; i < 3; i++){
-                                                        //    for (var j = 0; j < 3; j++){
-                                                        //        for (var k = 0; k < 3; k++){
-                                                        //            for (var l = 0; l < 3; l++){
-                                                        //                dhij_thph_t[i][j] += Lamijkl_th0ph0[i][j][k][l]*dddIij_t[k][l];
-                                                        //            }
-
-                                                        //        }
-                                                        //    }
-                                                        //}
+                                                        for (var i = 0; i < 3; i++){
+                                                            for (var j = 0; j < 3; j++){
+                                                                for (var k = 0; k < 3; k++){
+                                                                    for (var l = 0; l < 3; l++){
+                                                                        dhij_thph_t[i][j] += Lamijkl_th0ph0[i][j][k][l]*dddIij_t[k][l];
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
 
                                                         data[it][0] = dddIij_t[0][0]*1e4;
                                                         data[it][1] = dddIij_t[0][1]*1e4;//dhij_thph_t[0][1]*1e2;//10. + 10.*cosOmega_t;

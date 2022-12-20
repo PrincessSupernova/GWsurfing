@@ -88,45 +88,45 @@
                                                     return Iij_t;
                                                 }
 
-//                                                // array to get ni projection vector in direction theta,phi
-//                                                function get_ni_thetaphi(theta,phi){                                            
-//                                                    var ni_thph = [Math.sin(theta)*Math.cos(phi),Math.sin(theta)*Math.sin(phi),Math.cos(theta)]; 
-//                                                    return ni_thph; // this is a 3x1 array
-//                                                }
-//
-//                                                function get_Pij_thetaphi(theta,phi){
-//                                                    var ni_thph = get_ni_thetaphi(theta,phi);
-//                                                    var Pij_thph = [];
-//                                                    for (var i=0;i<3;i++){
-//                                                        Pij[i] = [];
-//                                                        for (var j=0;j<3;j++){
-//                                                            if (i==j) {
-//                                                                Pij_thph[i][j] = 1. - ni_thph[i]*ni_thph[j];                                                   //            Pij_thph[ith][iph][i][j] = 1. - ni_thph[ith,iph,i]*ni_thph[ith,iph,j];
-//                                                            } else {
-//                                                                Pij_thph[i][j] = -ni_thph[i]*ni_thph[j];  
-//                                                            }
-//                                                        }
-//                                                    }
-//                                                    return Pij_thph; // this is a 3x3 array
-//                                                }
-//
-//                                                function get_Lijkl_thetaphi(theta,phi){
-//                                                    var Pij_thph = get_Pij_thetaphi(theta,phi);
-//                                                    var Lijkl_thph = [];
-//                                                    for (var i = 0; i < 3; i++){
-//                                                        Lijkl_thph[i] = []; 
-//                                                        for (var j = 0; j < 3; j++){
-//                                                            Lijkl_thph[i][j] = [];
-//                                                            for (var k = 0; k < 3; k++){
-//                                                                Lijkl_thph[i][j][k] = [];
-//                                                                for (var l = 0; l < 3; l++){
-//                                                                    Lijkl_thph[i][j][k][l] = Pij_thph[i][k]*Pij_thph[j][l]-0.5*Pij_thph[i][j]*Pij_thph[k][l];
-//                                                                }
-//                                                            }
-//                                                        }
-//                                                    }
-//                                                    return Lijkl_thph; // this is a 3x3x3x3 array
-//                                                }
+                                                // array to get ni projection vector in direction theta,phi
+                                                function get_ni_thetaphi(theta,phi){                                            
+                                                    var ni_thph = [Math.sin(theta)*Math.cos(phi),Math.sin(theta)*Math.sin(phi),Math.cos(theta)]; 
+                                                    return ni_thph; // this is a 3x1 array
+                                                }
+
+                                                function get_Pij_thetaphi(theta,phi){
+                                                    var ni_thph = get_ni_thetaphi(theta,phi);
+                                                    var Pij_thph = [];
+                                                    for (var i=0;i<3;i++){
+                                                        Pij_thph[i] = [];
+                                                        for (var j=0;j<3;j++){
+                                                            if (i==j) {
+                                                                Pij_thph[i][j] = 1. - ni_thph[i]*ni_thph[j];                                                   //            Pij_thph[ith][iph][i][j] = 1. - ni_thph[ith,iph,i]*ni_thph[ith,iph,j];
+                                                            } else {
+                                                                Pij_thph[i][j] = -ni_thph[i]*ni_thph[j];  
+                                                            }
+                                                        }
+                                                    }
+                                                    return Pij_thph; // this is a 3x3 array
+                                                }
+
+                                                function get_Lijkl_thetaphi(theta,phi){
+                                                    var Pij_thph = get_Pij_thetaphi(theta,phi);
+                                                    var Lijkl_thph = [];
+                                                    for (var i = 0; i < 3; i++){
+                                                        Lijkl_thph[i] = []; 
+                                                        for (var j = 0; j < 3; j++){
+                                                            Lijkl_thph[i][j] = [];
+                                                            for (var k = 0; k < 3; k++){
+                                                                Lijkl_thph[i][j][k] = [];
+                                                                for (var l = 0; l < 3; l++){
+                                                                    Lijkl_thph[i][j][k][l] = Pij_thph[i][k]*Pij_thph[j][l]-0.5*Pij_thph[i][j]*Pij_thph[k][l];
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    return Lijkl_thph; // this is a 3x3x3x3 array
+                                                }
 
 
                                                 // coordinates of top left corner
@@ -140,7 +140,7 @@
                                                 board = JXG.JSXGraph.initBoard('box', {boundingbox: [TLx, TLy, BRx, BRy], axis: true, grid: false});
           
                                                 // Define sliders to dynamically change parameters of the equations and create text elements to describe them
-                                                s = board.create('slider', [[0.1*BRx,0.85*TLy],[0.3*BRx,0.85*TLy],[0.1,0.25,1.0]],{name:'m2',strokeColor:'green',fillColor:'green'});
+                                                s = board.create('slider', [[0.1*BRx,0.85*TLy],[0.3*BRx,0.85*TLy],[0.1,0.25,1.0]],{name:'m2',strokeColor:'magenta',fillColor:'magenta'});
                                                 u = board.create('slider', [[0.1*BRx,0.75*TLy],[0.3*BRx,0.75*TLy],[0.1,0.75,1.0]],{name:'m1',strokeColor:'black',fillColor:'black'});
                                                 a = board.create('slider', [[0.1*BRx,0.65*TLy],[0.3*BRx,0.65*TLy],[1.,100.,200.]],{name:'a',strokeColor:'black',fillColor:'black'});
 

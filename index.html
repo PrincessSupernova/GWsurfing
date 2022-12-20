@@ -140,7 +140,7 @@
                                                 board = JXG.JSXGraph.initBoard('box', {boundingbox: [TLx, TLy, BRx, BRy], axis: true, grid: false});
           
                                                 // Define sliders to dynamically change parameters of the equations and create text elements to describe them
-                                                s = board.create('slider', [[0.1*BRx,0.85*TLy],[0.3*BRx,0.85*TLy],[0.1,0.25,1.0]],{name:'m2',strokeColor:'magenta',fillColor:'magenta'});
+                                                s = board.create('slider', [[0.1*BRx,0.85*TLy],[0.3*BRx,0.85*TLy],[0.1,0.25,1.0]],{name:'m2',strokeColor:'green',fillColor:'green'});
                                                 u = board.create('slider', [[0.1*BRx,0.75*TLy],[0.3*BRx,0.75*TLy],[0.1,0.75,1.0]],{name:'m1',strokeColor:'black',fillColor:'black'});
                                                 a = board.create('slider', [[0.1*BRx,0.65*TLy],[0.3*BRx,0.65*TLy],[1.,100.,200.]],{name:'a',strokeColor:'black',fillColor:'black'});
 
@@ -206,10 +206,16 @@
                                                     }
 
                                                     var dddIij_t = [];
-                                                    for (var i = 0; i < 3; i++){
+                                                    var dhij_thph_t = [];
+                                                    for (var i=0;i<3;i++){
                                                         dddIij_t[i] = [];
-
+                                                        dhij_thph_t[i] = [];
+                                                        for (var j=0;j<3;j++){
+                                                            dhij_thph_t[i][j] = 0.;
+                                                        }
                                                     }
+
+                                                    var Lamijkl_th0ph0 = get_Lijkl_thetaphi(0,0);
 
                                                     for(var it = 3; it < data.length-3; it++){
 
@@ -224,7 +230,8 @@
                                                         var cosOmega_t = Math.cos(Omega_t);
                                                         //var sinOmega_t = Math.sin(Omega_t);
 
-                                                        
+                                                       
+
                                                         ////particle positions
                                                         //var X1_t = [m2R_M*cosOmega_t,m2R_M*sinOmega_t,0];
                                                         //var X2_t = [m1R_M*cosOmega_t,m1R_M*sinOmega_t,0];
@@ -241,8 +248,36 @@
                                                             }
                                                         }
 
+                                                        for (var i = 0; i < 3; i++){
+                                                            for (var j = 0; j < 3; j++){
+                                                                for (var k = 0; k < 3; k++){
+                                                                    for (var l = 0; l < 3; l++){
+                                                                        dhij_thph_t[i][j] += Lamijkl_th0ph0[i][j][k][l]*dddIij_t[k][l];
+                                                                    }
+
+                                                                }
+                                                            }
+                                                        }
+
                                                         data[it][0] = dddIij_t[0][0]*1e4;
-                                                        data[it][1] = dddIij_t[0][1]*1e4;//10. + 10.*cosOmega_t;
+                                                        data[it][1] = dhij_thph_t[0][1]*1e2;//10. + 10.*cosOmega_t;
+
+                                                          //Calculate the wave tensor by contracting the projection tensor with the multipole expansion
+ // for ith in range(Nth):
+ //   for iph in range(Nph):
+ //     for i in range(3):
+ //       for j in range(3):
+ //         for k in range(3):
+ //           for l in range(3):
+ //             hij_thph[:,ith,iph,i,j] += Lamijkl_thph[ith,iph,i,j,k,l]*ddMij[:,k,l]
+ //             dhij_thph[:,ith,iph,i,j] += Lamijkl_thph[ith,iph,i,j,k,l]*dddMij[:,k,l]                                                        
+
+
+
+
+
+
+
                                                     }
 
                                                     data[0][0] = 0;
@@ -498,45 +533,7 @@
  //                                               //}
  //
  //
- //                                               var tt = [];
- //                                               var plotarr1 = [];
- //                                               var plotarr2 = [];
- //                                               var plotarr3 = [];
- //
- //                                               //tt[0] = 0;
- //                                               //var Iij_t0 = get_Iij_t(0,m1,m2,R);
- //                                               ////dddIij_t0 = get_dddIij_t(0,m1,m2,R,dt,edgeFLAG=1);
- //                                               //plotarr1[0] = Iij_t0[0,0];//65.;//dddIij_t0[0][0]*10000000.; 
- //                                               //plotarr2[0] = Iij_t0[0,1];//35.;//dddIij_t[0][1]*10000000.; 
- //
- //                                               //tt[Nt-1] = (Nt-1)*dt;
- //                                               //var Iij_t1 = get_Iij_t(tt[Nt-1],m1,m2,R);
- //                                               ////dddIij_t1 = get_dddIij_t(tt[Nt-1],m1,m2,R,dt,edgeFLAG=1);
- //                                               //plotarr1[Nt-1] = Iij_t1[0,0];//dddIij_t1[0][0]*10000000.; 
- //                                               //plotarr2[Nt-1] = Iij_t1[0,1];//dddIij_t1[0][1]*10000000.;
- // d
- //                                                   //var Iij_t = get_Iij_t(tt[i],m1,m2,R);
- //
- //                                                   //dddIij_t = get_dddIij_t(tt[it],m1,m2,R,dt);
- //                                                   //hij_t_thph = get_hij_t_thetaphi(tt[it],m1,m2,R,dt,theta,phi);
-//
-//                                                    // plot things                                                    
-//                                                    plotarr1[it] = 35.*cosOmega_t;//Iij_t[0][0];////dddIij_t[0][0]*10000000.;
-//                                                    plotarr2[it] = 65.*sinOmega_t;//Iij_t[0][1];////dddIij_t[0][1]*10000000.;
-//                                                    //plotarr3[it] = hij_t_thph[0][0]*1000000.;
-//                                                }
-//
-//////                                                
-//                                                 var c = brd.create('curve',[
-//                                                          function(t){return t;},
-//                                                          function(t){return x.Value()*Math.sin(Omega*t);},
-//                                                          0, 4.*Math.PI*Math.sqrt(a.Value()**3/(m1.Value() + m2.Value()))],
-//                                                          {strokeColor:'#aa2233',strokeWidth:3});
-////                                                var c = board.create('curve',[tt,X1x],{strokeColor:'magenta',strokeWidth:3});                                                
-////                                                var c = board.create('curve',[tt,35.*Math.cos(Omega*tt)],{strokeColor:'magenta',strokeWidth:3});
- //                                               //var c = board.create('curve',[tt,plotarr1],{strokeColor:'magenta',strokeWidth:3});
- //                                               //var d = board.create('curve',[tt,plotarr2],{strokeColor:'green',strokeWidth:3});
- //
+
 //                                                board.unsuspendUpdate(); 
            
                                             </script>

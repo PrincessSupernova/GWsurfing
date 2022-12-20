@@ -59,6 +59,35 @@
                                         <div id="box" class="jxgbox" style="width:500px; height:500px;"></div>
                                             <script type="text/javascript">
 
+                                                ////Iij func
+                                                // function to compute Iij at time t
+                                                function get_Iij_t(t,m1,m2,R){
+                                                    // first get omega and Torb
+                                                    var M = m1 + m2;
+                                                    var Torb = 2.*Math.PI*Math.sqrt(R**3/M);
+                                                    var Omega = 2.*Math.PI/Torb;
+                                                    var Omega_t = Omega*t;
+                                                    var cosOmega_t = Math.cos(Omega_t);
+                                                    var sinOmega_t = Math.sin(Omega_t);
+
+                                                    var m2R_M = m2*R/M;
+                                                    var m1R_M = -m1*R/M;
+                                                                                                        
+                                                    var X1_t = [m2R_M*cosOmega_t,m2R_M*sinOmega_t,0];
+                                                    var X2_t = [m1R_M*cosOmega_t,m1R_M*sinOmega_t,0];
+                                                    var Iij_t = [];
+                                                    for (var i = 0; i < 3; i++){
+                                                        Iij_t[i] = [];
+                                                    }
+                                                    for (var i = 0; i < 3; i++){   
+                                                        for (var j = 0; j < 3; j++){
+                                                            Iij_t[i][j] = m1*X1_t[i]*X1_t[j] + m2*X2_t[i]*X2_t[j];
+                                                        }
+                                                    }
+
+                                                    return Iij_t;
+                                                }
+
                                                 // coordinates of top left corner
                                                 var TLx = -700;//-1.5;
                                                 var TLy = 100;//28.5;
@@ -70,7 +99,7 @@
                                                 board = JXG.JSXGraph.initBoard('box', {boundingbox: [TLx, TLy, BRx, BRy], axis: true, grid: false});
           
                                                 // Define sliders to dynamically change parameters of the equations and create text elements to describe them
-                                                s = board.create('slider', [[0.6*BRx,0.85*TLy],[0.8*BRx,0.85*TLy],[0.1,0.25,1.0]],{name:'m1',strokeColor:'magenta',fillColor:'magenta'});
+                                                s = board.create('slider', [[0.6*BRx,0.85*TLy],[0.8*BRx,0.85*TLy],[0.1,0.25,1.0]],{name:'m1',strokeColor:'green',fillColor:'green'});
                                                 u = board.create('slider', [[0.6*BRx,0.75*TLy],[0.8*BRx,0.75*TLy],[0.1,0.75,1.0]],{name:'m2',strokeColor:'black',fillColor:'black'});
 
                                                 o = board.create('slider', [[0.1*BRx,0.85*TLy],[0.3*BRx,0.85*TLy],[0.0,0.1,1.0]],{name:'&gamma;1',strokeColor:'black',fillColor:'black'});
@@ -138,7 +167,7 @@
                                                     }
 
                                                     var Iij_t = [];
-                                                    
+
 //                                                    var dIij_t = [];
 //                                                    var ddIij_t = [];
 //                                                    var dddIij_t = [];
@@ -147,20 +176,24 @@
                                                     }
 
                                                     for(var it =0; it < data.length; it++){
+
+                                                        time = data[it][2];
+
+                                                        Iij_t = get_Iij_t(data[it][2],mass1,mass2,R)
                                                         // 
                                                         var Omega_t = Omega*data[it][2]; 
                                                         var cosOmega_t = Math.cos(Omega_t);
-                                                        var sinOmega_t = Math.sin(Omega_t);
+                                                        //var sinOmega_t = Math.sin(Omega_t);
 
-                                                        //particle positions
-                                                        var X1_t = [m2R_M*cosOmega_t,m2R_M*sinOmega_t,0];
-                                                        var X2_t = [m1R_M*cosOmega_t,m1R_M*sinOmega_t,0];
+                                                        ////particle positions
+                                                        //var X1_t = [m2R_M*cosOmega_t,m2R_M*sinOmega_t,0];
+                                                        //var X2_t = [m1R_M*cosOmega_t,m1R_M*sinOmega_t,0];
  
-                                                        for (var i = 0; i < 3; i++){   
-                                                            for (var j = 0; j < 3; j++){
-                                                                Iij_t[i][j] = mass1*X1_t[i]*X1_t[j] + mass2*X2_t[i]*X2_t[j];
-                                                            }
-                                                        }
+                                                        //for (var i = 0; i < 3; i++){   
+                                                        //    for (var j = 0; j < 3; j++){
+                                                        //        Iij_t[i][j] = mass1*X1_t[i]*X1_t[j] + mass2*X2_t[i]*X2_t[j];
+                                                        //    }
+                                                        //}
                                                         data[it][0] = Iij_t[0][0]*0.01;
                                                         data[it][1] = 10. + 10.*cosOmega_t;
                                                     }

@@ -101,17 +101,14 @@
                                                 board = JXG.JSXGraph.initBoard('box', {boundingbox: [TLx, TLy, BRx, BRy], axis: true, grid: false});
           
                                                 // Define sliders to dynamically change parameters of the equations and create text elements to describe them
-                                                s = board.create('slider', [[0.6*BRx,0.85*TLy],[0.8*BRx,0.85*TLy],[0.1,0.25,1.0]],{name:'m2',strokeColor:'magenta',fillColor:'magenta'});
-                                                u = board.create('slider', [[0.6*BRx,0.75*TLy],[0.8*BRx,0.75*TLy],[0.1,0.75,1.0]],{name:'m1',strokeColor:'black',fillColor:'black'});
-
-                                                o = board.create('slider', [[0.1*BRx,0.85*TLy],[0.3*BRx,0.85*TLy],[0.0,0.1,1.0]],{name:'&gamma;1',strokeColor:'black',fillColor:'black'});
-                                                p = board.create('slider', [[0.1*BRx,0.75*TLy],[0.3*BRx,0.75*TLy],[0.0,0.3,1.0]],{name:'&gamma;2',strokeColor:'black',fillColor:'black'});
+                                                s = board.create('slider', [[0.1*BRx,0.85*TLy],[0.3*BRx,0.85*TLy],[0.1,0.25,1.0]],{name:'m2',strokeColor:'green',fillColor:'green'});
+                                                u = board.create('slider', [[0.1*BRx,0.75*TLy],[0.3*BRx,0.75*TLy],[0.1,0.75,1.0]],{name:'m1',strokeColor:'black',fillColor:'black'});
                                                 a = board.create('slider', [[0.1*BRx,0.65*TLy],[0.3*BRx,0.65*TLy],[1.,100.,200.]],{name:'a',strokeColor:'black',fillColor:'black'});
 
                                               
                                                 // Dynamic initial value as gliders on the y-axis
-                                                startpred = board.create('glider', [0, 10, board.defaultAxes.y], {name:'Preys',strokeColor:'magenta',fillColor:'magenta'});
-                                                startprey = board.create('glider', [0, 5, board.defaultAxes.y], {name:'Predators',strokeColor:'blue',fillColor:'blue'});
+                                                //startpred = board.create('glider', [0, 10, board.defaultAxes.y], {name:'Preys',strokeColor:'magenta',fillColor:'magenta'});
+                                                //startprey = board.create('glider', [0, 5, board.defaultAxes.y], {name:'Predators',strokeColor:'blue',fillColor:'blue'});
 
                                                 // Variables for the JXG.Curves
                                                 var g3 = null;
@@ -144,8 +141,8 @@
                                                     var f = function(t, x) {
                                                         var bpred = s.Value();//0.3;
                                                         var bprey = u.Value();//0.7;
-                                                        var dpred = o.Value();//0.1;
-                                                        var dprey = p.Value();//0.3;
+                                                        var dpred = 0.1;
+                                                        var dprey = 0.3;
                                                 
                                                         var y = [];
                                                         y[0] = x[0]*(bpred - dpred*x[1]);
@@ -155,7 +152,7 @@
                                                     }
                                                
                                                     // Initial value
-                                                    var x0 = [startpred.Y(), startprey.Y()];
+                                                    var x0 = [10,5];
                                                
                                                     // Solve ode
                                                     var data = JXG.Math.Numerics.rungeKutta('euler', x0, I, N, f);

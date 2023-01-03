@@ -141,7 +141,7 @@
                                     board = JXG.JSXGraph.initBoard('box', {boundingbox: [TLx, TLy, BRx, BRy], axis: true, grid: false});
               
                                     // Define sliders to dynamically change parameters of the equations and create text elements to describe them
-                                    s = board.create('slider', [[0.1*BRx,0.85*TLy],[0.3*BRx,0.85*TLy],[0.1,0.25,1.0]],{name:'m2',strokeColor:'green',fillColor:'green'});
+                                    s = board.create('slider', [[0.1*BRx,0.85*TLy],[0.3*BRx,0.85*TLy],[0.1,0.25,1.0]],{name:'m2',strokeColor:'magenta',fillColor:'magenta'});
                                     u = board.create('slider', [[0.1*BRx,0.75*TLy],[0.3*BRx,0.75*TLy],[0.1,0.75,1.0]],{name:'m1',strokeColor:'black',fillColor:'black'});
                                     a = board.create('slider', [[0.1*BRx,0.65*TLy],[0.3*BRx,0.65*TLy],[1.,100.,200.]],{name:'a',strokeColor:'black',fillColor:'black'});
  
@@ -280,31 +280,59 @@
                             </div>    
 
                             <div class="example">
-                               
-                                <h2>3D solid: sphere</h2>
-                                <div id="jxgbox7" class="jxgbox construct" style="width:500px; height:500px;"></div>
-                                    <script id="ex7">
-                                      (function () {
-										    var board = JXG.JSXGraph.initBoard('jxgbox7', {
+                                <div id="jxgbox7b" class="jxgbox construct" style="width:500px; height:500px;"></div>
+                                    <script id="ex7b">
+                                        (function () {
+										    var board = JXG.JSXGraph.initBoard('jxgbox7b', {
 										        boundingbox: [-8, 8, 8, -8],
 										        keepaspectratio: false,
 										        axis: false
 										    });
-    
+     
 										    var view = board.create('view3d',
 										        [[-6, -3], [8, 8],
 										        [[-5, 5], [-5, 5], [-5, 5]]],
 										        {});
-    
-										    var r = board.create('slider', [[-7, -6], [5, -6], [-3, 2, 4]], { name: 'r' });
-										    // Sphere
+     
+										    var b = board.create('slider', [[-7, -6], [5, -6], [-3, 2, 4]], { name: 'b' });
+										    var q = board.create('slider', [[-7, -7], [5, -7], [1, 1, 30]], { name: 'q', snapWidth: 1 
+										});
+     
+										    // Torus
 										    var c = view.create('parametricsurface3d', [
-										        (u, v) => r.Value() * Math.sin(u) * Math.cos(v),
-										        (u, v) => r.Value() * Math.sin(u) * Math.sin(v),
-										        (u, v) => r.Value() * Math.cos(u),
+										        (u, v) => (Math.cos(u) + b.Value()) * Math.cos(v),
+										        (u, v) => (Math.cos(u) + b.Value()) * Math.sin(v),
+										        (u, v) => Math.sin(u),
 										        [0, 2 * Math.PI],
-										        [0, Math.PI]
-										    ], { strokeColor: '#ff0000', stepsU: 30, stepsV: 30 });
+										        [0, 2 * Math.PI]
+										    ], { strokeColor: '#777777', stepsU: 30, stepsV: 20, visible: true });
+     
+										    // Circle
+										    var curve = view.create('curve3d', [
+										        (t) => (Math.cos(t) + b.Value()) * Math.cos(0),
+										        (t) => (Math.cos(t) + b.Value()) * Math.sin(0),
+										        (t) => Math.sin(t),
+										        [0, 2 * Math.PI]
+										    ], { strokewidth: 2, strokeColor: 'black' });
+     
+										    var p = 3;
+     
+										    // Trefoil knot
+										    var curve2 = view.create('curve3d', [
+										        (t) => (Math.cos(p * t) + b.Value()) * Math.cos(2 * t),
+										        (t) => (Math.cos(p * t) + b.Value()) * Math.sin(2 * t),
+										        (t) => -Math.sin(p * t),
+										        [0, 2 * Math.PI]
+										    ], { strokewidth: 3, strokeColor: 'red' });
+     
+										    // Torus knot
+										    var curve2 = view.create('curve3d', [
+										        (t) => (Math.cos(p * t) + b.Value()) * Math.cos(q.Value() * t),
+										        (t) => (Math.cos(p * t) + b.Value()) * Math.sin(q.Value() * t),
+										        (t) => -Math.sin(p * t),
+										        [0, 2 * Math.PI]
+										    ], { strokewidth: 2, strokeColor: 'blue' });
+     
 										})();
  
  //                                         var divId = 'jxgbox0';
@@ -361,9 +389,9 @@
   //                           
   //                                      })();
                                     </script>
-                                    <pre class="line-numbers"><code id="c7" class="language-javascript"></code></pre>
+                                    <pre class="line-numbers"><code id="c7b" class="language-javascript"></code></pre>
                                     <script>
-                                        showCode('ex7', 'c7');
+                                        showCode('ex7b', 'c7b');
                                     </script>
                             </div>
 

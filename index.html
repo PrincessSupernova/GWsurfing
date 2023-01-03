@@ -141,7 +141,7 @@
                                     board = JXG.JSXGraph.initBoard('box', {boundingbox: [TLx, TLy, BRx, BRy], axis: true, grid: false});
               
                                     // Define sliders to dynamically change parameters of the equations and create text elements to describe them
-                                    s = board.create('slider', [[0.1*BRx,0.85*TLy],[0.3*BRx,0.85*TLy],[0.1,0.25,1.0]],{name:'m2',strokeColor:'green',fillColor:'green'});
+                                    s = board.create('slider', [[0.1*BRx,0.85*TLy],[0.3*BRx,0.85*TLy],[0.1,0.25,1.0]],{name:'m2',strokeColor:'magenta',fillColor:'magenta'});
                                     u = board.create('slider', [[0.1*BRx,0.75*TLy],[0.3*BRx,0.75*TLy],[0.1,0.75,1.0]],{name:'m1',strokeColor:'black',fillColor:'black'});
                                     a = board.create('slider', [[0.1*BRx,0.65*TLy],[0.3*BRx,0.65*TLy],[1.,100.,200.]],{name:'a',strokeColor:'black',fillColor:'black'});
  
@@ -309,14 +309,14 @@
 										        [0, 2 * Math.PI]
 										    ], { strokeColor: '#777777', stepsU: 30, stepsV: 20, visible: true });
 
-										    // Sphere
-										    var d = view.create('parametricsurface3d', [
-										        (u, v) => 2 * Math.sin(u) * Math.cos(v),
-										        (u, v) => 2 * Math.sin(u) * Math.sin(v),,
-										        (u, v) => 2 * Math.cos(u),
-										        [0, 2 * Math.PI],
-										        [0, Math.PI]
-										    ], { strokeColor: '#ff0000', stepsU: 30, stepsV: 20, visible: true });
+										    //// Sphere
+										    //var d = view.create('parametricsurface3d', [
+										    //    (u, v) => 2 * Math.sin(u) * Math.cos(v),
+										    //    (u, v) => 2 * Math.sin(u) * Math.sin(v),,
+										    //    (u, v) => 2 * Math.cos(u),
+										    //    [0, 2 * Math.PI],
+										    //    [0, Math.PI]
+										    //], { strokeColor: '#ff0000', stepsU: 30, stepsV: 20, visible: true });
  
      
 										    // Circle

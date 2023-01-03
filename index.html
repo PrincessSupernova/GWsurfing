@@ -274,7 +274,6 @@
                                         this.dataY[i] = data[i][2];
                                     }
                                 }
-
                                 //g5 = board.create('curve', [t, datatest], {strokeColor:'green', strokeWidth:'2px'});
                                 //g5.updateDataArray = function() {
                                 //    var data = ode();
@@ -471,8 +470,83 @@
  //
 
 //                                board.unsuspendUpdate(); 
-           
+ 
+          
                             </script>
+
+                            <div class="example">
+                                <h2>3D function plotter</h2>
+                                <p>Function term in <em>(x,y)</em>:
+                                    <br>
+                                    <input type"text" id="plot_input" value="sin(x * y * r / 4)" style="width: 10em; margin-top: 1rem;">
+                                    <br>
+                                    <input type="button" id="plot_start" value="plot" style="width: 4em; margin-top: 1rem;">
+                                    <input type="button" id="plot_reset" value="reset" style="width: 4em; margin-top: 1rem;">
+                                    <br><br>
+                                    (The function might also depend on the slider value <em>r</em>.)
+                                </p>
+                                <div id="jxgbox0" class="jxgbox construct"></div>
+                                <script id="ex0">
+                                  (function () {
+                                      var divId = 'jxgbox0';
+            
+                                      // Define some colors. optimized for colorblinds
+                                      var colors = [JXG.palette.blue,
+                                              JXG.palette.red,
+                                              JXG.palette.green,
+                                              JXG.palette.black,
+                                              JXG.palette.purple,
+                                              JXG.palette.yellow,
+                                              JXG.palette.skyblue],
+                                          cnt = 0;
+            
+                                      var board = JXG.JSXGraph.initBoard(divId, {
+                                          boundingbox: [-8, 8, 8, -8],
+                                          keepaspectratio: false,
+                                          axis: false
+                                      });
+            
+                                      var box = [-5, 5];
+                                      view = board.create('view3d', [[-6, -3], [8, 8], [box, box, box]], {
+                                          xPlaneRear: {visible: false},
+                                          yPlaneRear: {visible: false},
+                                      });
+            
+                                      // Create a slider which might be used in the function term
+                                      // using the name 'r'
+                                      var slider = board.create('slider', [[-7, -6], [5, -6], [-3, 1, 4]], { name: 'r' });
+            
+                                      // Handler for button 'plot'
+                                      document.getElementById('plot_start').addEventListener('click', function () {
+                                          var txt = document.getElementById('plot_input').value,
+                                              f = board.jc.snippet(txt, true, 'x,y', true);  // JessieCode parsing
+            
+                                          view.create('functiongraph3d', [f, box, box], {
+                                              strokeColor: colors[cnt],
+                                              stepsU: 50, stepsV: 50, strokeWidth: 0.5
+                                          });
+                                          // Cycle throught the color array
+                                          cnt = (cnt + 1) % colors.length;
+                                      });
+            
+                                      // Handler for button 'reset'
+                                      document.getElementById('plot_reset').addEventListener('click', function () {
+                                          // Complete restart of the construction
+                                          JXG.JSXGraph.freeBoard(board);
+                                          board = JXG.JSXGraph.initBoard(divId, { boundingbox: [-8, 8, 8, -8] });
+                                           view = board.create('view3d', [[-6, -3], [8, 8], [box, box, box]]);
+                            
+                                           slider = board.create('slider', [[-7, -6], [5, -6], [-3, 1, 4]], { name: 'r' });
+                                           cnt = 0;
+                                       });
+                            
+                                    })();
+                                </script>
+                                <pre class="line-numbers"><code id="c0" class="language-javascript"></code></pre>
+                                <script>
+                                    showCode('ex0', 'c0');
+                                </script>
+                            </div>
 
 					<!-- This is the footer that appears at the bottom of the page -->
 					<footer id="footer">
@@ -501,3 +575,4 @@
                 
 	</body>     
 </html>             
+

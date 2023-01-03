@@ -57,424 +57,230 @@
 							</div>
 						</div>
 
-                        <div id="box" class="jxgbox" style="width:500px; height:500px;"></div>
-                            <script type="text/javascript">
-
-                                // function to compute Iij at time t
-                                function get_Iij_t(t,m1,m2,R){
-                                    // first get omega and Torb
-                                    var M = m1 + m2;
-                                    var Torb = 2.*Math.PI*Math.sqrt(R**3/M);
-                                    var Omega = 2.*Math.PI/Torb;
-                                    var Omega_t = Omega*t;
-                                    var cosOmega_t = Math.cos(Omega_t);
-                                    var sinOmega_t = Math.sin(Omega_t);
-
-                                    var m2R_M = m2*R/M;
-                                    var m1R_M = -m1*R/M;
-                                                                                        
-                                    var X1_t = [m2R_M*cosOmega_t,m2R_M*sinOmega_t,0];
-                                    var X2_t = [m1R_M*cosOmega_t,m1R_M*sinOmega_t,0];
-                                    var Iij_t = [];
-                                    for (var i = 0; i < 3; i++){
-                                        Iij_t[i] = [];
-                                    }
-                                    for (var i = 0; i < 3; i++){   
-                                        for (var j = 0; j < 3; j++){
-                                            Iij_t[i][j] = m1*X1_t[i]*X1_t[j] + m2*X2_t[i]*X2_t[j];
+                        <div class="example"> 
+                            <div id="box" class="jxgbox" style="width:500px; height:500px;"></div>
+                                <script type="text/javascript">
+ 
+                                    // function to compute Iij at time t
+                                    function get_Iij_t(t,m1,m2,R){
+                                        // first get omega and Torb
+                                        var M = m1 + m2;
+                                        var Torb = 2.*Math.PI*Math.sqrt(R**3/M);
+                                        var Omega = 2.*Math.PI/Torb;
+                                        var Omega_t = Omega*t;
+                                        var cosOmega_t = Math.cos(Omega_t);
+                                        var sinOmega_t = Math.sin(Omega_t);
+ 
+                                        var m2R_M = m2*R/M;
+                                        var m1R_M = -m1*R/M;
+                                                                                            
+                                        var X1_t = [m2R_M*cosOmega_t,m2R_M*sinOmega_t,0];
+                                        var X2_t = [m1R_M*cosOmega_t,m1R_M*sinOmega_t,0];
+                                        var Iij_t = [];
+                                        for (var i = 0; i < 3; i++){
+                                            Iij_t[i] = [];
                                         }
-                                    }
-
-                                    return Iij_t;
-                                }
-
-                                // array to get ni projection vector in direction theta,phi
-                                function get_ni_thetaphi(theta,phi){                                            
-                                    var ni_thph = [Math.sin(theta)*Math.cos(phi),Math.sin(theta)*Math.sin(phi),Math.cos(theta)]; 
-                                    return ni_thph; // this is a 3x1 array
-                                }
-
-                                function get_Pij_thetaphi(theta,phi){
-                                    var ni_thph = get_ni_thetaphi(theta,phi);
-                                    var Pij_thph = [];
-                                    for (var i=0;i<3;i++){
-                                        Pij_thph[i] = [];
-                                        for (var j=0;j<3;j++){
-                                            if (i==j) {
-                                                Pij_thph[i][j] = 1. - ni_thph[i]*ni_thph[j];
-                                            } else {
-                                                Pij_thph[i][j] = -ni_thph[i]*ni_thph[j];  
+                                        for (var i = 0; i < 3; i++){   
+                                            for (var j = 0; j < 3; j++){
+                                                Iij_t[i][j] = m1*X1_t[i]*X1_t[j] + m2*X2_t[i]*X2_t[j];
                                             }
                                         }
+ 
+                                        return Iij_t;
                                     }
-                                    return Pij_thph; // this is a 3x3 array
-                                }
-
-                                function get_Lijkl_thetaphi(theta,phi){
-                                    var Pij_thph = get_Pij_thetaphi(theta,phi);
-                                    var Lijkl_thph = [];
-                                    for (var i = 0; i < 3; i++){
-                                        Lijkl_thph[i] = []; 
-                                        for (var j = 0; j < 3; j++){
-                                            Lijkl_thph[i][j] = [];
-                                            for (var k = 0; k < 3; k++){
-                                                Lijkl_thph[i][j][k] = [];
-                                                for (var l = 0; l < 3; l++){
-                                                    Lijkl_thph[i][j][k][l] = Pij_thph[i][k]*Pij_thph[j][l]-0.5*Pij_thph[i][j]*Pij_thph[k][l];
+ 
+                                    // array to get ni projection vector in direction theta,phi
+                                    function get_ni_thetaphi(theta,phi){                                            
+                                        var ni_thph = [Math.sin(theta)*Math.cos(phi),Math.sin(theta)*Math.sin(phi),Math.cos(theta)]; 
+                                        return ni_thph; // this is a 3x1 array
+                                    }
+ 
+                                    function get_Pij_thetaphi(theta,phi){
+                                        var ni_thph = get_ni_thetaphi(theta,phi);
+                                        var Pij_thph = [];
+                                        for (var i=0;i<3;i++){
+                                            Pij_thph[i] = [];
+                                            for (var j=0;j<3;j++){
+                                                if (i==j) {
+                                                    Pij_thph[i][j] = 1. - ni_thph[i]*ni_thph[j];
+                                                } else {
+                                                    Pij_thph[i][j] = -ni_thph[i]*ni_thph[j];  
                                                 }
                                             }
                                         }
+                                        return Pij_thph; // this is a 3x3 array
                                     }
-                                    return Lijkl_thph; // this is a 3x3x3x3 array
-                                }
-
-
-                                // coordinates of top left corner
-                                var TLx = -700;
-                                var TLy = 100;
-                                // coordinates of bottom right corner
-                                var BRx = 12650;
-                                var BRy = -100; 
-                         
-                                // Initialise board
-                                board = JXG.JSXGraph.initBoard('box', {boundingbox: [TLx, TLy, BRx, BRy], axis: true, grid: false});
-          
-                                // Define sliders to dynamically change parameters of the equations and create text elements to describe them
-                                s = board.create('slider', [[0.1*BRx,0.85*TLy],[0.3*BRx,0.85*TLy],[0.1,0.25,1.0]],{name:'m2',strokeColor:'green',fillColor:'green'});
-                                u = board.create('slider', [[0.1*BRx,0.75*TLy],[0.3*BRx,0.75*TLy],[0.1,0.75,1.0]],{name:'m1',strokeColor:'black',fillColor:'black'});
-                                a = board.create('slider', [[0.1*BRx,0.65*TLy],[0.3*BRx,0.65*TLy],[1.,100.,200.]],{name:'a',strokeColor:'black',fillColor:'black'});
-
-                                // Variables for the JXG.Curves
-                                var g3 = null;
-                                var g4 = null;
-                                var g5 = null;
  
-                                // Initialise ODE and solve it with JXG.Math.Numerics.rungeKutta()
-                                function ode() {
-
-                                    var mass1 = u.Value(); 
-                                    var mass2 = s.Value();
-                                    var M = mass1 + mass2;
-                                   
-                                    var R = a.Value();
-                                    var Torb = 2.*Math.PI*Math.sqrt(R**3/M);
-                                    var Omega = 2.*Math.PI/Torb;
-
-                                    var m2R_M = mass2*R/M;
-                                    var m1R_M = -mass1*R/M;
-
-
-                                    // evaluation interval
-                                    var I = [0,2.*Torb];
-                                    // Number of steps. 1000 should be enough
-                                    var N = 1000;
-                                    var dt = 2.*Torb/N;
-
-                                    var data = [];
-                                    var q = I[0];
-                                    for(var it=0; it<N; it++){
-                                        data[it] = [];
-                                        for(var i = 0; i < 3; i++){
-                                            data[it][i] = 0.;
-                                        }
-                                        data[it][0] = it*dt;
-                                    }
-
-                                    var dddIij_t = [];
-                                    var dhij_thph_t = [];
-                                    for (var i=0;i<3;i++){
-                                        dddIij_t[i] = [];
-                                        dhij_thph_t[i] = [];
-                                        for (var j=0;j<3;j++){
-                                            dhij_thph_t[i][j] = 0.;
-                                        }
-                                    }
-
-                                    var Lamijkl_th0ph0 = get_Lijkl_thetaphi(0,0);
-
-                                    for(var it = 3; it < data.length-3; it++){
-
-                                        var Iij_tm3 = get_Iij_t(data[it-3][0],mass1,mass2,R);
-                                        var Iij_tm2 = get_Iij_t(data[it-2][0],mass1,mass2,R);
-                                        var Iij_tm1 = get_Iij_t(data[it-1][0],mass1,mass2,R);
-                                        var Iij_t = get_Iij_t(data[it][0],mass1,mass2,R);
-                                        var Iij_tp1 = get_Iij_t(data[it+1][0],mass1,mass2,R);
-                                        var Iij_tp2 = get_Iij_t(data[it+2][0],mass1,mass2,R);
-                                        var Iij_tp3 = get_Iij_t(data[it+3][0],mass1,mass2,R);
- 
-                                        // 
-                                        //var Omega_t = Omega*data[it][0]; 
-                                        //var cosOmega_t = Math.cos(Omega_t);
-
-                                        for (var i = 0; i < 3; i++){   
-                                            for (var j = 0; j < 3; j++){
-                                                // third derivative of the mass quadrupole moment
-                                                dddIij_t[i][j] = (Iij_tp3[i][j] - 3.*Iij_tp1[i][j] + 3.*Iij_tm1[i][j] - Iij_tm3[i][j])/(8.*dt**3);
-                                                //// second derivative of the mass quadrupole moment -- SEG TODO
-                                                //dddIij_t[i][j] = (Iij_tp3[i][j] - 3.*Iij_tp1[i][j] + 3.*Iij_tm1[i][j] - Iij_tm3[i][j])/(8.*dt**3);
-
-
-                                            }
-                                        }
-
+                                    function get_Lijkl_thetaphi(theta,phi){
+                                        var Pij_thph = get_Pij_thetaphi(theta,phi);
+                                        var Lijkl_thph = [];
                                         for (var i = 0; i < 3; i++){
+                                            Lijkl_thph[i] = []; 
                                             for (var j = 0; j < 3; j++){
+                                                Lijkl_thph[i][j] = [];
                                                 for (var k = 0; k < 3; k++){
+                                                    Lijkl_thph[i][j][k] = [];
                                                     for (var l = 0; l < 3; l++){
-                                                        dhij_thph_t[i][j] += Lamijkl_th0ph0[i][j][k][l]*dddIij_t[k][l];
+                                                        Lijkl_thph[i][j][k][l] = Pij_thph[i][k]*Pij_thph[j][l]-0.5*Pij_thph[i][j]*Pij_thph[k][l];
                                                     }
                                                 }
                                             }
                                         }
-
-                                        data[it][1] = dddIij_t[0][0]*1e6;
-                                        data[it][2] = dhij_thph_t[0][1]*1e4;//dddIij_t[0][1]*1e4;//10. + 10.*cosOmega_t;
-
+                                        return Lijkl_thph; // this is a 3x3x3x3 array
                                     }
-
-                                    return data;
-                                }
-
-
-                                // get data points
-                                var data = ode();
-                                
-                                // copy data to arrays so we can plot it using JXG.Curve
-                                var t = [];
-                                var dataprey = [];
-                                var datapred = [];
-                                var datatest = [];
-                                for(var i=0; i<data.length; i++) {
-                                    t[i] = data[i][0];
-                                    datapred[i] = data[i][1];
-                                    dataprey[i] = data[i][2];
-                                    datatest[i] = 50.;//15.+Math.sin(data[i][2]); 
-                                }
-                               
-                                // Plot Predator
-                                g3 = board.create('curve', [t, datapred], {strokeColor:'red', strokeWidth:'2px'});
-                                g3.updateDataArray = function() {
-                                    var data = ode();
-                                    this.dataX = [];
-                                    this.dataY = [];
-                                    for(var i=0; i<data.length; i++) {
-                                        this.dataX[i] = data[i][0];
-                                        this.dataY[i] = data[i][1];
-                                    }
-                                }
-                               
-                                // Plot Prey
-                                g4 = board.create('curve', [t, dataprey], {strokeColor:'blue', strokeWidth:'2px'});
-                                g4.updateDataArray = function() {
-                                    var data = ode();
-                                    this.dataX = [];
-                                    this.dataY = [];
-                                    for(var i=0; i<data.length; i++) {
-                                        this.dataX[i] = data[i][0];
-                                        this.dataY[i] = data[i][2];
-                                    }
-                                }
-                                //g5 = board.create('curve', [t, datatest], {strokeColor:'green', strokeWidth:'2px'});
-                                //g5.updateDataArray = function() {
-                                //    var data = ode();
-                                //    this.dataX = [];
-                                //    this.dataY = [];
-                                //    for(var i=0; i<data.length; i++) {
-                                //        this.dataX[i] = data[i][2];
-                                //        this.dataY[i] =30.;//20.+15.*Math.sin(data[i][2]);
-                                //    }
-                                //}
-
-
-
-                                
-
-                                //// function to get first time derivative of Iij_t
-                                //function get_dIij_t(t,m1,m2,R,dt,edgeFLAG=0){
-
-                                //    // output array 
-                                //    var dIij_t = [];
-                                //    // calculate Iij
-                                //    if (edgeFLAG){
-                                //        if (t==0) {
-                                //            var Iij_t0 = get_Iij_t(t,m1,m2,R);
-                                //            var Iij_t1 = get_Iij_t(t+dt,m1,m2,R);
-                                //            var Iij_t2 = get_Iij_t(t+2.*dt,m1,m2,R);
-                                //            for (var i = 0; i < 3; i++){
-                                //                dIij_t[i] = [];
-                                //                for (var j = 0; j < 3; j++){
-                                //                    dIij_t[i][j] = (-3.*Iij_t0[i][j] + 4.*Iij_t1[i][j] - Iij_t2[i][j])/(2.*dt);
-                                //                } 
-                                //            }
-                                //        } else {
-                                //            var Iij_t0 = get_Iij_t(t-2.*dt,m1,m2,R);
-                                //            var Iij_t1 = get_Iij_t(t-dt,m1,m2,R);
-                                //            var Iij_t2 = get_Iij_t(t,m1,m2,R);
-                                //            for (var i = 0; i < 3; i++){
-                                //                dIij_t[i] = [];
-                                //                for (var j = 0; j < 3; j++){
-                                //                    dIij_t[i][j] = (Iij_t0[i][j] - 4.*Iij_t1[i][j] + 3.*Iij_t2[i][j])/(2.*dt);
-                                //                }
-                                //            }    
-                                //        }
-
-                                //    } else {
-                                //        var Iij_tp1 = get_Iij_t(t+dt,m1,m2,R);
-                                //        var Iij_tm1 = get_Iij_t(t-dt,m1,m2,R);
-                                //        for (var i = 0; i < 3; i++){
-                                //            dIij_t[i] = [];
-                                //            for (var j = 0; j < 3; j++){
-                                //                dIij_t[i][j] = (Iij_tp1[i][j] - Iij_tm1[i][j])/(2.*dt);
-                                //            }
-                                //        }
-                                //    }
-                                //    return dIij_t; // this is a 3x3 array
-                                //} 
-                                
-                              // function get_ddIij_t(t,m1,m2,R,dt,edgeFLAG=0){
-
-                              //      // output array 
-                              //      var ddIij_t = [];
-                              //      // calculate Iij
-                              //      if (edgeFLAG){
-                              //          if (t==0) {
-                              //              var dIij_t0 = get_dIij_t(t,m1,m2,R,dt,edgeFLAG=1);
-                              //              var dIij_t1 = get_dIij_t(t+dt,m1,m2,R,edgeFLAG=1);
-                              //              var dIij_t2 = get_dIij_t(t+2.*dt,m1,m2,R,edgeFLAG=1);
-                              //              for (var i = 0; i < 3; i++){
-                              //                  ddIij_t[i] = [];
-                              //                  for (var j = 0; j < 3; j++){
-                              //                      ddIij_t[i][j] = (-3.*dIij_t0[i][j] + 4.*dIij_t1[i][j] - dIij_t2[i][j])/(2.*dt);
-                              //                  } 
-                              //              }
-                              //          } else {
-                              //              var dIij_t0 = get_dIij_t(t-2.*dt,m1,m2,R,edgeFLAG=1);
-                              //              var dIij_t1 = get_dIij_t(t-dt,m1,m2,R,edgeFLAG=1);
-                              //              var dIij_t2 = get_dIij_t(t,m1,m2,R,edgeFLAG=1);
-                              //              for (var i = 0; i < 3; i++){
-                              //                  ddIij_t[i] = [];
-                              //                  for (var j = 0; j < 3; j++){
-                              //                      ddIij_t[i][j] = (dIij_t0[i][j] - 4.*dIij_t1[i][j] + 3.*dIij_t2[i][j])/(2.*dt);
-                              //                  }
-                              //              }    
-                              //          }
-
-                              //      } else {
-                              //          var dIij_tp1 = get_dIij_t(t+dt,m1,m2,R,dt);
-                              //          var dIij_tm1 = get_dIij_t(t-dt,m1,m2,R,dt);
-                              //          for (var i = 0; i < 3; i++){
-                              //              ddIij_t[i] = [];
-                              //              for (var j = 0; j < 3; j++){
-                              //                  ddIij_t[i][j] = (dIij_tp1[i][j] - dIij_tm1[i][j])/(2.*dt);
-                              //              }
-                              //          }
-                              //      }
-                              //      return ddIij_t; // this is a 3x3 array
-                              //  }    
-
-                                //function get_dddIij_t(t,m1,m2,R,dt,edgeFLAG=0){
-
-                                //    // output array 
-                                //    var dddIij_t = [];
-                                //    // calculate Iij
-                                //    if (edgeFLAG){
-                                //        if (t==0) {
-                                //            var ddIij_t0 = get_ddIij_t(t,m1,m2,R,dt,edgeFLAG=1);
-                                //            var ddIij_t1 = get_ddIij_t(t+dt,m1,m2,R,edgeFLAG=1);
-                                //            var ddIij_t2 = get_ddIij_t(t+2.*dt,m1,m2,R,edgeFLAG=1);
-                                //            for (var i = 0; i < 3; i++){
-                                //                dddIij_t[i] = [];
-                                //                for (var j = 0; j < 3; j++){
-                                //                    dddIij_t[i][j] = (-3.*ddIij_t0[i][j] + 4.*ddIij_t1[i][j] - ddIij_t2[i][j])/(2.*dt);
-                                //                } 
-                                //            }
-                                //        } else {
-                                //            var ddIij_t0 = get_ddIij_t(t-2.*dt,m1,m2,R,edgeFLAG=1);
-                                //            var ddIij_t1 = get_ddIij_t(t-dt,m1,m2,R,edgeFLAG=1);
-                                //            var ddIij_t2 = get_ddIij_t(t,m1,m2,R,edgeFLAG=1);
-                                //            for (var i = 0; i < 3; i++){
-                                //                dddIij_t[i] = [];
-                                //                for (var j = 0; j < 3; j++){
-                                //                    dddIij_t[i][j] = (ddIij_t0[i][j] - 4.*ddIij_t1[i][j] + 3.*ddIij_t2[i][j])/(2.*dt);
-                                //                }
-                                //            }    
-                                //        }
-
-                                //    } else {
-                                //        var ddIij_tp1 = get_ddIij_t(t+dt,m1,m2,R,dt);
-                                //        var ddIij_tm1 = get_ddIij_t(t-dt,m1,m2,R,dt);
-                                //        for (var i = 0; i < 3; i++){
-                                //            dddIij_t[i] = [];
-                                //            for (var j = 0; j < 3; j++){
-                                //                dddIij_t[i][j] = (ddIij_tp1[i][j] - ddIij_tm1[i][j])/(2.*dt);
-                                //            }
-                                //        }
-                                //    }
-                                //    return dddIij_t; // this is a 3x3 array
-                                //}
-                                    
-
-          
-                               // function get_hij_t_thetaphi(t,m1,m2,R,dt,theta,phi,edgeFLAG=0){
-
-                               //     var ddIij_t = get_ddIij_t(t,m1,m2,R,dt,edgeFLAG=0);
-                               //     var Lijkl_thph = get_Lijkl_thetaphi(theta,phi);
-//                             //     var ddIij = get_ddIij();
-                               //     var hij_t_thph = [];
-                               //     for (var i = 0; i < 3; i++){
-                               //         hij_t_thph[i] = [];
-                               //         for (var j = 0; j < 3; j++){
-                               //             // start sum
-                               //             hij_t_thph[i][j] = 0.;
-                               //             for (var k = 0; k < 3; k++){
-                               //                 for (var l = 0; l < 3; l++){
-                               //                     hij_t_thph[i][j] += Lijkl_thph[i][j][k][l]*ddIij_t[k,l];
-                               //                 }
-                               //             }
-                               //         }
-                               //     }
-                               //     return hij_t_thph; // this is a 3x3 array
-                               // }
-                        
- //                               // more variables for calculations
- //                               var Nt = 202; // number of time steps to use
- //                               var Nth = 41; // number of steps in cos theta to use
- //                               var Nph = 30; // number of steps in phi to use
- //                               var dt = 2.*Torb/Nt; // time steps
- //
- //
-//
-//                                //// arrays for theta+sin/cos
-//                                //var dcostheta = 2./(Nth-1);
-//                                //var theta = [];
-//                                //var costheta = [];
-//                                //var sintheta = [];
-//                                //for (var i=0; i<Nth;i++){
-//                                //    costheta[i] = -1. + i*dcostheta;
-//                                //    theta[i] = Math.acos(costheta[i]);
- //                               //    sintheta[i] = Math.sin(theta[i]);
- //
- //                               //}
- //
- //                               //// arrays for phi+sin/cos
- //                               //var dphi = 2.*Math.PI/Nph
- //                               //var phi = [];
- //                               //var cosphi = [];
- //                               //var sinphi = [];
- //                               //for (var i=0; i<Nph;i++){
- //                               //    phi[i] = i*dphi;
- //                               //    cosphi[i] = Math.cos(phi[i]);
- //                               //    sinphi[i] = Math.sin(phi[i]);
- //                               //}
- //
- //
-
-//                                board.unsuspendUpdate(); 
  
-          
-                            </script>
+ 
+                                    // coordinates of top left corner
+                                    var TLx = -700;
+                                    var TLy = 100;
+                                    // coordinates of bottom right corner
+                                    var BRx = 12650;
+                                    var BRy = -100; 
+                             
+                                    // Initialise board
+                                    board = JXG.JSXGraph.initBoard('box', {boundingbox: [TLx, TLy, BRx, BRy], axis: true, grid: false});
+              
+                                    // Define sliders to dynamically change parameters of the equations and create text elements to describe them
+                                    s = board.create('slider', [[0.1*BRx,0.85*TLy],[0.3*BRx,0.85*TLy],[0.1,0.25,1.0]],{name:'m2',strokeColor:'magenta',fillColor:'magenta'});
+                                    u = board.create('slider', [[0.1*BRx,0.75*TLy],[0.3*BRx,0.75*TLy],[0.1,0.75,1.0]],{name:'m1',strokeColor:'black',fillColor:'black'});
+                                    a = board.create('slider', [[0.1*BRx,0.65*TLy],[0.3*BRx,0.65*TLy],[1.,100.,200.]],{name:'a',strokeColor:'black',fillColor:'black'});
+ 
+                                    // Variables for the JXG.Curves
+                                    var g3 = null;
+                                    var g4 = null;
+                                    var g5 = null;
+  
+                                    // Initialise ODE and solve it with JXG.Math.Numerics.rungeKutta()
+                                    function ode() {
+ 
+                                        var mass1 = u.Value(); 
+                                        var mass2 = s.Value();
+                                        var M = mass1 + mass2;
+                                       
+                                        var R = a.Value();
+                                        var Torb = 2.*Math.PI*Math.sqrt(R**3/M);
+                                        var Omega = 2.*Math.PI/Torb;
+ 
+                                        var m2R_M = mass2*R/M;
+                                        var m1R_M = -mass1*R/M;
+ 
+ 
+                                        // evaluation interval
+                                        var I = [0,2.*Torb];
+                                        // Number of steps. 1000 should be enough
+                                        var N = 1000;
+                                        var dt = 2.*Torb/N;
+ 
+                                        var data = [];
+                                        var q = I[0];
+                                        for(var it=0; it<N; it++){
+                                            data[it] = [];
+                                            for(var i = 0; i < 3; i++){
+                                                data[it][i] = 0.;
+                                            }
+                                            data[it][0] = it*dt;
+                                        }
+ 
+                                        var dddIij_t = [];
+                                        var dhij_thph_t = [];
+                                        for (var i=0;i<3;i++){
+                                            dddIij_t[i] = [];
+                                            dhij_thph_t[i] = [];
+                                            for (var j=0;j<3;j++){
+                                                dhij_thph_t[i][j] = 0.;
+                                            }
+                                        }
+ 
+                                        var Lamijkl_th0ph0 = get_Lijkl_thetaphi(0,0);
+ 
+                                        for(var it = 3; it < data.length-3; it++){
+ 
+                                            var Iij_tm3 = get_Iij_t(data[it-3][0],mass1,mass2,R);
+                                            var Iij_tm2 = get_Iij_t(data[it-2][0],mass1,mass2,R);
+                                            var Iij_tm1 = get_Iij_t(data[it-1][0],mass1,mass2,R);
+                                            var Iij_t = get_Iij_t(data[it][0],mass1,mass2,R);
+                                            var Iij_tp1 = get_Iij_t(data[it+1][0],mass1,mass2,R);
+                                            var Iij_tp2 = get_Iij_t(data[it+2][0],mass1,mass2,R);
+                                            var Iij_tp3 = get_Iij_t(data[it+3][0],mass1,mass2,R);
+  
+                                            // 
+                                            //var Omega_t = Omega*data[it][0]; 
+                                            //var cosOmega_t = Math.cos(Omega_t);
+ 
+                                            for (var i = 0; i < 3; i++){   
+                                                for (var j = 0; j < 3; j++){
+                                                    // third derivative of the mass quadrupole moment
+                                                    dddIij_t[i][j] = (Iij_tp3[i][j] - 3.*Iij_tp1[i][j] + 3.*Iij_tm1[i][j] - Iij_tm3[i][j])/(8.*dt**3);
+                                                    //// second derivative of the mass quadrupole moment -- SEG TODO
+                                                    //dddIij_t[i][j] = (Iij_tp3[i][j] - 3.*Iij_tp1[i][j] + 3.*Iij_tm1[i][j] - Iij_tm3[i][j])/(8.*dt**3);
+ 
+ 
+                                                }
+                                            }
+ 
+                                            for (var i = 0; i < 3; i++){
+                                                for (var j = 0; j < 3; j++){
+                                                    for (var k = 0; k < 3; k++){
+                                                        for (var l = 0; l < 3; l++){
+                                                            dhij_thph_t[i][j] += Lamijkl_th0ph0[i][j][k][l]*dddIij_t[k][l];
+                                                        }
+                                                    }
+                                                }
+                                            }
+ 
+                                            data[it][1] = dddIij_t[0][0]*1e6;
+                                            data[it][2] = dhij_thph_t[0][1]*1e4;//dddIij_t[0][1]*1e4;//10. + 10.*cosOmega_t;
+ 
+                                        }
+ 
+                                        return data;
+                                    }
+ 
+ 
+                                    // get data points
+                                    var data = ode();
+                                    
+                                    // copy data to arrays so we can plot it using JXG.Curve
+                                    var t = [];
+                                    var dataprey = [];
+                                    var datapred = [];
+                                    var datatest = [];
+                                    for(var i=0; i<data.length; i++) {
+                                        t[i] = data[i][0];
+                                        datapred[i] = data[i][1];
+                                        dataprey[i] = data[i][2];
+                                        datatest[i] = 50.;//15.+Math.sin(data[i][2]); 
+                                    }
+                                   
+                                    // Plot Predator
+                                    g3 = board.create('curve', [t, datapred], {strokeColor:'red', strokeWidth:'2px'});
+                                    g3.updateDataArray = function() {
+                                        var data = ode();
+                                        this.dataX = [];
+                                        this.dataY = [];
+                                        for(var i=0; i<data.length; i++) {
+                                            this.dataX[i] = data[i][0];
+                                            this.dataY[i] = data[i][1];
+                                        }
+                                    }
+                                   
+                                    // Plot Prey
+                                    g4 = board.create('curve', [t, dataprey], {strokeColor:'blue', strokeWidth:'2px'});
+                                    g4.updateDataArray = function() {
+                                        var data = ode();
+                                        this.dataX = [];
+                                        this.dataY = [];
+                                        for(var i=0; i<data.length; i++) {
+                                            this.dataX[i] = data[i][0];
+                                            this.dataY[i] = data[i][2];
+                                        }
+                                    }
+              
+                                </script>
+                            </div>    
 
                             <div class="example">
+                               
                                 <h2>3D function plotter</h2>
                                 <p>Function term in <em>(x,y)</em>:
                                     <br>
@@ -485,67 +291,67 @@
                                     <br><br>
                                     (The function might also depend on the slider value <em>r</em>.)
                                 </p>
-                                <div id="jxgbox0" class="jxgbox construct"></div>
-                                <script id="ex0">
-                                  (function () {
-                                      var divId = 'jxgbox0';
-            
-                                      // Define some colors. optimized for colorblinds
-                                      var colors = [JXG.palette.blue,
-                                              JXG.palette.red,
-                                              JXG.palette.green,
-                                              JXG.palette.black,
-                                              JXG.palette.purple,
-                                              JXG.palette.yellow,
-                                              JXG.palette.skyblue],
-                                          cnt = 0;
-            
-                                      var board = JXG.JSXGraph.initBoard(divId, {
-                                          boundingbox: [-8, 8, 8, -8],
-                                          keepaspectratio: false,
-                                          axis: false
-                                      });
-            
-                                      var box = [-5, 5];
-                                      view = board.create('view3d', [[-6, -3], [8, 8], [box, box, box]], {
-                                          xPlaneRear: {visible: false},
-                                          yPlaneRear: {visible: false},
-                                      });
-            
-                                      // Create a slider which might be used in the function term
-                                      // using the name 'r'
-                                      var slider = board.create('slider', [[-7, -6], [5, -6], [-3, 1, 4]], { name: 'r' });
-            
-                                      // Handler for button 'plot'
-                                      document.getElementById('plot_start').addEventListener('click', function () {
-                                          var txt = document.getElementById('plot_input').value,
-                                              f = board.jc.snippet(txt, true, 'x,y', true);  // JessieCode parsing
-            
-                                          view.create('functiongraph3d', [f, box, box], {
-                                              strokeColor: colors[cnt],
-                                              stepsU: 50, stepsV: 50, strokeWidth: 0.5
+                                <div id="jxgbox0" class="jxgbox construct" style="width:500px; height:500px;"></div>
+                                    <script id="ex0">
+                                      (function () {
+                                          var divId = 'jxgbox0';
+                             
+                                          // Define some colors. optimized for colorblinds
+                                          var colors = [JXG.palette.blue,
+                                                  JXG.palette.red,
+                                                  JXG.palette.green,
+                                                  JXG.palette.black,
+                                                  JXG.palette.purple,
+                                                  JXG.palette.yellow,
+                                                  JXG.palette.skyblue],
+                                              cnt = 0;
+                             
+                                          var board = JXG.JSXGraph.initBoard(divId, {
+                                              boundingbox: [-8, 8, 8, -8],
+                                              keepaspectratio: false,
+                                              axis: false
                                           });
-                                          // Cycle throught the color array
-                                          cnt = (cnt + 1) % colors.length;
-                                      });
-            
-                                      // Handler for button 'reset'
-                                      document.getElementById('plot_reset').addEventListener('click', function () {
-                                          // Complete restart of the construction
-                                          JXG.JSXGraph.freeBoard(board);
-                                          board = JXG.JSXGraph.initBoard(divId, { boundingbox: [-8, 8, 8, -8] });
-                                           view = board.create('view3d', [[-6, -3], [8, 8], [box, box, box]]);
-                            
-                                           slider = board.create('slider', [[-7, -6], [5, -6], [-3, 1, 4]], { name: 'r' });
-                                           cnt = 0;
-                                       });
-                            
-                                    })();
-                                </script>
-                                <pre class="line-numbers"><code id="c0" class="language-javascript"></code></pre>
-                                <script>
-                                    showCode('ex0', 'c0');
-                                </script>
+                             
+                                          var box = [-5, 5];
+                                          view = board.create('view3d', [[-6, -3], [8, 8], [box, box, box]], {
+                                              xPlaneRear: {visible: false},
+                                              yPlaneRear: {visible: false},
+                                          });
+                             
+                                          // Create a slider which might be used in the function term
+                                          // using the name 'r'
+                                          var slider = board.create('slider', [[-7, -6], [5, -6], [-3, 1, 4]], { name: 'r' });
+                             
+                                          // Handler for button 'plot'
+                                          document.getElementById('plot_start').addEventListener('click', function () {
+                                              var txt = document.getElementById('plot_input').value,
+                                                  f = board.jc.snippet(txt, true, 'x,y', true);  // JessieCode parsing
+                             
+                                              view.create('functiongraph3d', [f, box, box], {
+                                                  strokeColor: colors[cnt],
+                                                  stepsU: 50, stepsV: 50, strokeWidth: 0.5
+                                              });
+                                              // Cycle throught the color array
+                                              cnt = (cnt + 1) % colors.length;
+                                          });
+                             
+                                          // Handler for button 'reset'
+                                          document.getElementById('plot_reset').addEventListener('click', function () {
+                                              // Complete restart of the construction
+                                              JXG.JSXGraph.freeBoard(board);
+                                              board = JXG.JSXGraph.initBoard(divId, { boundingbox: [-8, 8, 8, -8] });
+                                               view = board.create('view3d', [[-6, -3], [8, 8], [box, box, box]]);
+                             
+                                               slider = board.create('slider', [[-7, -6], [5, -6], [-3, 1, 4]], { name: 'r' });
+                                               cnt = 0;
+                                           });
+                             
+                                        })();
+                                    </script>
+                                    <pre class="line-numbers"><code id="c0" class="language-javascript"></code></pre>
+                                    <script>
+                                        showCode('ex0', 'c0');
+                                    </script>
                             </div>
 
 					<!-- This is the footer that appears at the bottom of the page -->

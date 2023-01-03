@@ -292,9 +292,16 @@
 										    var view = board.create('view3d',
 										        [[-6, -3], [8, 8],
 										        [[-5, 5], [-5, 5], [-5, 5]]]);
+
+
+                                            //                                    // Define sliders to dynamically change parameters of the equations and create text elements to describe them
+                                            //s = board.create('slider', [[0.1*BRx,0.85*TLy],[0.3*BRx,0.85*TLy],[0.1,0.25,1.0]],{name:'m2',strokeColor:'green',fillColor:'green'});
+                                            //u = board.create('slider', [[0.1*BRx,0.75*TLy],[0.3*BRx,0.75*TLy],[0.1,0.75,1.0]],{name:'m1',strokeColor:'black',fillColor:'black'});
+                                            //a = board.create('slider', [[0.1*BRx,0.65*TLy],[0.3*BRx,0.65*TLy],[1.,100.,200.]],{name:'a',strokeColor:'black',fillColor:'black'});
      
-										    var b = board.create('slider', [[-7, -6], [5, -6], [-3, 2, 4]], { name: 'b' });
-										    var q = board.create('slider', [[-7, -7], [5, -7], [1, 1, 30]], { name: 'q', snapWidth: 1});
+     
+										    var b = board.create('slider', [[-7, -6], [5, -6], [0.1, 0.25, 1.0]], { name: 'b' });
+										    var q = board.create('slider', [[-7, -7], [5, -7], [1., 1., 5.]], { name: 'q', snapWidth: 1});
  
                                             //var m1 = board.create('slider', [[-7, -6], [5, -6], [-3, 2, 4]], { name: 'b' });
 										    //var m2 = board.create('slider', [[-7, -7], [5, -7], [1, 1, 30]], { name: 'q', snapWidth: 1});
@@ -310,12 +317,12 @@
 
 										    // Sphere
 										    var c = view.create('parametricsurface3d', [
-										        (u, v) => 2 * Math.sin(u) * Math.cos(v),
-										        (u, v) => 2 * Math.sin(u) * Math.sin(v),
-										        (u, v) => 2 * Math.cos(u),
+										        (u, v) => 2 * q.Value() * Math.sin(u) * Math.cos(v),
+										        (u, v) => 2 * q.Value() * Math.sin(u) * Math.sin(v),
+										        (u, v) => 2 * q.Value() * Math.cos(u),
 										        [0, 2 * Math.PI],
 										        [0, Math.PI]
-										    ], { strokeColor: '#ff0000', stepsU: 30, stepsV: 30, visible: true});
+										    ], { strokeColor: 'magenta', stepsU: 30, stepsV: 30, visible: true});
  
      
 										    //// Circle

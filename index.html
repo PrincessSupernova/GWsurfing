@@ -59,16 +59,6 @@
 
                         <div class="example"> 
                             <div id="box" class="jxgbox" style="width:500px; height:500px;"></div>
-                            <!--<div id="three" style="width:500px; height:500px;"></div>-->
-                         
-                            <script type="text/javascript" src="https://duetosymmetry.com/assets/js/vendor/three.min.js"></script>
-                         
-                            <script type="text/javascript" src="https://duetosymmetry.com/assets/js/vendor/threestrap.min.js"></script>
-                            
-                            <script type="text/javascript" src="https://duetosymmetry.com/assets/js/vendor/OrbitControls.js"></script>
-                            
-                            <script type="text/javascript" src="https://duetosymmetry.com/assets/js/elliptic.js"></script>
-
                             <script type="text/javascript">
  
                                 // function to compute Iij at time t
@@ -301,7 +291,7 @@
      
 										    var view = board.create('view3d',
 										        [[-6, -3], [8, 8],
-										        [[-5, 5], [-5, 5], [-5, 5]]]);
+										        [[-2, 2], [-2, 2], [-2,2]]]);
 
 										    var b = board.create('slider', [[-7, -6], [5, -6], [0.1, 0.25, 1.0]], { name: 'b' });
 										    var q = board.create('slider', [[-7, -7], [5, -7], [1., 1., 5.]], { name: 'q', snapWidth: 1});
@@ -312,7 +302,7 @@
 										        (u, v) => 0.25*(1.+Math.cos(u)**2)**2 * Math.cos(2*v)**2 + Math.cos(u)**2*Math.sin(2*v)**2,
 										        [0, Math.PI],
 										        [0, 2*Math.PI]
-										    ], { strokeColor: 'green', stepsU: 30, stepsV: 20, visible: true});
+										    ], { strokeColor: 'magenta', stepsU: 30, stepsV: 20, visible: true});
      
 										})();
  
@@ -324,6 +314,17 @@
                             </div>
 
                             <div class="example">
+                                <!--<div id="three" style="width:500px; height:500px;"></div>-->
+<!--                             
+                                <script type="text/javascript" src="https://duetosymmetry.com/assets/js/vendor/three.min.js"></script>
+                             
+                                <script type="text/javascript" src="https://duetosymmetry.com/assets/js/vendor/threestrap.min.js"></script>
+                                
+                                <script type="text/javascript" src="https://duetosymmetry.com/assets/js/vendor/OrbitControls.js"></script>
+                                
+                                <script type="text/javascript" src="https://duetosymmetry.com/assets/js/elliptic.js"></script>-->
+
+
                                 <div id="jxgbox3d" class="jxgbox construct" style="width:500px; height:500px;"></div>
                                     <script id="ex3d" src="js/vendor/three.js"></script>
 

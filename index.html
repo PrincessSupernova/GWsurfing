@@ -294,7 +294,8 @@
 										        [[-2, 2], [-2, 2], [-2,2]]]);
 
 										    var b = board.create('slider', [[-7, -6], [5, -6], [0.1, 0.25, 1.0]], { name: 'b' });
-										    var q = board.create('slider', [[-7, -7], [5, -7], [1., 1., 5.]], { name: 'q', snapWidth: 1});
+										    //var q = board.create('slider', [[-7, -7], [5, -7], [1., 1., 5.]], { name: 'q', snapWidth: 1});
+                                            var H = board.create('slider',[[-7,-7],[5,-7],[0,1,360]], {name:'H',fillColor:'black',strokeColor:'black'});
 
  										    var c = view.create('parametricsurface3d', [
 										        (u, v) => (0.25*(1.+Math.cos(u)**2)**2 * Math.cos(2*v)**2 + Math.cos(u)**2*Math.sin(2*v)**2)*Math.sin(u) * Math.cos(v),
@@ -302,7 +303,7 @@
 										        (u, v) => (0.25*(1.+Math.cos(u)**2)**2 * Math.cos(2*v)**2 + Math.cos(u)**2*Math.sin(2*v)**2)*Math.cos(u),
 										        [0, 2* Math.PI],
 										        [0, 2*Math.PI]
-										    ], { strokeColor: 'magenta', stepsU: 30, stepsV: 20, visible: true});
+										    ], { strokeColor: function(){ return JXG.hsv2rgb(H.Value(),1.0,1.0); }, stepsU: 30, stepsV: 20, visible: true});
      
 										})();
  

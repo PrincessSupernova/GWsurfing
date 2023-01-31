@@ -30,6 +30,9 @@
 
         <script type="text/javascript" charset="UTF-8" src="https://cdn.jsdelivr.net/npm/jsxgraph/distrib/jsxgraphcore.js"></script>
 
+        <!-- Load plotly.js into the DOM -->
+     	<script src='https://cdn.plot.ly/plotly-2.18.0.min.js'></script>
+
 		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
 	</head>
 	<!-- The body is the location where your site's content will go -->
@@ -141,7 +144,7 @@
                                 board = JXG.JSXGraph.initBoard('box', {boundingbox: [TLx, TLy, BRx, BRy], axis: true, grid: false});
               
                                 // Define sliders to dynamically change parameters of the equations and create text elements to describe them
-                                s = board.create('slider', [[0.1*BRx,0.85*TLy],[0.3*BRx,0.85*TLy],[0.1,0.25,1.0]],{name:'m2',strokeColor:'green',fillColor:'green'});
+                                s = board.create('slider', [[0.1*BRx,0.85*TLy],[0.3*BRx,0.85*TLy],[0.1,0.25,1.0]],{name:'m2',strokeColor:'magenta',fillColor:'magenta'});
                                 u = board.create('slider', [[0.1*BRx,0.75*TLy],[0.3*BRx,0.75*TLy],[0.1,0.75,1.0]],{name:'m1',strokeColor:'black',fillColor:'black'});
                                 a = board.create('slider', [[0.1*BRx,0.65*TLy],[0.3*BRx,0.65*TLy],[1.,100.,200.]],{name:'a',strokeColor:'black',fillColor:'black'});
  
@@ -314,6 +317,15 @@
                                         showCode('ex7b', 'c7b');
                                     </script>
                             </div>
+
+                            <div id="tester" style="width:600px;height:250px;"></div>
+                            <script>
+                                TESTER = document.getElementById('tester');
+                                Plotly.newPlot( TESTER, [{
+                                x: [1, 2, 3, 4, 5],
+                                y: [1, 2, 4, 8, 16] }], {
+                                margin: { t: 0 } } );
+                            </script>
 
                             <div class="example">
                                 <!--<div id="three" style="width:500px; height:500px;"></div>-->

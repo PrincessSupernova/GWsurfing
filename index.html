@@ -151,7 +151,7 @@
                                 board = JXG.JSXGraph.initBoard('box', {boundingbox: [TLx, TLy, BRx, BRy], axis: true, grid: false});
               
                                 // Define sliders to dynamically change parameters of the equations and create text elements to describe them
-                                s = board.create('slider', [[0.1*BRx,0.85*TLy],[0.3*BRx,0.85*TLy],[0.1,0.25,1.0]],{name:'m2',strokeColor:'green',fillColor:'green'});
+                                s = board.create('slider', [[0.1*BRx,0.85*TLy],[0.3*BRx,0.85*TLy],[0.1,0.25,1.0]],{name:'m2',strokeColor:'magenta',fillColor:'magenta'});
                                 u = board.create('slider', [[0.1*BRx,0.75*TLy],[0.3*BRx,0.75*TLy],[0.1,0.75,1.0]],{name:'m1',strokeColor:'black',fillColor:'black'});
                                 a = board.create('slider', [[0.1*BRx,0.65*TLy],[0.3*BRx,0.65*TLy],[1.,100.,200.]],{name:'a',strokeColor:'black',fillColor:'black'});
  
@@ -358,48 +358,47 @@
                                 Plotly.newPlot('tester', data, layout);
                                 });
 
-                                //var x = [0, 0, 1, 1, 0, 0, 1, 1]
-                                //var y = [0, 1, 1, 0, 0, 1, 1, 0]
-                                //var z = [0, 0, 0, 0, 1, 1, 1, 1]
-                                //var i = [7, 0, 0, 0, 4, 4, 2, 6, 4, 0, 3, 7]
-                                //var j = [3, 4, 1, 2, 5, 6, 5, 5, 0, 1, 2, 2]
-                                //var k = [0, 7, 2, 3, 6, 7, 1, 2, 5, 5, 7, 6]
-
-                                //var facecolor = [
-    							//	'rgb(50, 200, 200)',
-				     			//	'rgb(100, 200, 255)',
-								//    'rgb(150, 200, 115)',
-								//    'rgb(200, 200, 50)',
-								//    'rgb(230, 200, 10)',
-								//    'rgb(255, 140, 0)'
-                                //]
-
-//                                facecolor2 = new Array(facecolor.length * 2);
-//       
-//                                facecolor.forEach(function(x, i) {
-//								    facecolor2[i * 2 + 1] = facecolor2[i * 2] = x;
-//                                });
-//
-//                                var data = {
-//									x: x,
-//									y: y,
-//									z: z,
-//									i: i,
-//									j: j,
-//									k: k,
-//									facecolor: facecolor2,
-//									type: 'mesh3d'
-//                                }
-//
-//                                Plotly.newPlot('tester', [data])
-
-
-                                //TESTER = document.getElementById('tester');
-                                //Plotly.newPlot( TESTER, [{
-                                //x: [1, 2, 3, 4, 5],
-                                //y: [1, 2, 4, 8, 16] }], {
-                                //margin: { t: 0 } } );
                             </script>
+
+                            <div id="tester2" style="width:500px; height:500px;"></div>
+                            <script>
+
+
+                                d3.csv('https://raw.githubusercontent.com/plotly/datasets/master/api_docs/mt_bruno_elevation.csv', function(err, rows){
+                                function unpack(rows, key) {
+                                  return rows.map(function(row) { return row[key]; });
+                                }
+                                
+                                var z_data=[ ]
+                                for(i=0;i<24;i++)
+                                {
+                                  z_data.push(unpack(rows,i));
+                                }
+
+                                var data = [{
+                                    z: z_data,
+                                    type: 'surface'
+                                }];
+
+                                var layout = {
+                                  title: 'Mt Bruno Elevation',
+                                  autosize: false,
+                                  width: 500,
+                                  height: 500,
+                                  margin: {
+                                    l: 65,
+                                    r: 50,
+                                    b: 65,
+                                    t: 90,
+                                  }
+                                };
+                                Plotly.newPlot('tester2', data, layout);
+                                });
+
+                  
+                            </script>
+
+
 
                             <div class="example">
                                 <!--<div id="three" style="width:500px; height:500px;"></div>-->

@@ -151,7 +151,7 @@
                                 board = JXG.JSXGraph.initBoard('box', {boundingbox: [TLx, TLy, BRx, BRy], axis: true, grid: false});
               
                                 // Define sliders to dynamically change parameters of the equations and create text elements to describe them
-                                s = board.create('slider', [[0.1*BRx,0.85*TLy],[0.3*BRx,0.85*TLy],[0.1,0.25,1.0]],{name:'m2',strokeColor:'magenta',fillColor:'magenta'});
+                                s = board.create('slider', [[0.1*BRx,0.85*TLy],[0.3*BRx,0.85*TLy],[0.1,0.25,1.0]],{name:'m2',strokeColor:'green',fillColor:'green'});
                                 u = board.create('slider', [[0.1*BRx,0.75*TLy],[0.3*BRx,0.75*TLy],[0.1,0.75,1.0]],{name:'m1',strokeColor:'black',fillColor:'black'});
                                 a = board.create('slider', [[0.1*BRx,0.65*TLy],[0.3*BRx,0.65*TLy],[1.,100.,200.]],{name:'a',strokeColor:'black',fillColor:'black'});
  
@@ -325,165 +325,172 @@
                                     </script>
                             </div>
 
-                            <div id="tester" style="width:500px; height:500px;"></div>
-                            <script>
-                                d3.csv('https://raw.githubusercontent.com/plotly/datasets/master/api_docs/mt_bruno_elevation.csv', function(err, rows){
-                                function unpack(rows, key) {
-                                  return rows.map(function(row) { return row[key]; });
-                                }
-                                
-                                var z_data=[ ]
-                                for(i=0;i<24;i++)
-                                {
-                                  z_data.push(unpack(rows,i));
-                                }
+                            <div class="example">
 
-                                var data = [{
-                                    z: z_data,
-                                    type: 'surface'
-                                }];
-
-                                var layout = {
-                                  title: 'Mt Bruno Elevation',
-                                  autosize: false,
-                                  width: 500,
-                                  height: 500,
-                                  margin: {
-                                    l: 65,
-                                    r: 50,
-                                    b: 65,
-                                    t: 90,
-                                  }
-                                };
-                                Plotly.newPlot('tester', data, layout);
-                                });
-
-                            </script>
-
-                            <div id="tester2" style="width:500px; height:500px;"></div>
-                            <script>
-
-                                // Generating random data..
-                                a=[]; b=[]; c=[];
-                                var Ncth = 50;
-                                var dcth = 2./Ncth;
-                                var dph = 2.*Math.PI/Ncth;
-                                for(var i=0;i<Ncth;i++)
-                                  {
-                                    var costheta = -1. + i*dcth;
-                                    var sintheta = Math.sqrt(1.-costheta**2);
-
-                                    var phi = i*dph;
-                                    var cosphi = Math.cos(phi);
-                                    var cos2phi = Math.cos(2.*phi);
-                                    var sinphi = Math.sin(phi);
-                                    var sin2phi = Math.sin(2.*phi);
-
-                                    var scalefac = (0.25*(1.+costheta**2)**2 * cos2phi**2 + costheta**2*sin2phi**2); 
-
-                                    var a_ = scalefac*sintheta*cosphi;
-                                    a.push(a_);
-                                   
-                                    var b_ = scalefac*sintheta*sinphi; 
-                                    b.push(b_);
-                                   
-                                    var c_ = scalefac*costheta; 
-                                    c.push(c_);
-                                  }
-
-                                // Plotting the mesh
-                                var data=[
-                                    {
-                                      opacity:0.8,
-                                      color:'rgb(300,100,200)',
-                                      type: 'mesh3d',
-                                      x: a,
-                                      y: b,
-                                      z: c,
+                                <div id="tester" style="width:500px; height:500px;"></div>
+                                <script>
+                                    d3.csv('https://raw.githubusercontent.com/plotly/datasets/master/api_docs/mt_bruno_elevation.csv', function(err, rows){
+                                    function unpack(rows, key) {
+                                      return rows.map(function(row) { return row[key]; });
                                     }
-                                ];
-
-                                // aesthetics
-                                var layout = {
-                                  title: '(to be) Antenna Plot',
-                                  autosize: false,
-                                  width: 500,
-                                  height: 500,
-                                  margin: {
-                                    l: 65,
-                                    r: 50,
-                                    b: 65,
-                                    t: 90,
-                                  }
-                                };
-                                
-                                // make plot
-                                Plotly.newPlot('tester2', data);//, layout);
-                  
-                            </script>
-
-                            <div id="tester3" style="width:500px; height:500px;"></div>
-                            <script>
-                           
-                                // Generating random data..
-                                a=[]; b=[]; c=[];
-                                var Ncth = 50;
-                                var dcth = 2./Ncth;
-                                var dph = 2.*Math.PI/Ncth;
-                                for(var i=0;i<Ncth;i++)
-                                  {
-                                    var costheta = -1. + i*dcth;
-                                    var sintheta = Math.sqrt(1.-costheta**2);
-                           
-                                    var phi = i*dph;
-                                    var cosphi = Math.cos(phi);
-                                    var cos2phi = Math.cos(2.*phi);
-                                    var sinphi = Math.sin(phi);
-                                    var sin2phi = Math.sin(2.*phi);
-                           
-                                    var scalefac = (0.25*(1.+costheta**2)**2 * cos2phi**2 + costheta**2*sin2phi**2); 
-                           
-                                    var a_ = scalefac*sintheta*cosphi;
-                                    a.push(a_);
-                                   
-                                    var b_ = scalefac*sintheta*sinphi; 
-                                    b.push(b_);
-                                   
-                                    var c_ = scalefac*costheta; 
-                                    c.push(c_);
-                                  }
-                           
-                                // Plotting the mesh
-                                var data=[
+                                    
+                                    var z_data=[ ]
+                                    for(i=0;i<24;i++)
                                     {
-                                      opacity:0.8,
-                                      color:'rgb(300,100,200)',
-                                      type: 'mesh3d',
-                                      x: a,
-                                      y: b,
-                                      z: c,
+                                      z_data.push(unpack(rows,i));
                                     }
-                                ];
-                           
-                                // aesthetics
-                                var layout = {
-                                  title: '(to be) Antenna Plot 2',
-                                  autosize: false,
-                                  width: 500,
-                                  height: 500,
-                                  margin: {
-                                    l: 65,
-                                    r: 50,
-                                    b: 65,
-                                    t: 90,
-                                  }
-                                };
-                                
-                                // make plot
-                                Plotly.newPlot('tester3', data);//, layout);
-                           
-                            </script>
+ 
+                                    var data = [{
+                                        z: z_data,
+                                        type: 'surface'
+                                    }];
+ 
+                                    var layout = {
+                                      title: 'Mt Bruno Elevation',
+                                      autosize: false,
+                                      width: 500,
+                                      height: 500,
+                                      margin: {
+                                        l: 65,
+                                        r: 50,
+                                        b: 65,
+                                        t: 90,
+                                      }
+                                    };
+                                    Plotly.newPlot('tester', data, layout);
+                                    });
+ 
+                                </script>
+                            </div>
 
+
+                            <div class="example">
+                                <div id="tester2" style="width:500px; height:500px;"></div>
+                                <script>
+ 
+                                    // Generating random data..
+                                    a=[]; b=[]; c=[];
+                                    var Ncth = 50;
+                                    var dcth = 2./Ncth;
+                                    var dph = 2.*Math.PI/Ncth;
+                                    for(var i=0;i<Ncth;i++)
+                                      {
+                                        var costheta = -1. + i*dcth;
+                                        var sintheta = Math.sqrt(1.-costheta**2);
+ 
+                                        var phi = i*dph;
+                                        var cosphi = Math.cos(phi);
+                                        var cos2phi = Math.cos(2.*phi);
+                                        var sinphi = Math.sin(phi);
+                                        var sin2phi = Math.sin(2.*phi);
+ 
+                                        var scalefac = (0.25*(1.+costheta**2)**2 * cos2phi**2 + costheta**2*sin2phi**2); 
+ 
+                                        var a_ = scalefac*sintheta*cosphi;
+                                        a.push(a_);
+                                       
+                                        var b_ = scalefac*sintheta*sinphi; 
+                                        b.push(b_);
+                                       
+                                        var c_ = scalefac*costheta; 
+                                        c.push(c_);
+                                      }
+ 
+                                    // Plotting the mesh
+                                    var data=[
+                                        {
+                                          opacity:0.8,
+                                          color:'rgb(300,100,200)',
+                                          type: 'mesh3d',
+                                          x: a,
+                                          y: b,
+                                          z: c,
+                                        }
+                                    ];
+ 
+                                    // aesthetics
+                                    var layout = {
+                                      title: '(to be) Antenna Plot',
+                                      autosize: false,
+                                      width: 500,
+                                      height: 500,
+                                      margin: {
+                                        l: 65,
+                                        r: 50,
+                                        b: 65,
+                                        t: 90,
+                                      }
+                                    };
+                                    
+                                    // make plot
+                                    Plotly.newPlot('tester2', data);//, layout);
+                      
+                                </script>
+                            </div>
+
+                            <div class="example">
+                                <div id="tester3" style="width:500px; height:500px;"></div>
+                                <script>
+                               
+                                    // Generating random data..
+                                    a=[]; b=[]; c=[];
+                                    var Ncth = 50;
+                                    var dcth = 2./Ncth;
+                                    var dph = 2.*Math.PI/Ncth;
+                                    for(var i=0;i<Ncth;i++)
+                                      {
+                                        var costheta = -1. + i*dcth;
+                                        var sintheta = Math.sqrt(1.-costheta**2);
+                               
+                                        var phi = i*dph;
+                                        var cosphi = Math.cos(phi);
+                                        var cos2phi = Math.cos(2.*phi);
+                                        var sinphi = Math.sin(phi);
+                                        var sin2phi = Math.sin(2.*phi);
+                               
+                                        var scalefac = (0.25*(1.+costheta**2)**2 * cos2phi**2 + costheta**2*sin2phi**2); 
+                               
+                                        var a_ = scalefac*sintheta*cosphi;
+                                        a.push(a_);
+                                       
+                                        var b_ = scalefac*sintheta*sinphi; 
+                                        b.push(b_);
+                                       
+                                        var c_ = scalefac*costheta; 
+                                        c.push(c_);
+                                      }
+                               
+                                    // Plotting the mesh
+                                    var data=[
+                                        {
+                                          opacity:0.8,
+                                          color:'rgb(300,100,200)',
+                                          type: 'mesh3d',
+                                          x: a,
+                                          y: b,
+                                          z: c,
+                                        }
+                                    ];
+                               
+                                    // aesthetics
+                                    var layout = {
+                                      title: '(to be) Antenna Plot 2',
+                                      autosize: false,
+                                      width: 500,
+                                      height: 500,
+                                      margin: {
+                                        l: 65,
+                                        r: 50,
+                                        b: 65,
+                                        t: 90,
+                                      }
+                                    };
+                                    
+                                    // make plot
+                                    Plotly.newPlot('tester3', data);//, layout);
+                               
+                                </script>
+                            </div> 
 <!--                            <div class="example">
                                 <div id="three" style="width:500px; height:500px;"></div>
                              

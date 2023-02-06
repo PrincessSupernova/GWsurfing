@@ -151,7 +151,7 @@
                                 board = JXG.JSXGraph.initBoard('box', {boundingbox: [TLx, TLy, BRx, BRy], axis: true, grid: false});
               
                                 // Define sliders to dynamically change parameters of the equations and create text elements to describe them
-                                s = board.create('slider', [[0.1*BRx,0.85*TLy],[0.3*BRx,0.85*TLy],[0.1,0.25,1.0]],{name:'m2',strokeColor:'green',fillColor:'green'});
+                                s = board.create('slider', [[0.1*BRx,0.85*TLy],[0.3*BRx,0.85*TLy],[0.1,0.25,1.0]],{name:'m2',strokeColor:'magenta',fillColor:'magenta'});
                                 u = board.create('slider', [[0.1*BRx,0.75*TLy],[0.3*BRx,0.75*TLy],[0.1,0.75,1.0]],{name:'m1',strokeColor:'black',fillColor:'black'});
                                 a = board.create('slider', [[0.1*BRx,0.65*TLy],[0.3*BRx,0.65*TLy],[1.,100.,200.]],{name:'a',strokeColor:'black',fillColor:'black'});
  
@@ -365,15 +365,29 @@
 
                                 // Generating random data..
                                 a=[]; b=[]; c=[];
-                                for(i=0;i<50;i++)
+                                var Ncth = 50;
+                                var dcth = 2./Ncth;
+                                var dph = 2.*Math.PI/Ncth;
+                                for(var i=0;i<Ncth;i++)
                                   {
-                                    var a_ = Math.random(); 
+                                    var costheta = -1. + i*dcth;
+                                    var sintheta = Math.sin(Math.acos(costheta));
+
+                                    var phi = i*dph;
+                                    var cosphi = Math.cos(phi);
+                                    var cos2phi = Math.cos(2.*phi);
+                                    var sinphi = Math.sin(phi);
+                                    var sin2phi = Math.sin(2.*phi);
+
+                                    var scalefac = (0.25*(1.+costheta**2)**2 * cos2phi**2 + costheta**2*sin2phi**2); 
+
+                                    var a_ = scalefac*sintheta*cosphi;
                                     a.push(a_);
                                    
-                                    var b_ = Math.random(); 
+                                    var b_ = scalefac*sintheta*sinphi; 
                                     b.push(b_);
                                    
-                                    var c_ = Math.random(); 
+                                    var c_ = scalefac*costheta; 
                                     c.push(c_);
                                   }
 

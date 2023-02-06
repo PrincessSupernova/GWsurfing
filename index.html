@@ -151,7 +151,7 @@
                                 board = JXG.JSXGraph.initBoard('box', {boundingbox: [TLx, TLy, BRx, BRy], axis: true, grid: false});
               
                                 // Define sliders to dynamically change parameters of the equations and create text elements to describe them
-                                s = board.create('slider', [[0.1*BRx,0.85*TLy],[0.3*BRx,0.85*TLy],[0.1,0.25,1.0]],{name:'m2',strokeColor:'magenta',fillColor:'magenta'});
+                                s = board.create('slider', [[0.1*BRx,0.85*TLy],[0.3*BRx,0.85*TLy],[0.1,0.25,1.0]],{name:'m2',strokeColor:'green',fillColor:'green'});
                                 u = board.create('slider', [[0.1*BRx,0.75*TLy],[0.3*BRx,0.75*TLy],[0.1,0.75,1.0]],{name:'m1',strokeColor:'black',fillColor:'black'});
                                 a = board.create('slider', [[0.1*BRx,0.65*TLy],[0.3*BRx,0.65*TLy],[1.,100.,200.]],{name:'a',strokeColor:'black',fillColor:'black'});
  
@@ -485,13 +485,13 @@
                                 }
 
 
-                                // Plotting the mesh
+                                // Plotting the lines 
                                 var line1={
                                       x: t,
                                       y: datapred,
                                       mod: 'lines',
                                       name: 'line 1',
-                                      color:'red'
+                                      color:'rgb(225,0,0)'
                                 };
 
                                 var line2={
@@ -499,7 +499,7 @@
                                       y: dataprey,
                                       mod: 'lines',
                                       name: 'line 2',
-                                      color:'blue'
+                                      color:'rgb(0,0,255)'
                                     };
 
                                 var datasets = [line1,line2];

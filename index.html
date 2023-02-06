@@ -37,7 +37,7 @@
         <!-- -->
         <!--<script type="text/javascript" src="https://duetosymmetry.com/assets/js/vendor/three.min.js"></script>-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" integrity="sha512-dLxUelApnYxpLt6K2iomGngnHO83iUvZytA3YjDUCjT0HDOHKXnVYdf3hU4JjM8uEhxf9nD1/ey98U3t2vZ0qQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-                             
+        <!--<script src="https://cdn.jsdelivr.net/npm/three@0.149.0/build/three.min.js"></script>                     -->
         <!--<script type="text/javascript" src="https://duetosymmetry.com/assets/js/vendor/threestrap.min.js"></script>
         -->
 		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
@@ -151,7 +151,7 @@
                                 board = JXG.JSXGraph.initBoard('box', {boundingbox: [TLx, TLy, BRx, BRy], axis: true, grid: false});
               
                                 // Define sliders to dynamically change parameters of the equations and create text elements to describe them
-                                s = board.create('slider', [[0.1*BRx,0.85*TLy],[0.3*BRx,0.85*TLy],[0.1,0.25,1.0]],{name:'m2',strokeColor:'magenta',fillColor:'magenta'});
+                                s = board.create('slider', [[0.1*BRx,0.85*TLy],[0.3*BRx,0.85*TLy],[0.1,0.25,1.0]],{name:'m2',strokeColor:'green',fillColor:'green'});
                                 u = board.create('slider', [[0.1*BRx,0.75*TLy],[0.3*BRx,0.75*TLy],[0.1,0.75,1.0]],{name:'m1',strokeColor:'black',fillColor:'black'});
                                 a = board.create('slider', [[0.1*BRx,0.65*TLy],[0.3*BRx,0.65*TLy],[1.,100.,200.]],{name:'a',strokeColor:'black',fillColor:'black'});
  
@@ -417,6 +417,9 @@
                                     <script id="ex3d" src="./assets/js/vendor/three.js"></script>
 
 									<script>
+
+                                        import * as THREE from 'three';
+
 										const scene = new THREE.Scene();
 										const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
     

@@ -151,7 +151,7 @@
                                 board = JXG.JSXGraph.initBoard('box', {boundingbox: [TLx, TLy, BRx, BRy], axis: true, grid: false});
               
                                 // Define sliders to dynamically change parameters of the equations and create text elements to describe them
-                                s = board.create('slider', [[0.1*BRx,0.85*TLy],[0.3*BRx,0.85*TLy],[0.1,0.25,1.0]],{name:'m2',strokeColor:'green',fillColor:'green'});
+                                s = board.create('slider', [[0.1*BRx,0.85*TLy],[0.3*BRx,0.85*TLy],[0.1,0.25,1.0]],{name:'m2',strokeColor:'magenta',fillColor:'magenta'});
                                 u = board.create('slider', [[0.1*BRx,0.75*TLy],[0.3*BRx,0.75*TLy],[0.1,0.75,1.0]],{name:'m1',strokeColor:'black',fillColor:'black'});
                                 a = board.create('slider', [[0.1*BRx,0.65*TLy],[0.3*BRx,0.65*TLy],[1.,100.,200.]],{name:'a',strokeColor:'black',fillColor:'black'});
  
@@ -422,11 +422,71 @@
                   
                             </script>
 
+                            <div id="tester3" style="width:500px; height:500px;"></div>
+                            <script>
+                           
+                                // Generating random data..
+                                a=[]; b=[]; c=[];
+                                var Ncth = 50;
+                                var dcth = 2./Ncth;
+                                var dph = 2.*Math.PI/Ncth;
+                                for(var i=0;i<Ncth;i++)
+                                  {
+                                    var costheta = -1. + i*dcth;
+                                    var sintheta = Math.sqrt(1.-costheta**2);
+                           
+                                    var phi = i*dph;
+                                    var cosphi = Math.cos(phi);
+                                    var cos2phi = Math.cos(2.*phi);
+                                    var sinphi = Math.sin(phi);
+                                    var sin2phi = Math.sin(2.*phi);
+                           
+                                    var scalefac = (0.25*(1.+costheta**2)**2 * cos2phi**2 + costheta**2*sin2phi**2); 
+                           
+                                    var a_ = scalefac*sintheta*cosphi;
+                                    a.push(a_);
+                                   
+                                    var b_ = scalefac*sintheta*sinphi; 
+                                    b.push(b_);
+                                   
+                                    var c_ = scalefac*costheta; 
+                                    c.push(c_);
+                                  }
+                           
+                                // Plotting the mesh
+                                var data=[
+                                    {
+                                      opacity:0.8,
+                                      color:'rgb(300,100,200)',
+                                      type: 'mesh3d',
+                                      x: a,
+                                      y: b,
+                                      z: c,
+                                    }
+                                ];
+                           
+                                // aesthetics
+                                var layout = {
+                                  title: '(to be) Antenna Plot 2',
+                                  autosize: false,
+                                  width: 500,
+                                  height: 500,
+                                  margin: {
+                                    l: 65,
+                                    r: 50,
+                                    b: 65,
+                                    t: 90,
+                                  }
+                                };
+                                
+                                // make plot
+                                Plotly.newPlot('tester3', data);//, layout);
+                           
+                            </script>
 
-
-                            <div class="example">
-                                <!--<div id="three" style="width:500px; height:500px;"></div>-->
-<!--                             
+<!--                            <div class="example">
+                                <div id="three" style="width:500px; height:500px;"></div>
+                             
                                 <script type="text/javascript" src="https://duetosymmetry.com/assets/js/vendor/three.min.js"></script>
                              
                                 <script type="text/javascript" src="https://duetosymmetry.com/assets/js/vendor/threestrap.min.js"></script>
@@ -434,42 +494,41 @@
                                 <script type="text/javascript" src="https://duetosymmetry.com/assets/js/vendor/OrbitControls.js"></script>
                                 
                                 <script type="text/javascript" src="https://duetosymmetry.com/assets/js/elliptic.js"></script>-->
-
-
-                                <div id="jxgbox3d" class="jxgbox construct" style="width:500px; height:500px;"></div>
+                                
+                                <!--<div id="jxgbox3d" class="jxgbox construct" style="width:500px; height:500px;"></div>
                                     <script id="ex3d" src="./assets/js/vendor/three.js"></script>
 
-									<script>
-
-                                        import * as THREE from 'three';
-
-										const scene = new THREE.Scene();
-										const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
-    
-										const renderer = new THREE.WebGLRenderer();
-										renderer.setSize( window.innerWidth, window.innerHeight );
-										document.body.appendChild( renderer.domElement );
-    
-										const geometry = new THREE.BoxGeometry( 1, 1, 1 );
-										const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-										const cube = new THREE.Mesh( geometry, material );
-										scene.add( cube );
-    
-										camera.position.z = 5;
-    
-										function animate() {
-											requestAnimationFrame( animate );
-    
-											cube.rotation.x += 0.01;
-											cube.rotation.y += 0.01;
-    
-											renderer.render( scene, camera );
-										};
-    
-										animate();
-
-									</script>
-                            </div>
+//									<script>
+//
+//                                        import * as THREE from 'three';
+//
+//										const scene = new THREE.Scene();
+//										const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+//    
+//										const renderer = new THREE.WebGLRenderer();
+//										renderer.setSize( window.innerWidth, window.innerHeight );
+//										document.body.appendChild( renderer.domElement );
+//    
+//										const geometry = new THREE.BoxGeometry( 1, 1, 1 );
+//										const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+//										const cube = new THREE.Mesh( geometry, material );
+//										scene.add( cube );
+//    
+//										camera.position.z = 5;
+//    
+//										function animate() {
+//											requestAnimationFrame( animate );
+//    
+//											cube.rotation.x += 0.01;
+//											cube.rotation.y += 0.01;
+//    
+//											renderer.render( scene, camera );
+//										};
+//    
+//										animate();
+//
+//									</script>
+                            </div>-->
 
 					<!-- This is the footer that appears at the bottom of the page -->
 					<footer id="footer">

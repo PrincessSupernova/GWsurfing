@@ -145,7 +145,7 @@
                                 board = JXG.JSXGraph.initBoard('box', {boundingbox: [TLx, TLy, BRx, BRy], axis: true, grid: false});
               
                                 // Define sliders to dynamically change parameters of the equations and create text elements to describe them
-                                s = board.create('slider', [[0.1*BRx,0.85*TLy],[0.3*BRx,0.85*TLy],[0.1,0.25,1.0]],{name:'m2',strokeColor:'magenta',fillColor:'magenta'});
+                                s = board.create('slider', [[0.1*BRx,0.85*TLy],[0.3*BRx,0.85*TLy],[0.1,0.25,1.0]],{name:'m2',strokeColor:'green',fillColor:'green'});
                                 u = board.create('slider', [[0.1*BRx,0.75*TLy],[0.3*BRx,0.75*TLy],[0.1,0.75,1.0]],{name:'m1',strokeColor:'black',fillColor:'black'});
                                 a = board.create('slider', [[0.1*BRx,0.65*TLy],[0.3*BRx,0.65*TLy],[1.,100.,200.]],{name:'a',strokeColor:'black',fillColor:'black'});
  
@@ -283,34 +283,34 @@
                             </script>
                         </div>    
 
-                            <div class="example">
-                                <div id="jxgbox7b" class="jxgbox construct" style="width:500px; height:500px;"></div>
-                                    <script id="ex7b">
-                                        (function () {
-										    var board = JXG.JSXGraph.initBoard('jxgbox7b', {
-										        boundingbox: [-8, 8, 8, -8],
-										        keepaspectratio: false,
-                                                grid: false,
-										        axis: false
-										    });
+                        <div class="example">
+                            <div id="jxgbox7b" class="jxgbox construct" style="width:500px; height:500px;"></div>
+                                <script id="ex7b">
+                                    (function () {
+									    var board = JXG.JSXGraph.initBoard('jxgbox7b', {
+									        boundingbox: [-8, 8, 8, -8],
+									        keepaspectratio: false,
+                                               grid: false,
+									        axis: false
+									    });
      
-										    var view = board.create('view3d',
-										        [[-6, -3], [8, 8],
-										        [[-2, 2], [-2, 2], [-2,2]]]);
+										var view = board.create('view3d',
+										    [[-6, -3], [8, 8],
+										    [[-2, 2], [-2, 2], [-2,2]]]);
 
-										    var b = board.create('slider', [[-7, -6], [5, -6], [0.1, 0.25, 1.0]], { name: 'b' });
-										    //var q = board.create('slider', [[-7, -7], [5, -7], [1., 1., 5.]], { name: 'q', snapWidth: 1});
-                                            var H = board.create('slider',[[-7,-7],[5,-7],[0,1,360]], {name:'H',fillColor:'black',strokeColor:'black'});
+										var b = board.create('slider', [[-7, -6], [5, -6], [0.1, 0.25, 1.0]], { name: 'b' });
+										//var q = board.create('slider', [[-7, -7], [5, -7], [1., 1., 5.]], { name: 'q', snapWidth: 1});
+                                        var H = board.create('slider',[[-7,-7],[5,-7],[0,1,360]], {name:'H',fillColor:'black',strokeColor:'black'});
 
- 										    var c = view.create('parametricsurface3d', [
-										        (u, v) => (0.25*(1.+Math.cos(u)**2)**2 * Math.cos(2*v)**2 + Math.cos(u)**2*Math.sin(2*v)**2)*Math.sin(u) * Math.cos(v),
-										        (u, v) => (0.25*(1.+Math.cos(u)**2)**2 * Math.cos(2*v)**2 + Math.cos(u)**2*Math.sin(2*v)**2)*Math.sin(u) * Math.sin(v),
-										        (u, v) => (0.25*(1.+Math.cos(u)**2)**2 * Math.cos(2*v)**2 + Math.cos(u)**2*Math.sin(2*v)**2)*Math.cos(u),
-										        [0, 2* Math.PI],
-										        [0, 2*Math.PI]
-										    ], { strokeColor: function(){ return JXG.hsv2rgb(H.Value()*2,1.0,1.0); }, stepsU: 30, stepsV: 30, visible: true});
+ 									    var c = view.create('parametricsurface3d', [
+										    (u, v) => (0.25*(1.+Math.cos(u)**2)**2 * Math.cos(2*v)**2 + Math.cos(u)**2*Math.sin(2*v)**2)*Math.sin(u) * Math.cos(v),
+										    (u, v) => (0.25*(1.+Math.cos(u)**2)**2 * Math.cos(2*v)**2 + Math.cos(u)**2*Math.sin(2*v)**2)*Math.sin(u) * Math.sin(v),
+										    (u, v) => (0.25*(1.+Math.cos(u)**2)**2 * Math.cos(2*v)**2 + Math.cos(u)**2*Math.sin(2*v)**2)*Math.cos(u),
+										    [0, 2* Math.PI],
+										    [0, 2*Math.PI]
+										], { strokeColor: function(){ return JXG.hsv2rgb(H.Value()*2,1.0,1.0); }, stepsU: 30, stepsV: 30, visible: true});
      
-										})();
+									})();
  
                                     </script>
                                     <pre class="line-numbers"><code id="c7b" class="language-javascript"></code></pre>
@@ -326,7 +326,6 @@
                                   return rows.map(function(row) { return row[key]; });
                                 }
                                 
-
                                 var z_data=[ ]
                                 for(i=0;i<24;i++)
                                 {
@@ -409,7 +408,7 @@
 
 
                                 <div id="jxgbox3d" class="jxgbox construct" style="width:500px; height:500px;"></div>
-                                    <script id="ex3d" src="js/vendor/three.js"></script>
+                                    <script id="ex3d" src="./assets/js/vendor/three.js"></script>
 
 									<script>
 										const scene = new THREE.Scene();

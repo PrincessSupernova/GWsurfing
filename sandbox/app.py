@@ -1,6 +1,3 @@
-# Simpler gist here: https://gist.github.com/xhlulu/773fe238773ea69c8bc2b26560ab67d7
-import random
-
 import dash
 from dash import html,dcc
 import dash_bootstrap_components as dbc
@@ -45,29 +42,40 @@ app.layout = html.Div([
                        html.Div([
                          html.H4("Controls"),
                          html.Br(),
-                         #html.P("Total mass [Msun]:"),
-                         #dcc.Slider(
-                         #  id="slider-mtot",
-                         #  min=1.,
-                         #  max=5.,
-                         #  #step=0.05,
-                         #  value=1.),
-                         html.P("Mass ratio:"),
-                         dcc.Slider(
-                           id="slider-q",
-                           min=0.001,
-                           max=1.,
-                           value=0.75,
-#                           step=0.05,
-                           tooltip={"placement": "bottom", "always_visible": True}),
-                         html.Br(),
-                         html.P("Semi-major axis [1e-8 Msun]:"),
+                         html.P("Binary separation:"),
                          dcc.Slider(
                            id="slider-sma",
                            min=1.,
                            max=200.,
 #                           step=20.,
                            value=20.,
+                           tooltip={"placement": "bottom", "always_visible": True}),
+                         html.Br(),
+                         html.P("Number of binaries:"),
+                         dcc.Slider(
+                           id="slider-Nb",
+                           min=2,
+                           max=6,
+                           value=4,
+                           step=1,
+                           tooltip={"placement": "bottom", "always_visible": True}),
+                         html.Br(),
+                         html.P("Distance between binaries [GW wavelengths]"),
+                         dcc.Slider(
+                           id="slider-db",
+                           min=0.25,
+                           max=1.,
+                           step=0.25,
+                           value=0.25,
+                           tooltip={"placement": "bottom", "always_visible": True}),
+                         html.Br(),
+                         html.P("Initial phase lag between binaries [\u03c0]"),
+                         dcc.Slider(
+                           id="slider-pb",
+                           min=0,
+                           max=1.,
+                           step=0.25,
+                           value=0.25,
                            tooltip={"placement": "bottom", "always_visible": True}),
                          html.Br(),
                          html.P("Eccentricity: (Coming soon!)"),
@@ -96,59 +104,83 @@ app.layout = html.Div([
 
 @app.callback(
     Output("graph", "figure"),
-    Input("slider-q","value"),
     Input("slider-sma", "value"),
+    Input("slider-Nb","value"),
+    Input("slider-db", "value"),
+    Input("slider-pb", "value"),
     Input("slider-ecc", "value"),
 )
 
 
-def make_plots(q,R,ecc):
-    fig = produce_figures(q,R,ecc=ecc)
+def make_plots(sma,Nb,db,pb,ecc):
+    fig = produce_figures(sma,Nb,db,pb,ecc=ecc)
     return fig
 
 
-def produce_figures(q,R,Mtot=1.,ecc=0.,Nt=101,Nth=51,Nph=50):
+def produce_figures(sma,Nb,db,pb,Mtot=1.,ecc=0.,Nt=101,Nth=41,Nph=30):
 
-    # orbit params
-    m1 = Mtot/(q+1)
-    m2 = Mtot-m1
-    Torb = 2.*np.pi*np.sqrt(R**3./Mtot)
-    Omega = 2.*np.pi/Torb
+    Nt = 101
+    Nt2 = Nt+20
+    Nth = 41
+    Nph = 30
+    Np = int(Nb*2) #Number of particles
+    Mp = np.ones(Np)*0.5
+    R = sma
+    R_b = np.ones(Nb)*R
+    Torb_b = np.zeros(Nb)
+    Omg_b = np.zeros(Nb)
+    for ib in range(Nb):
+        Mtot = Mp[ib*2]+Mp[ib*2+1]
+        Torb_b[ib] = 2.*np.pi*np.sqrt(R_b[ib]**3./Mtot)
+        Omg_b[ib] = 2.*np.pi/Torb_b[ib]
+    M = 1.0
+    Torb = 2.*np.pi*np.sqrt(R**3./M)
+    Omg = 2.*np.pi/Torb
 
-    # time series
-    dt = 2.*Torb/(Nt)
+    L = Torb/2. #GW wavelength
+
+    z_b = np.linspace(1,Nb,Nb)*L*db
+    #z_b = [0,1/4*L,2/4*L,3/4*L] # relative distance b/w binaries
+    #z_b = [0,5/4*L,10/4*L,15/4*L] # relative distance b/w binaries
+
+    phi_b = np.linspace(0,Nb-1,Nb)*(-np.pi*pb)
+    #[0*np.pi,-1/4*np.pi,-2/4*np.pi,-3/4*np.pi]
+ 
+    dt = Torb/(Nt-1)
     tt = np.zeros(Nt)
     for it in range(Nt):
         tt[it]=it*dt
-
-    X1 = np.zeros((Nt,3))
-    X2 = np.zeros((Nt,3))
-    V1 = np.zeros((Nt,3))
-    V2 = np.zeros((Nt,3))
-    Mij = np.zeros((Nt,3,3)) #mass quadrupole
-    Sijk = np.zeros((Nt,3,3,3)) #current quadrupole
-    Mijk = np.zeros((Nt,3,3,3)) #mass octupole
+    tt2 = np.zeros(Nt2)
+    for it in range(Nt2):
+        tt2[it]=(it-10)*dt
+   
+    Xp = np.zeros((Nt2,Np,3))
+    Vp = np.zeros((Nt2,Np,3))
+    Mbij = np.zeros((Nt2,Nb,3,3)) #mass quadrupole
+    #Sbijk = np.zeros((Nt2,Nb,3,3,3)) #current quadrupole
+    #Mbijk = np.zeros((Nt2,Nb,3,3,3)) #mass octopole
     hij_thph = np.zeros((Nt,Nth,Nph,3,3))
-    hijS_thph = np.zeros((Nt,Nth,Nph,3,3)) #current quadrupole contribution to waveform
-    hijO_thph = np.zeros((Nt,Nth,Nph,3,3)) #octupole contribution to waveform
+    #hijS_thph = np.zeros((Nt,Nth,Nph,3,3)) #current quadrupole contribution to waveform
+    #hijO_thph = np.zeros((Nt,Nth,Nph,3,3)) #octopole contribution to waveform
     htp_thph = np.zeros((Nt,Nth,Nph,2,2))
-    htpS_thph = np.zeros((Nt,Nth,Nph,2,2))
-    htpO_thph = np.zeros((Nt,Nth,Nph,2,2))
+    #htpS_thph = np.zeros((Nt,Nth,Nph,2,2))
+    #htpO_thph = np.zeros((Nt,Nth,Nph,2,2))
     dhtp_thph = np.zeros((Nt,Nth,Nph,2,2))
-    dhtpS_thph = np.zeros((Nt,Nth,Nph,2,2))
-    dhtpO_thph = np.zeros((Nt,Nth,Nph,2,2))
+    #dhtpS_thph = np.zeros((Nt,Nth,Nph,2,2))
+    #dhtpO_thph = np.zeros((Nt,Nth,Nph,2,2))
     hP_thph = np.zeros((Nth,Nph))
     hX_thph = np.zeros((Nth,Nph))
     PP_thph = np.zeros((Nth,Nph))
     PX_thph = np.zeros((Nth,Nph))
     Ptot_thph = np.zeros((Nth,Nph))
-    PPO_thph = np.zeros((Nth,Nph))
-    PXO_thph = np.zeros((Nth,Nph))
-    PtotO_thph = np.zeros((Nth,Nph))
-    PPS_thph = np.zeros((Nth,Nph))
-    PXS_thph = np.zeros((Nth,Nph))
-    PtotS_thph = np.zeros((Nth,Nph))
-    Dij = np.zeros((3,3))
+    #PPO_thph = np.zeros((Nth,Nph))
+    #PXO_thph = np.zeros((Nth,Nph))
+    #PtotO_thph = np.zeros((Nth,Nph))
+    #PPS_thph = np.zeros((Nth,Nph))
+    #PXS_thph = np.zeros((Nth,Nph))
+    #PtotS_thph = np.zeros((Nth,Nph))
+    
+    Dij = np.zeros((3,3)) #Kronecker delta tensor
     for i in range(3):
         Dij[i,i]=1.
 
@@ -168,9 +200,11 @@ def produce_figures(q,R,Mtot=1.,ecc=0.,Nt=101,Nth=51,Nph=50):
         for iph in range(Nph):
             cosphi = np.cos(phi[iph])
             sinphi = np.sin(phi[iph])
+
             ni_thph[ith,iph,:]=[sintheta*cosphi,sintheta*sinphi,costheta]
             Lthi_thph[ith,iph,:]=[costheta*cosphi,costheta*sinphi,-sintheta]
             Lphi_thph[ith,iph,:]=[-sinphi,cosphi,0]
+ 
             for i in range(3):
                 for j in range(3):
                     Pij_thph[ith,iph,i,j]=Dij[i,j]-ni_thph[ith,iph,i]*ni_thph[ith,iph,j]
@@ -180,85 +214,113 @@ def produce_figures(q,R,Mtot=1.,ecc=0.,Nt=101,Nth=51,Nph=50):
                         for l in range(3):
                             Lamijkl_thph[ith,iph,i,j,k,l]=Pij_thph[ith,iph,i,k]*Pij_thph[ith,iph,j,l]-0.5*Pij_thph[ith,iph,i,j]*Pij_thph[ith,iph,k,l]
 
-    #Calculate the mass quadrupole tensor and its derivatives
-    dMij = np.copy(Mij)      #this is the way to do it without sharing same pointer      
-    dMij = np.zeros((Nt,3,3))
-    ddMij = np.zeros((Nt,3,3))
-    dddMij = np.zeros((Nt,3,3))
+    #Calculate the mass quadrupole tensor and its derivatives for each binary, as if it were centered on the origin
+    dMbij = np.zeros((Nt2,Nb,3,3))
+    ddMbij = np.zeros((Nt2,Nb,3,3))
+    tmp = np.zeros(Nt2)
+    for ib in range(Nb):
+        for it in range(Nt2):
+            ### SG TO-DO -- do we need to change z component here to match z_b
+            ph = Omg_b[ib]*tt2[it]+phi_b[ib]
+            Xp[it,ib*2+0,:]=R_b[ib]*Mp[ib*2+1]/M*np.array([np.cos(ph),np.sin(ph),z_b[ib]])
+            Xp[it,ib*2+1,:]=-R_b[ib]*Mp[ib*2+0]/M*np.array([np.cos(ph),np.sin(ph),-z_b[ib]])
+            Vp[it,ib*2+0,:]=R_b[ib]*Mp[ib*2+1]/M*Omg_b[ib]*np.array([-np.sin(ph),np.cos(ph),0])
+            Vp[it,ib*2+1,:]=-R_b[ib]*Mp[ib*2+0]/M*Omg_b[ib]*np.array([-np.sin(ph),np.cos(ph),0])
+
+    for ib in range(Nb):   
+        for ip in range(2):
+            for i in range(3):  
+                for j in range(3):
+                    Mbij[:,ib,i,j]+=Mp[ib*2+ip]*Xp[:,ib*2+ip,i]*Xp[:,ib*2+ip,j]
+
+    for ib in range(Nb):
+        for i in range(3):
+            for j in range(3):
+                tmp[:] = Mbij[:,ib,i,j]
+                tmp=np.gradient(tmp,tt2,edge_order=2)
+                dMbij[:,ib,i,j]=tmp[:]
+                tmp=np.gradient(tmp,tt2,edge_order=2)
+                ddMbij[:,ib,i,j]=tmp[:]
+
+#    #Calculate the current quadrupole tensor and its derivatives            
+#    #THESE CAN PROBABLY BE SPED UP WITH TENSOR SYMMETRIES
+#    dSbijk = np.zeros((Nt2,Nb,3,3,3))
+#    ddSbijk = np.zeros((Nt2,Nb,3,3,3))
+#    for ib in range(Nb):
+#        for ip in range(2):
+#            for i in range(3):
+#                for j in range(3):
+#                    for k in range(3):
+#                        Sbijk[:,ib,i,j,k]+=Mp[ib*2+ip]*(Xp[:,ib*2+ip,i]*Xp[:,ib*2+ip,k]*Vp[:,ib*2+ip,j]
+#                                                       +Xp[:,ib*2+ip,j]*Xp[:,ib*2+ip,k]*Vp[:,ib*2+ip,i]
+#                                                       -2.*Xp[:,ib*2+ip,i]*Xp[:,ib*2+ip,j]*Vp[:,ib*2+ip,k])
+#
+#    for ib in range(Nb):
+#        for i in range(3):
+#            for j in range(3):
+#                for k in range(3):
+#                    tmp[:]=Sbijk[:,ib,i,j,k]
+#                    tmp=np.gradient(tmp,tt2,edge_order=2)
+#                    dSbijk[:,ib,i,j,k]=tmp[:]
+#                    tmp=np.gradient(tmp,tt2,edge_order=2)
+#                    ddSbijk[:,ib,i,j,k]=tmp[:]
+#
+#    #Calculate the mass octopole tensor and its derivatives            
+#    dMbijk = np.zeros((Nt2,Nb,3,3,3))
+#    ddMbijk = np.zeros((Nt2,Nb,3,3,3))
+#    dddMbijk = np.zeros((Nt2,Nb,3,3,3))
+#    for ib in range(Nb):
+#        for ip in range(2):
+#            for i in range(3):
+#                for j in range(3):
+#                    for k in range(3):
+#                        Mbijk[:,ib,i,j,k]+=Mp[ib*2+ip]*Xp[:,ib*2+ip,i]*Xp[:,ib*2+ip,j]*Xp[:,ib*2+ip,k]
+#
+#    for ib in range(Nb):
+#        for i in range(3):
+#            for j in range(3):
+#                for k in range(3):
+#                    tmp[:]=Mbijk[:,ib,i,j,k]
+#                    tmp=np.gradient(tmp,tt2,edge_order=2)
+#                    dMbijk[:,ib,i,j,k]=tmp[:]
+#                    tmp=np.gradient(tmp,tt2,edge_order=2)
+#                    ddMbijk[:,ib,i,j,k]=tmp[:]
+#                    tmp=np.gradient(tmp,tt2,edge_order=2)
+#                    dddMbijk[:,ib,i,j,k]=tmp[:]
+
+    #cut off the "ghost cells" for each of the multipole tensors, so the total
+    #time covered is exactly one period
+    ddMbij = ddMbij[10:Nt+10]
+#    ddSbijk = ddSbijk[10:Nt+10]
+#    dddMbijk = dddMbijk[10:Nt+10]
     tmp = np.zeros(Nt)
-    dhij_thph = hij_thph
-   
-    R_M = R/Mtot 
-    RW_M = R_M*Omega
 
-    for it in range(Nt):
-        Wt = Omega*tt[it]
-        cosWt = np.cos(Wt)
-        sinWt = np.sin(Wt)
-        X1[it,:]=m2*R_M*np.array([cosWt,sinWt,0])
-        V1[it,:]=m2*RW_M*np.array([-sinWt,cosWt,0])
-        X2[it,:]=-R_M*m1*np.array([cosWt,sinWt,0])
-        V2[it,:]=-RW_M*m1*np.array([-sinWt,cosWt,0])
-   
-    for i in range(3):
-        for j in range(3):
-            Mij[:,i,j]=m1*X1[:,i]*X1[:,j]+m2*X2[:,i]*X2[:,j]
+    #Calculate the sum of the Nb multipole tensors, accounting for t_ret(theta)
+    #Let t_ret to the origin be 0
+    ddMij_th = np.zeros((Nt,Nth,3,3))
+#    ddSijk_th = np.zeros((Nt,Nth,3,3,3))
+#    dddMijk_th = np.zeros((Nt,Nth,3,3,3))
+    idex0 = np.array(range(Nt))
+    for ith in range(Nth):
+        costheta = np.cos(theta[ith])
+        for ib in range(Nb):
+            t_ret = z_b[ib]*costheta
+            t_ret = t_ret % Torb_b[ib]
+            it_lo = int(t_ret/Torb*(Nt-1))
+            if (it_lo == Nt-1):
+                it_lo = 0
+                t_ret = 0
+            it_hi = it_lo+1
+            w_lo = (tt[it_hi]-t_ret)/(tt[it_hi]-tt[it_lo])
+            w_hi = 1.-w_lo
+            print(ith,t_ret,it_lo,it_hi,w_lo,w_hi)
+            #mod (Nt-1) should ensure that Mij_th[0]=Mij_th[Nt]
+            idex_lo = (idex0+it_lo)%(Nt-1)
+            idex_hi = (idex0+it_hi)%(Nt-1)
+            ddMij_th[:,ith,:,:]+=w_lo*ddMbij[idex_lo,ib,:,:]+w_hi*ddMbij[idex_hi,ib,:,:]
+#            dddMijk_th[:,ith,:,:,:]+=w_lo*dddMbijk[idex_lo,ib,:,:,:]+w_hi*dddMbijk[idex_hi,ib,:,:,:]
+#            ddSijk_th[:,ith,:,:,:]+=w_lo*ddSbijk[idex_lo,ib,:,:,:]+w_hi*ddSbijk[idex_hi,ib,:,:,:]
 
-    for i in range(3):
-        for j in range(3):
-            tmp[:] = Mij[:,i,j]
-            tmp=np.gradient(tmp,tt,edge_order=2)
-            dMij[:,i,j]=tmp[:]
-            tmp=np.gradient(tmp,tt,edge_order=2)
-            ddMij[:,i,j]=tmp[:]
-            tmp=np.gradient(tmp,tt,edge_order=2)
-            dddMij[:,i,j]=tmp[:]
-       
-    #Calculate the current quadrupole tensor and its derivatives            
-    dSijk = np.zeros((Nt,3,3,3))
-    ddSijk = np.zeros((Nt,3,3,3))
-    for it in range(Nt):
-        for i in range(3):
-            for j in range(3):
-                for k in range(3):
-                    Sijk[it,i,j,k]=(m1*(X1[it,i]*X1[it,k]*V1[it,j]
-                                       +X1[it,j]*X1[it,k]*V1[it,i]
-                                       -2.*X1[it,i]*X1[it,j]*V1[it,k])
-                                    +m2*(X2[it,i]*X2[it,k]*V2[it,j]
-                                         +X2[it,j]*X2[it,k]*V2[it,i]
-                                       -2.*X2[it,i]*X2[it,j]*V2[it,k]))
-      
-     
-    for i in range(3):
-        for j in range(3):
-            for k in range(3):
-                tmp[:]=Sijk[:,i,j,k]
-                tmp=np.gradient(tmp,tt,edge_order=2)
-                dSijk[:,i,j,k]=tmp[:]
-                tmp=np.gradient(tmp,tt,edge_order=2)
-                ddSijk[:,i,j,k]=tmp[:]
-      
-    #Calculate the mass octupole tensor and its derivatives            
-    dMijk = np.zeros((Nt,3,3,3))
-    ddMijk = np.zeros((Nt,3,3,3))
-    dddMijk = np.zeros((Nt,3,3,3))
-    for it in range(Nt):
-        for i in range(3):
-            for j in range(3):
-                for k in range(3):
-                    Mijk[it,i,j,k]=m1*X1[it,i]*X1[it,j]*X1[it,k]+m2*X2[it,i]*X2[it,j]*X2[it,k]
-       
-    for i in range(3):
-        for j in range(3):
-            for k in range(3):
-                tmp[:]=Mijk[:,i,j,k]
-                tmp=np.gradient(tmp,tt,edge_order=2)
-                dMijk[:,i,j,k]=tmp[:]
-                tmp=np.gradient(tmp,tt,edge_order=2)
-                ddMijk[:,i,j,k]=tmp[:]
-                tmp=np.gradient(tmp,tt,edge_order=2)
-                dddMijk[:,i,j,k]=tmp[:]
-     
     #Calculate the wave tensor by contracting the projection tensor with the multipole expansion
     for ith in range(Nth):
         for iph in range(Nph):
@@ -266,12 +328,12 @@ def produce_figures(q,R,Mtot=1.,ecc=0.,Nt=101,Nth=51,Nph=50):
                 for j in range(3):
                     for k in range(3):
                         for l in range(3):
-                            hij_thph[:,ith,iph,i,j] += Lamijkl_thph[ith,iph,i,j,k,l]*ddMij[:,k,l]
-                            dhij_thph[:,ith,iph,i,j] += Lamijkl_thph[ith,iph,i,j,k,l]*dddMij[:,k,l]
-                            for m in range(3):
-                                hijO_thph[:,ith,iph,i,j] += Lamijkl_thph[ith,iph,i,j,k,l]*dddMijk[:,k,l,m]*ni_thph[ith,iph,m]/3.
-                                hijS_thph[:,ith,iph,i,j] += 2.*Lamijkl_thph[ith,iph,i,j,k,l]*ddSijk[:,k,l,m]*ni_thph[ith,iph,m]/3.
-             
+                            hij_thph[:,ith,iph,i,j] += Lamijkl_thph[ith,iph,i,j,k,l]*ddMij_th[:,ith,k,l]
+#                            for m in range(3):
+#                                hijO_thph[:,ith,iph,i,j] += Lamijkl_thph[ith,iph,i,j,k,l]*dddMijk_th[:,ith,k,l,m]*ni_thph[ith,iph,m]/3.
+#                                hijS_thph[:,ith,iph,i,j] += 2.*Lamijkl_thph[ith,iph,i,j,k,l]*ddSijk_th[:,ith,k,l,m]*ni_thph[ith,iph,m]/3.
+                 
+
     #Now project the h_ij wave tensor onto the h_{\hat{theta} \hat{phi}} basis
     for ith in range(Nth):
         for iph in range(Nph):
@@ -281,49 +343,54 @@ def produce_figures(q,R,Mtot=1.,ecc=0.,Nt=101,Nth=51,Nph=50):
                     htp_thph[:,ith,iph,1,0] += Lphi_thph[ith,iph,i]*Lthi_thph[ith,iph,j]*hij_thph[:,ith,iph,i,j]
                     htp_thph[:,ith,iph,0,1] += Lthi_thph[ith,iph,i]*Lphi_thph[ith,iph,j]*hij_thph[:,ith,iph,i,j]
                     htp_thph[:,ith,iph,1,1] += Lphi_thph[ith,iph,i]*Lphi_thph[ith,iph,j]*hij_thph[:,ith,iph,i,j]
-                    htpO_thph[:,ith,iph,0,0] += Lthi_thph[ith,iph,i]*Lthi_thph[ith,iph,j]*hijO_thph[:,ith,iph,i,j]
-                    htpO_thph[:,ith,iph,1,0] += Lphi_thph[ith,iph,i]*Lthi_thph[ith,iph,j]*hijO_thph[:,ith,iph,i,j]
-                    htpO_thph[:,ith,iph,0,1] += Lthi_thph[ith,iph,i]*Lphi_thph[ith,iph,j]*hijO_thph[:,ith,iph,i,j]
-                    htpO_thph[:,ith,iph,1,1] += Lphi_thph[ith,iph,i]*Lphi_thph[ith,iph,j]*hijO_thph[:,ith,iph,i,j]
-                    htpS_thph[:,ith,iph,0,0] += Lthi_thph[ith,iph,i]*Lthi_thph[ith,iph,j]*hijS_thph[:,ith,iph,i,j]
-                    htpS_thph[:,ith,iph,1,0] += Lphi_thph[ith,iph,i]*Lthi_thph[ith,iph,j]*hijS_thph[:,ith,iph,i,j]
-                    htpS_thph[:,ith,iph,0,1] += Lthi_thph[ith,iph,i]*Lphi_thph[ith,iph,j]*hijS_thph[:,ith,iph,i,j]
-                    htpS_thph[:,ith,iph,1,1] += Lphi_thph[ith,iph,i]*Lphi_thph[ith,iph,j]*hijS_thph[:,ith,iph,i,j]
-
-    #calculate the power [hdot^2] as a function of theta, phi, averaging over an orbit
-    #by only including middle segment, reduce edge effects of np.gradient
+                    #htpO_thph[:,ith,iph,0,0] += Lthi_thph[ith,iph,i]*Lthi_thph[ith,iph,j]*hijO_thph[:,ith,iph,i,j]
+                    #htpO_thph[:,ith,iph,1,0] += Lphi_thph[ith,iph,i]*Lthi_thph[ith,iph,j]*hijO_thph[:,ith,iph,i,j]
+                    #htpO_thph[:,ith,iph,0,1] += Lthi_thph[ith,iph,i]*Lphi_thph[ith,iph,j]*hijO_thph[:,ith,iph,i,j]
+                    #htpO_thph[:,ith,iph,1,1] += Lphi_thph[ith,iph,i]*Lphi_thph[ith,iph,j]*hijO_thph[:,ith,iph,i,j]
+                    #htpS_thph[:,ith,iph,0,0] += Lthi_thph[ith,iph,i]*Lthi_thph[ith,iph,j]*hijS_thph[:,ith,iph,i,j]
+                    #htpS_thph[:,ith,iph,1,0] += Lphi_thph[ith,iph,i]*Lthi_thph[ith,iph,j]*hijS_thph[:,ith,iph,i,j]
+                    #htpS_thph[:,ith,iph,0,1] += Lthi_thph[ith,iph,i]*Lphi_thph[ith,iph,j]*hijS_thph[:,ith,iph,i,j]
+                    #htpS_thph[:,ith,iph,1,1] += Lphi_thph[ith,iph,i]*Lphi_thph[ith,iph,j]*hijS_thph[:,ith,iph,i,j]
+           
+    ##ccaallculate the power [hdot^2] as a function of theta, phi, averaging over an orbit
+    ##bbyy  only including middle segment, reduce edge effects of np.gradient
             for i in range(2):
                 for j in range(2):
                     tmp[:] = htp_thph[:,ith,iph,i,j]
-                    dhtp_thph[:,ith,iph,i,j]=np.gradient(tmp,tt,edge_order=2)
-                    tmp[:] = htpO_thph[:,ith,iph,i,j]
-                    dhtpO_thph[:,ith,iph,i,j]=np.gradient(tmp,tt,edge_order=2)
-                    tmp[:] = htpS_thph[:,ith,iph,i,j]
-                    dhtpS_thph[:,ith,iph,i,j]=np.gradient(tmp,tt,edge_order=2)
-            PP_thph[ith,iph] = np.mean(dhtp_thph[(tt>=0.5*Torb)&(tt<1.5*Torb),ith,iph,0,0]**2)
-            PX_thph[ith,iph] = np.mean(dhtp_thph[(tt>=0.5*Torb)&(tt<1.5*Torb),ith,iph,0,1]**2)
+                    dhtp_thph[:,ith,iph,i,j]=np.gradient(tmp,tt,edge_order=1)
+                    #tmp[:] = htpO_thph[:,ith,iph,i,j]
+                    #dhtpO_thph[:,ith,iph,i,j]=np.gradient(tmp,tt,edge_order=1)
+                    #tmp[:] = htpS_thph[:,ith,iph,i,j]
+                    #dhtpS_thph[:,ith,iph,i,j]=np.gradient(tmp,tt,edge_order=1)
+            PP_thph[ith,iph] = np.mean(dhtp_thph[:,ith,iph,0,0]**2)
+            PX_thph[ith,iph] = np.mean(dhtp_thph[:,ith,iph,0,1]**2)
+            #PPO_thph[ith,iph] = np.mean(dhtpO_thph[:,ith,iph,0,0]**2)
+            #PXO_thph[ith,iph] = np.mean(dhtpO_thph[:,ith,iph,0,1]**2)
+            #PPS_thph[ith,iph] = np.mean(dhtpS_thph[:,ith,iph,0,0]**2)
+            #PXS_thph[ith,iph] = np.mean(dhtpS_thph[:,ith,iph,0,1]**2)
+
+    ### end of Nbinary_multipoles.py code -- now add in app stuff
+ 
+
             # SG add -- total power in quadrupole moment
             Ptot_thph[ith,iph] = np.mean(dhtp_thph[(tt>=0.5*Torb)&(tt<1.5*Torb),ith,iph,0,0]**2 + dhtp_thph[(tt>=0.5*Torb)&(tt<1.5*Torb),ith,iph,0,1]**2)
-            PPO_thph[ith,iph] = np.mean(dhtpO_thph[(tt>=0.5*Torb)&(tt<1.5*Torb),ith,iph,0,0]**2)
-            PXO_thph[ith,iph] = np.mean(dhtpO_thph[(tt>=0.5*Torb)&(tt<1.5*Torb),ith,iph,0,1]**2)
-            # SG add -- total power in octupole moment
-            PtotO_thph[ith,iph] = np.mean(dhtpO_thph[(tt>=0.5*Torb)&(tt<1.5*Torb),ith,iph,0,0]**2 + dhtpO_thph[(tt>=0.5*Torb)&(tt<1.5*Torb),ith,iph,0,1]**2)
-            PPS_thph[ith,iph] = np.mean(dhtpS_thph[(tt>=0.5*Torb)&(tt<1.5*Torb),ith,iph,0,0]**2)
-            PXS_thph[ith,iph] = np.mean(dhtpS_thph[(tt>=0.5*Torb)&(tt<1.5*Torb),ith,iph,0,1]**2)
-            # SG add -- total power in current quadrupole moment
-            PtotS_thph[ith,iph] = np.mean(dhtpS_thph[(tt>=0.5*Torb)&(tt<1.5*Torb),ith,iph,0,0]**2 + dhtpS_thph[(tt>=0.5*Torb)&(tt<1.5*Torb),ith,iph,0,1]**2)
-
+            ## SG add -- total power in octupole moment
+            #PtotO_thph[ith,iph] = np.mean(dhtpO_thph[(tt>=0.5*Torb)&(tt<1.5*Torb),ith,iph,0,0]**2 + dhtpO_thph[(tt>=0.5*Torb)&(tt<1.5*Torb),ith,iph,0,1]**2)
+            ## SG add -- total power in current quadrupole moment
+            #PtotS_thph[ith,iph] = np.mean(dhtpS_thph[(tt>=0.5*Torb)&(tt<1.5*Torb),ith,iph,0,0]**2 + dhtpS_thph[(tt>=0.5*Torb)&(tt<1.5*Torb),ith,iph,0,1]**2)
+#
     #### SG test -- get psi
     ######SG test
     psiQ = np.zeros((Nt,Nth,Nph))
-    psiS = np.zeros((Nt,Nth,Nph))
-    psiO = np.zeros((Nt,Nth,Nph))
+    #psiS = np.zeros((Nt,Nth,Nph))
+    #psiO = np.zeros((Nt,Nth,Nph))
 
     for jth in range(0,Nth):
         for kph in range(0,Nph):
             psiQ[:,jth,kph] = np.arctan2(htp_thph[:,jth,kph,0,1],htp_thph[:,jth,kph,0,0])
-            psiS[:,jth,kph] = np.arctan2(htpS_thph[:,jth,kph,0,1],htpS_thph[:,jth,kph,0,0])
-            psiO[:,jth,kph] = np.arctan2(htpO_thph[:,jth,kph,0,1],htpO_thph[:,jth,kph,0,0])
+            #psiS[:,jth,kph] = np.arctan2(htpS_thph[:,jth,kph,0,1],htpS_thph[:,jth,kph,0,0])
+            #psiO[:,jth,kph] = np.arctan2(htpO_thph[:,jth,kph,0,1],htpO_thph[:,jth,kph,0,0])
+
    
     ### end of multipoles2.py code -- now add in app stuff
     Theta,Phi = np.meshgrid(theta,phi)
@@ -333,72 +400,61 @@ def produce_figures(q,R,Mtot=1.,ecc=0.,Nt=101,Nth=51,Nph=50):
     ## mass quadrupole
     ampQ = Ptot_thph.T
    
-    ## current quadrupole
-    ampS = PtotS_thph.T
+    ### current quadrupole
+    #ampS = PtotS_thph.T
    
-    ## mass octupole
-    ampO = PtotO_thph.T
+    ### mass octupole
+    #ampO = PtotO_thph.T
 
-
-    fig = make_subplots(rows=6, cols=3,
-                        specs=[[{'rowspan': 6, 'colspan': 2, 'is_3d': True}, 
-                                None,
-                                {'rowspan': 3, 'colspan': 1, 'is_3d': True}],
-                               [None, None, None],
-                               [None, None, None],
-                               [None, None, 
-                                {'rowspan': 3, 'colspan': 1, 'is_3d': True}],\
-                               [None, None, None],
-                               [None, None, None]],
-                        subplot_titles=['Mass quadrupole',
-                                        'Current quadrupole',
-                                        'Mass octopole'],
+    fig = make_subplots(rows=2, cols=2,
+                        specs=[[{'rowspan': 2, 'colspan': 1, 'is_3d': True}, 
+                                {'rowspan': 2, 'colspan': 1, 'is_3d': True}],
+                               [None, None]],
+                        subplot_titles=['Binary set-up',
+                                        'Mass quadrupole'],
                         vertical_spacing=0.13, horizontal_spacing=0.05)
 
+    ### left panel -- binary set-up
+    fig.add_trace(go.Scatter3d(x=Xp[0,:,0],
+                               y=Xp[0,:,1],
+                               z=Xp[0,:,2],
+                               mode='markers',
+                               marker=dict(color='black',size=5),
+                               showlegend=False
+                               ),1,1)
+    ### add orbital paths
+    for ib in range(0,Nb):
+        fig.add_trace(go.Scatter3d(x=Xp[:,2*ib,0],
+                                   y=Xp[:,2*ib,1],
+                                   z=Xp[:,2*ib,2],
+                                   mode='lines',
+                                   marker=dict(color='black',size=1),
+                                   showlegend=False
+                                   ),1,1)
 
-#    camp = 45e-9
-#    xb,yb,zb = camp*np.cos(phi),camp*np.sin(phi),np.zeros(Nph)
-
-    
-
-   
-    ### left panel -- mass quadrupole
+    ### right panel -- mass quadrupole
     fig.add_trace(go.Surface(x=X*ampQ, y=Y*ampQ, z=Z*ampQ,
                              surfacecolor=np.sin(psiQ[0,:,:]).T, 
                              colorscale='PiYG',
-                             colorbar={"title": 'sin(\u03a8)'}),1, 1)
-   
-    ### top right panel -- current quadrupole
-    fig.add_trace(go.Surface(x=X*ampS, y=Y*ampS, z=Z*ampS,
-                             surfacecolor=np.sin(psiS[0,:,:]).T,
-                             colorscale='PiYG',
-                             colorbar={"title": 'sin(\u03a8)'}),1, 3)
-    
-    ### bottom right panel -- mass octopole
-    fig.add_trace(go.Surface(x=X*ampO, y=Y*ampO, z=Z*ampO,
-                             surfacecolor=np.sin(psiO[0,:,:]).T,
-                             colorscale='PiYG',
-                             colorbar={"title": 'sin(\u03a8)'}),4, 3)
-
-
+                             colorbar={"title": 'sin(\u03a8)'}),1, 2)
+ 
     ### new time index number -- only show movie over Torb to avoid repetition
     Ntt = int((Nt+1)/2)
 
     frames = [dict(
                name = k,
-               data = [go.Surface(x=X*ampQ, y=Y*ampQ, z=Z*ampQ,
+               data = [go.Scatter3d(x=Xp[k,:,0],
+                                    y=Xp[k,:,1],
+                                    z=Xp[k,:,2],
+                                    mode='markers',
+                                    marker=dict(color='black',size=5),
+                                    showlegend=False),
+                       go.Surface(x=X*ampQ, y=Y*ampQ, z=Z*ampQ,
                              surfacecolor=np.sin(psiQ[k,:,:]).T, 
                              colorscale='PiYG',
-                             colorbar={"title": 'sin(\u03a8)'}),
-                       go.Surface(x=X*ampS, y=Y*ampS, z=Z*ampS,
-                             surfacecolor=np.sin(psiS[k,:,:]).T,
-                             colorscale='PiYG',
-                             colorbar={"title": 'sin(\u03a8)'}),
-                       go.Surface(x=X*ampO, y=Y*ampO, z=Z*ampO,
-                             surfacecolor=np.sin(psiO[k,:,:]).T,
-                             colorscale='PiYG',
-                             colorbar={"title": 'sin(\u03a8)'})],
-               traces = [0, 1, 2]
+                             colorbar={"title": 'sin(\u03a8)'})
+                      ],
+               traces = [0,Nb+1]
                ) for k in range(Ntt)]
 
 
@@ -431,35 +487,14 @@ def produce_figures(q,R,Mtot=1.,ecc=0.,Nt=101,Nth=51,Nph=50):
                 'len': 0.9, 'x': 0.1, 'y': 0, 
                 'steps': [{'args': [[k], {'frame': {'duration': 30.0, 'easing': 'linear'},
                                       'transition': {'duration': 0, 'easing': 'linear'}}], 
-                           'label': k, 'method': 'animate'} for k in range(Ntt)
-                    ]
- 
-                #'steps': [{'args': [[k], {'frame': {'duration': 30.0, 'easing': 'linear'},
-                #                      'transition': {'duration': 0, 'easing': 'linear'}}], 
-                #           'label': "%.2fT\u2092\u1d63"%(k/Ntt), 'method': 'animate'} for k in [0,0.2*Ntt,0.4*Ntt,0.6*Ntt,0.8*Ntt,Ntt]
-                #    ]
+                           'label': k, 'method': 'animate'} for k in range(Ntt)]
                }]
 
     fig.update(frames=frames)
 
-    fig.update_layout(title_text="GW power in different modes",
+    fig.update_layout(title_text="Orbit-averaged GW power",
                       updatemenus=updatemenus,
-                      sliders=sliders
-    #                  scene = dict(xaxis = dict(nticks=4,range=[-8e-8,8e-8],),
-    #                               yaxis = dict(nticks=4, range=[-8e-8,8e-8],),
-    #                               zaxis = dict(nticks=4, range=[-2e-7,2e-7],),),
-    #                  scene2 = dict(xaxis = dict(nticks=4,range=[-8e-8,8e-8],),
-    #                              yaxis = dict(nticks=4, range=[-8e-8,8e-8],),
-    #                              zaxis = dict(nticks=4, range=[-2e-7,2e-7],),),
-    
-    #                  scene3 = dict(xaxis = dict(nticks=4,range=[-8e-8,8e-8],),
-    #                              yaxis = dict(nticks=4, range=[-8e-8,8e-8],),
-    #                              zaxis = dict(nticks=4, range=[-2e-7,2e-7],),),
-   
-   
-                     
-                      )
-
+                      sliders=sliders)
     return fig
 
 

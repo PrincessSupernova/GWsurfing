@@ -86,6 +86,17 @@ app.layout = html.Div([
                            #step=10.,
                            value=0.,
                            tooltip={"placement": "bottom", "always_visible": True}),
+                         html.Br(),
+                         html.P("Average power over one orbital period?"),
+                         dcc.RadioItems(
+                           options=[
+                             {'label': 'Yes', 'value': True},
+                             {'label': 'No', 'value': False}
+                             ],
+                           value=False,
+                           id="radio-time-avg", 
+                           inline=True),
+                         html.Br(),
                        ]),width=4),
                      # graph
                      dbc.Col(
@@ -109,21 +120,33 @@ app.layout = html.Div([
     Input("slider-db", "value"),
     Input("slider-pb", "value"),
     Input("slider-ecc", "value"),
+    Input("radio-time-avg", "value"),
 )
 
 
-def make_plots(sma,Nb,db,pb,ecc):
-    fig = produce_figures(sma,Nb,db,pb,ecc=ecc)
+def make_plots(sma,Nb,db,pb,ecc,timeavg):
+    fig = produce_figures(sma,Nb,db,pb,ecc=ecc,timeavg=timeavg)
     return fig
 
 
-def produce_figures(sma,Nb,db,pb,Mtot=1.,ecc=0.,Nt=101,Nth=41,Nph=30):
+def produce_figures(sma,Nb,db,pb,ecc=0.,timeavg=False):
 
+    ## test the timeavg boolean works
+    if timeavg:
+        print("Time averaging")
+    else:
+        print("Not time averaging")
+    ##### end timeavg boolean test
+
+    # time elements
     Nt = 101
     Nt2 = Nt+20
+    # grid points for theta, phi
     Nth = 41
     Nph = 30
-    Np = int(Nb*2) #Number of particles
+    # number of particles
+    Np = int(Nb*2) 
+    # particle masses
     Mp = np.ones(Np)*0.5
     R = sma
     R_b = np.ones(Nb)*R
@@ -172,7 +195,8 @@ def produce_figures(sma,Nb,db,pb,Mtot=1.,ecc=0.,Nt=101,Nth=41,Nph=30):
     hX_thph = np.zeros((Nth,Nph))
     PP_thph = np.zeros((Nth,Nph))
     PX_thph = np.zeros((Nth,Nph))
-    Ptot_thph = np.zeros((Nth,Nph))
+    Ptot_thph = np.zeros((Nt,Nth,Nph))
+    #Ptot_noavg_thph = np.zeros((Nt,Nth,Nph))
     #PPO_thph = np.zeros((Nth,Nph))
     #PXO_thph = np.zeros((Nth,Nph))
     #PtotO_thph = np.zeros((Nth,Nph))
@@ -369,18 +393,19 @@ def produce_figures(sma,Nb,db,pb,Mtot=1.,ecc=0.,Nt=101,Nth=41,Nph=30):
             #PPS_thph[ith,iph] = np.mean(dhtpS_thph[:,ith,iph,0,0]**2)
             #PXS_thph[ith,iph] = np.mean(dhtpS_thph[:,ith,iph,0,1]**2)
 
-    ### end of Nbinary_multipoles.py code -- now add in app stuff
- 
+            #### SG: time average the total power if needed
+            if timeavg:
+                Ptot_thph[:,ith,iph] = np.mean(dhtp_thph[(tt>=0.5*Torb)&(tt<1.5*Torb),ith,iph,0,0]**2 + dhtp_thph[(tt>=0.5*Torb)&(tt<1.5*Torb),ith,iph,0,1]**2)
+                ## total power in octupole moment
+                #PtotO_thph[ith,iph] = np.mean(dhtpO_thph[(tt>=0.5*Torb)&(tt<1.5*Torb),ith,iph,0,0]**2 + dhtpO_thph[(tt>=0.5*Torb)&(tt<1.5*Torb),ith,iph,0,1]**2)
+                ## total power in current quadrupole moment
+                #PtotS_thph[ith,iph] = np.mean(dhtpS_thph[(tt>=0.5*Torb)&(tt<1.5*Torb),ith,iph,0,0]**2 + dhtpS_thph[(tt>=0.5*Torb)&(tt<1.5*Torb),ith,iph,0,1]**2)
 
-            # SG add -- total power in quadrupole moment
-            Ptot_thph[ith,iph] = np.mean(dhtp_thph[(tt>=0.5*Torb)&(tt<1.5*Torb),ith,iph,0,0]**2 + dhtp_thph[(tt>=0.5*Torb)&(tt<1.5*Torb),ith,iph,0,1]**2)
-            ## SG add -- total power in octupole moment
-            #PtotO_thph[ith,iph] = np.mean(dhtpO_thph[(tt>=0.5*Torb)&(tt<1.5*Torb),ith,iph,0,0]**2 + dhtpO_thph[(tt>=0.5*Torb)&(tt<1.5*Torb),ith,iph,0,1]**2)
-            ## SG add -- total power in current quadrupole moment
-            #PtotS_thph[ith,iph] = np.mean(dhtpS_thph[(tt>=0.5*Torb)&(tt<1.5*Torb),ith,iph,0,0]**2 + dhtpS_thph[(tt>=0.5*Torb)&(tt<1.5*Torb),ith,iph,0,1]**2)
-#
-    #### SG test -- get psi
-    ######SG test
+            else: 
+                # SG add -- total power in quadrupole moment, not time averaged
+                Ptot_thph[:,ith,iph] = dhtp_thph[:,ith,iph,0,0]**2 + dhtp_thph[:,ith,iph,0,1]**2
+
+    # Get polarization angle psi
     psiQ = np.zeros((Nt,Nth,Nph))
     #psiS = np.zeros((Nt,Nth,Nph))
     #psiO = np.zeros((Nt,Nth,Nph))
@@ -390,22 +415,28 @@ def produce_figures(sma,Nb,db,pb,Mtot=1.,ecc=0.,Nt=101,Nth=41,Nph=30):
             psiQ[:,jth,kph] = np.arctan2(htp_thph[:,jth,kph,0,1],htp_thph[:,jth,kph,0,0])
             #psiS[:,jth,kph] = np.arctan2(htpS_thph[:,jth,kph,0,1],htpS_thph[:,jth,kph,0,0])
             #psiO[:,jth,kph] = np.arctan2(htpO_thph[:,jth,kph,0,1],htpO_thph[:,jth,kph,0,0])
+    # Take sine of polarisation angle (then transpose) for plotting purposes
+    sinPsi = np.sin(psiQ).T
 
    
-    ### end of multipoles2.py code -- now add in app stuff
+    # Meshgrid angles for plot stuff
     Theta,Phi = np.meshgrid(theta,phi)
-   
+    # Standard cartesian coords from spherical polars
     X,Y,Z = np.sin(Theta)*np.cos(Phi),np.sin(Theta)*np.sin(Phi),np.cos(Theta)
-   
-    ## mass quadrupole
+    ## Amplitude from quadrupole power
     ampQ = Ptot_thph.T
-   
-    ### current quadrupole
-    #ampS = PtotS_thph.T
-   
-    ### mass octupole
-    #ampO = PtotO_thph.T
 
+    Xt = np.zeros((Nph,Nth,Nt))
+    Yt = np.zeros((Nph,Nth,Nt))
+    Zt = np.zeros((Nph,Nth,Nt))
+
+    for it in range(Nt):
+        Xt[:,:,it] = ampQ[:,:,it]*X[:,:]
+        Yt[:,:,it] = ampQ[:,:,it]*Y[:,:]
+        Zt[:,:,it] = ampQ[:,:,it]*Z[:,:]
+
+
+    # Now plot!
     fig = make_subplots(rows=2, cols=2,
                         specs=[[{'rowspan': 2, 'colspan': 1, 'is_3d': True}, 
                                 {'rowspan': 2, 'colspan': 1, 'is_3d': True}],
@@ -433,8 +464,8 @@ def produce_figures(sma,Nb,db,pb,Mtot=1.,ecc=0.,Nt=101,Nth=41,Nph=30):
                                    ),1,1)
 
     ### right panel -- mass quadrupole
-    fig.add_trace(go.Surface(x=X*ampQ, y=Y*ampQ, z=Z*ampQ,
-                             surfacecolor=np.sin(psiQ[0,:,:]).T, 
+    fig.add_trace(go.Surface(x=Xt[:,:,0],y=Yt[:,:,0],z=Zt[:,:,0],
+                             surfacecolor=sinPsi[:,:,0], 
                              colorscale='PiYG',
                              colorbar={"title": 'sin(\u03a8)'}),1, 2)
  
@@ -449,10 +480,10 @@ def produce_figures(sma,Nb,db,pb,Mtot=1.,ecc=0.,Nt=101,Nth=41,Nph=30):
                                     mode='markers',
                                     marker=dict(color='black',size=5),
                                     showlegend=False),
-                       go.Surface(x=X*ampQ, y=Y*ampQ, z=Z*ampQ,
-                             surfacecolor=np.sin(psiQ[k,:,:]).T, 
-                             colorscale='PiYG',
-                             colorbar={"title": 'sin(\u03a8)'})
+                       go.Surface(x=Xt[:,:,k],y=Yt[:,:,k],z=Zt[:,:,k],
+                                  surfacecolor=sinPsi[:,:,k], 
+                                  colorscale='PiYG',
+                                  colorbar={"title": 'sin(\u03a8)'})
                       ],
                traces = [0,Nb+1]
                ) for k in range(Ntt)]
